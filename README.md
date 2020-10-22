@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: MIT -->
-# MOISM_Core
+# MOSIM_Core
 
 ## Intended Usage
 
