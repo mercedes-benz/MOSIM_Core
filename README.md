@@ -1,7 +1,9 @@
 <!-- SPDX-License-Identifier: MIT -->
-# My Project
+# MOISM_Core
 
 ## Intended Usage
+
+This repository contains the core framework of the MOSIM approach.
 
 ⚠️ //TODO// Describe your example! Eg: This project is made for cooking the best Tiramisu. It works best with high quality ingredients and the best tools. Please describe your project as accurately and concisely as possible to help others understand your use case.
 
