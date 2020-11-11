@@ -1,0 +1,23 @@
+{
+  "Name": "CoSimulationMMUC#",
+  "ID": "dffe45fa-4411-455a-7c14-564c8c0fd0ae",
+  "AssemblyName": "CoSimulationMMU.dll",
+  "MotionType": "coSimulation",
+  "Language": "C#",
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Version": "1.0",
+  "SupportedProportions": {},
+  "Properties": {},
+  "Dependencies": [],
+  "Events": [],
+  "LongDescription": "Long description",
+  "ShortDescription": "Basic co-simulating encapsualted within an MMU",
+  "__isset": {
+    "SupportedProportions": true,
+    "Properties": true,
+    "Dependencies": true,
+    "Events": true,
+    "LongDescription": true,
+    "ShortDescription": true
+  }
+}

@@ -1,0 +1,6 @@
+*.exe
+!deployLanguage.exe
+*.pyc
+*/**/dist
+*/**/*.egg*
+*/**/build

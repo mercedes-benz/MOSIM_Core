@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42DE17DD-1978-45D5-95C5-AC91A4378403}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MMIUnity.TargetEngine</RootNamespace>
+    <AssemblyName>MMIUnity.TargetEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Thrift, Version=0.11.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Thrift.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>.\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AsynchronousSimulationController.cs" />
+    <Compile Include="AvatarBehavior.cs" />
+    <Compile Include="DrawingUtils.cs" />
+    <Compile Include="LocalCoSimulation.cs" />
+    <Compile Include="MMISettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteCoSimulation.cs" />
+    <Compile Include="Scene\RemoteSkeletonAccessServer.cs" />
+    <Compile Include="Scene\Remote\RemoteSceneManipulation.cs" />
+    <Compile Include="Scene\Remote\RemoteSceneManipulationRequest.cs" />
+    <Compile Include="Scene\MMIAvatar.cs" />
+    <Compile Include="Scene\MMISceneObject.cs" />
+    <Compile Include="Scene\RemoteSceneAccessServer.cs" />
+    <Compile Include="Scene\RemoteSceneManipulationServer.cs" />
+    <Compile Include="Scene\UnityBone.cs" />
+    <Compile Include="Scene\UnityHandPose.cs" />
+    <Compile Include="Scene\UnitySceneAccess.cs" />
+    <Compile Include="SimulationController.cs" />
+    <Compile Include="TransformExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Thrift.dll" />
+    <Content Include="UnityEngine.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CoSimulation\MMICoSimulation\MMICoSimulation.csproj">
+      <Project>{50aaa4c3-3627-4dcd-8249-e93200f67ba9}</Project>
+      <Name>MMICoSimulation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LanguageSupport\cs\MMICSharp\MMICSharp.csproj">
+      <Project>{de1d9a38-8343-4f73-a411-40b14d5271cb}</Project>
+      <Name>MMICSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\LanguageSupport\cs\MMIStandard\MMIStandard.csproj">
+      <Project>{1623ae27-6a5b-4465-9b11-4a0f34ebc67d}</Project>
+      <Name>MMIStandard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MMIUnity\MMIUnity.csproj">
+      <Project>{95b77b64-cc96-4718-b525-c3fd5c04320c}</Project>
+      <Name>MMIUnity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
