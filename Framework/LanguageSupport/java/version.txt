@@ -1,0 +1,2 @@
+MMI Framework: 0
+Core/Java: 0.1 

@@ -1,0 +1,38 @@
+{
+	"Name": "ReachMG",
+	"ID": "2a01e7b3-f6eb-4815-acb3-asdfb6e10085",
+	"AssemblyName": "main.py",
+	"MotionType": "Pose/Reach",
+	"Language": "python",
+	"Author": "Erik Herrmann, Han Du",
+	"Version": "0.1",
+	"SupportedProportions": null,
+	"Properties": {},
+	"Dependencies": null,
+	"Events": null,
+	"LongDescription": "Reach MMU using Morphhablegraphs",
+	"ShortDescription": "A python reach MMU",
+	"Parameters": [
+		{
+			"Name": "TargetID",
+			"Type": "string",
+			"Description": "The ID of the target object (target location).",
+			"Required": true
+		  },
+		  {
+			"Name": "Hand",
+			"Type": "(Left,Right)",
+			"Description": "The hand which should be used for the move motion.",
+			"Required": true
+		  }
+	],
+	"__isset": {
+		"SupportedProportions": false,
+		"Properties": true,
+		"Dependencies": false,
+		"Events": false,
+		"LongDescription": true,
+		"ShortDescription": true,
+		"Parameters": true
+	}
+}

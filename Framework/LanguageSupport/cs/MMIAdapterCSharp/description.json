@@ -1,0 +1,10 @@
+{
+  "__isset": { "Dependencies": true },
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Dependencies": [],
+  "ExecutableName": "MMIAdapterCSharp.exe",
+  "ID": "7889d37f-60fb-45da-9015-f4adde70a44d",
+  "Language": "C#",
+  "Name": "CSharpAdapter",
+  "Version": "1.0"
+}

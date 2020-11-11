@@ -1,0 +1,100 @@
+{
+  "Name": "UnityLocomotionMMU",
+  "ID": "4b8e33c0-2db1-424a-96a8-ca9fdcbcb56a",
+  "AssemblyName": "UnityLocomotionMMU.dll",
+  "MotionType": "Locomotion/Walk",
+  "Language": "UnityC#",
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Version": "1.0",
+  "SupportedProportions": {},
+  "Properties": {},
+  "Dependencies": [
+    {
+      "ID": "unitylocomotionmmu",
+      "Type": "ProgramLibrary",
+      "MinVersion": {
+        "Major": 0,
+        "Minor": 0,
+        "Sub": 0,
+        "Subsub": 0,
+        "__isset": {
+          "Minor": false,
+          "Sub": false,
+          "Subsub": false
+        }
+      },
+      "MaxVersion": {
+        "Major": 0,
+        "Minor": 0,
+        "Sub": 0,
+        "Subsub": 0,
+        "__isset": {
+          "Minor": false,
+          "Sub": false,
+          "Subsub": false
+        }
+      },
+      "ExcludedVersions": null,
+      "Name": "unitylocomotionmmu",
+      "__isset": {
+        "ExcludedVersions": false,
+        "Name": true
+      }
+    }
+  ],
+
+  "Events": [],
+  "LongDescription": "Implementation of a locomotion MMU which actually models walking from point a to point b. The MMU uses the path planning service.",
+  "ShortDescription": "Data driven locomotion MMU based on the Unity Engine.",
+  "Parameters": [
+    {
+      "Name": "TargetID",
+      "Type": "string",
+      "Description": "The id of the target object/transform. Either Target ID or Target Name must be defined.",
+      "Required": true
+    },
+    {
+      "Name": "TargetName",
+      "Type": "string",
+      "Description": "The name of the target object/transform. Either Target ID or Target Name must be defined.",
+      "Required": true
+    },
+    {
+      "Name": "ReplanningTime",
+      "Type": "int",
+      "Description": "The timespan [ms]after which the replanning is performed.",
+      "Required": false
+    },
+    {
+      "Name": "Velocity",
+      "Type": "float",
+      "Description": "The velocity of the avatar [m/s].",
+      "Required": false
+    },
+    {
+      "Name": "TransitionModeling",
+      "Type": "bool",
+      "Description": "Specifies whether the transition modeling is enabled.",
+      "Required": false
+    },
+    {
+      "Name": "Trajectory",
+      "Type": "list<MVector2>",
+      "Description": "An optional trajectory which can be defined.",
+      "Required": false
+    }
+  ],
+  "__isset": {
+    "MotionSubType": false,
+    "Prerequisites": false,
+    "SupportedProportions": false,
+    "Properties": false,
+    "Dependencies": true,
+    "Events": false,
+    "LongDescription": false,
+    "ShortDescription": false,
+    "Parameters": true,
+    "SceneParameters": false,
+    "RequiredServices": false
+  }
+}

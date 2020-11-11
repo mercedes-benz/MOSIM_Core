@@ -1,0 +1,62 @@
+{
+  "Name": "UnityIdleMMU",
+  "ID": "dffe45fa-4411-455a-8c14-564c8c0fd0ae",
+  "AssemblyName": "UnityIdleMMU.dll",
+  "MotionType": "Pose/Idle",
+  "Language": "UnityC#",
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Version": "1.0",
+  "SupportedProportions": {},
+  "Properties": {},
+  "Dependencies": [
+    {
+      "ID": "idlemmu",
+      "Type": "ProgramLibrary",
+      "MinVersion": {
+        "Major": 0,
+        "Minor": 0,
+        "Sub": 0,
+        "Subsub": 0,
+        "__isset": {
+          "Minor": false,
+          "Sub": false,
+          "Subsub": false
+        }
+      },
+      "MaxVersion": {
+        "Major": 0,
+        "Minor": 0,
+        "Sub": 0,
+        "Subsub": 0,
+        "__isset": {
+          "Minor": false,
+          "Sub": false,
+          "Subsub": false
+        }
+      },
+      "ExcludedVersions": null,
+      "Name": "idlemmu",
+      "__isset": {
+        "ExcludedVersions": false,
+        "Name": true
+      }
+    }
+  ],
+
+  "Events": [],
+  "LongDescription": "Long description",
+  "ShortDescription": "Basic idle MMU",
+  "__isset": {
+    "MotionSubType": false,
+    "Prerequisites": false,
+    "SupportedProportions": false,
+    "Properties": false,
+    "Dependencies": true,
+    "Events": false,
+    "LongDescription": false,
+    "ShortDescription": false,
+    "Parameters": false,
+    "SceneParameters": false,
+    "RequiredServices": false
+  }
+}

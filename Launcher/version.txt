@@ -1,0 +1,7 @@
+MMI Framework:5
+Core/Launcher: 5.1.2
+
+ - Added MMU adding to local library from zip files
+ - Added MMU upload and download synchronization as separate options
+ - Added MMU Library support (synchronization)
+ - Added proxy support for task editor communication

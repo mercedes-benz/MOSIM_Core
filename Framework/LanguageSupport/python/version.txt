@@ -1,0 +1,2 @@
+MMIFramework: 0.6
+Python: 0.6

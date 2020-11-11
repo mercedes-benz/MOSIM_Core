@@ -1,0 +1,6 @@
+[submodule "MGReach/morphablegraphs"]
+	path = BasicMMus/Python-MMUs/MGReach/morphablegraphs
+	url = git@github.com:eherr/morphablegraphs.git
+[submodule "MGReach/anim_utils"]
+	path = BasicMMus/Python-MMUs/MGReach/anim_utils
+	url = git@github.com:eherr/anim_utils.git

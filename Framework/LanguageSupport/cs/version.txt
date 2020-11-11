@@ -1,0 +1,2 @@
+MMI Framework:5
+Core/CS: 5.2

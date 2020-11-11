@@ -1,0 +1,4 @@
+[submodule "MMIStandard/src"]
+	path = Framework/Core/cpp/MMIStandard/src
+	url = 	../../core/thrift.git
+	branch = compiled/cpp/0.0.4Cmake

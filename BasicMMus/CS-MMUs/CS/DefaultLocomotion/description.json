@@ -1,0 +1,38 @@
+{
+  "Name": "DefaultLocomotion",
+  "ID": "2a02a7b3-f6eb-4815-acb3-c9acb6e1ff83",
+  "AssemblyName": "DefaultLocomotion.dll",
+  "MotionType": "locomotion",
+  "Language": "C#",
+  "Author": "Janis Sprenger",
+  "Version": "1.0",
+  "SupportedProportions": null,
+  "Properties": { },
+  "Dependencies": null,
+  "Events": null,
+  "LongDescription": "A fallback MMU allowing arbritrary global repositioning in space without animations. ",
+  "ShortDescription": "A fallback locomotion MMU.",
+  "Parameters": [
+    {
+      "Name": "TargetID",
+      "Type": "string",
+      "Description": "The ID of the target object (target location).",
+      "Required": true
+    },
+    {
+      "Name": "linearVelocity",
+      "Type": "float",
+      "Description": "Linear velocity for character transport. If not provided, instant teleportation is utilized. In any other case, linear interpolation with the given velocity is used",
+      "Required":false
+    }
+  ],
+  "__isset": {
+    "SupportedProportions": false,
+    "Properties": true,
+    "Dependencies": false,
+    "Events": false,
+    "LongDescription": true,
+    "ShortDescription": true,
+    "Parameters": true
+  }
+}
