@@ -28,8 +28,7 @@ class MGraspPoseService_GetGraspPoses_args
         2 => array(
             'var' => 'handType',
             'isRequired' => false,
-            'type' => TType::STRUCT,
-            'class' => '\MTransform',
+            'type' => TType::I32,
         ),
         3 => array(
             'var' => 'sceneObject',
@@ -49,7 +48,7 @@ class MGraspPoseService_GetGraspPoses_args
      */
     public $posture = null;
     /**
-     * @var \MTransform
+     * @var int
      */
     public $handType = null;
     /**
@@ -107,9 +106,8 @@ class MGraspPoseService_GetGraspPoses_args
                     }
                     break;
                 case 2:
-                    if ($ftype == TType::STRUCT) {
-                        $this->handType = new \MTransform();
-                        $xfer += $this->handType->read($input);
+                    if ($ftype == TType::I32) {
+                        $xfer += $input->readI32($this->handType);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -152,11 +150,8 @@ class MGraspPoseService_GetGraspPoses_args
             $xfer += $output->writeFieldEnd();
         }
         if ($this->handType !== null) {
-            if (!is_object($this->handType)) {
-                throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
-            }
-            $xfer += $output->writeFieldBegin('handType', TType::STRUCT, 2);
-            $xfer += $this->handType->write($output);
+            $xfer += $output->writeFieldBegin('handType', TType::I32, 2);
+            $xfer += $output->writeI32($this->handType);
             $xfer += $output->writeFieldEnd();
         }
         if ($this->sceneObject !== null) {

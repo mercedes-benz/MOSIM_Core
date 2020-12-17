@@ -274,11 +274,15 @@ class MExecutableDescription(object):
      - Author
      - Version
      - Dependencies
+     - Vendor
+     - VendorDomain
+     - ServiceUrl
+     - UpdateUrl
 
     """
 
 
-    def __init__(self, Name=None, ID=None, Language=None, ExecutableName=None, Author=None, Version=None, Dependencies=None,):
+    def __init__(self, Name=None, ID=None, Language=None, ExecutableName=None, Author=None, Version=None, Dependencies=None, Vendor=None, VendorDomain=None, ServiceUrl=None, UpdateUrl=None,):
         self.Name = Name
         self.ID = ID
         self.Language = Language
@@ -286,6 +290,10 @@ class MExecutableDescription(object):
         self.Author = Author
         self.Version = Version
         self.Dependencies = Dependencies
+        self.Vendor = Vendor
+        self.VendorDomain = VendorDomain
+        self.ServiceUrl = ServiceUrl
+        self.UpdateUrl = UpdateUrl
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -336,6 +344,26 @@ class MExecutableDescription(object):
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.STRING:
+                    self.Vendor = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.STRING:
+                    self.VendorDomain = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 10:
+                if ftype == TType.STRING:
+                    self.ServiceUrl = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 11:
+                if ftype == TType.STRING:
+                    self.UpdateUrl = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -376,6 +404,22 @@ class MExecutableDescription(object):
             for iter13 in self.Dependencies:
                 oprot.writeString(iter13.encode('utf-8') if sys.version_info[0] == 2 else iter13)
             oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.Vendor is not None:
+            oprot.writeFieldBegin('Vendor', TType.STRING, 8)
+            oprot.writeString(self.Vendor.encode('utf-8') if sys.version_info[0] == 2 else self.Vendor)
+            oprot.writeFieldEnd()
+        if self.VendorDomain is not None:
+            oprot.writeFieldBegin('VendorDomain', TType.STRING, 9)
+            oprot.writeString(self.VendorDomain.encode('utf-8') if sys.version_info[0] == 2 else self.VendorDomain)
+            oprot.writeFieldEnd()
+        if self.ServiceUrl is not None:
+            oprot.writeFieldBegin('ServiceUrl', TType.STRING, 10)
+            oprot.writeString(self.ServiceUrl.encode('utf-8') if sys.version_info[0] == 2 else self.ServiceUrl)
+            oprot.writeFieldEnd()
+        if self.UpdateUrl is not None:
+            oprot.writeFieldBegin('UpdateUrl', TType.STRING, 11)
+            oprot.writeString(self.UpdateUrl.encode('utf-8') if sys.version_info[0] == 2 else self.UpdateUrl)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -583,6 +627,10 @@ MExecutableDescription.thrift_spec = (
     (5, TType.STRING, 'Author', 'UTF8', None, ),  # 5
     (6, TType.STRING, 'Version', 'UTF8', None, ),  # 6
     (7, TType.LIST, 'Dependencies', (TType.STRING, 'UTF8', False), None, ),  # 7
+    (8, TType.STRING, 'Vendor', 'UTF8', None, ),  # 8
+    (9, TType.STRING, 'VendorDomain', 'UTF8', None, ),  # 9
+    (10, TType.STRING, 'ServiceUrl', 'UTF8', None, ),  # 10
+    (11, TType.STRING, 'UpdateUrl', 'UTF8', None, ),  # 11
 )
 all_structs.append(MServiceDescription)
 MServiceDescription.thrift_spec = (

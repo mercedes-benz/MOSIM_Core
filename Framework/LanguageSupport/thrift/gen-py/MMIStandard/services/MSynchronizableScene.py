@@ -330,11 +330,11 @@ class ApplyManipulations_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.sceneManipulations = []
-                    (_etype369, _size366) = iprot.readListBegin()
-                    for _i370 in range(_size366):
-                        _elem371 = MMIStandard.scene.ttypes.MSceneManipulation()
-                        _elem371.read(iprot)
-                        self.sceneManipulations.append(_elem371)
+                    (_etype353, _size350) = iprot.readListBegin()
+                    for _i354 in range(_size350):
+                        _elem355 = MMIStandard.scene.ttypes.MSceneManipulation()
+                        _elem355.read(iprot)
+                        self.sceneManipulations.append(_elem355)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -351,8 +351,8 @@ class ApplyManipulations_args(object):
         if self.sceneManipulations is not None:
             oprot.writeFieldBegin('sceneManipulations', TType.LIST, 1)
             oprot.writeListBegin(TType.STRUCT, len(self.sceneManipulations))
-            for iter372 in self.sceneManipulations:
-                iter372.write(oprot)
+            for iter356 in self.sceneManipulations:
+                iter356.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

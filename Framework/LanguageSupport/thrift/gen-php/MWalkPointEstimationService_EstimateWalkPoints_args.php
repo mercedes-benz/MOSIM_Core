@@ -112,14 +112,14 @@ class MWalkPointEstimationService_EstimateWalkPoints_args
                 case 1:
                     if ($ftype == TType::LST) {
                         $this->sceneObjects = array();
-                        $_size280 = 0;
-                        $_etype283 = 0;
-                        $xfer += $input->readListBegin($_etype283, $_size280);
-                        for ($_i284 = 0; $_i284 < $_size280; ++$_i284) {
-                            $elem285 = null;
-                            $elem285 = new \MSceneObject();
-                            $xfer += $elem285->read($input);
-                            $this->sceneObjects []= $elem285;
+                        $_size264 = 0;
+                        $_etype267 = 0;
+                        $xfer += $input->readListBegin($_etype267, $_size264);
+                        for ($_i268 = 0; $_i268 < $_size264; ++$_i268) {
+                            $elem269 = null;
+                            $elem269 = new \MSceneObject();
+                            $xfer += $elem269->read($input);
+                            $this->sceneObjects []= $elem269;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -144,16 +144,16 @@ class MWalkPointEstimationService_EstimateWalkPoints_args
                 case 4:
                     if ($ftype == TType::MAP) {
                         $this->properties = array();
-                        $_size286 = 0;
-                        $_ktype287 = 0;
-                        $_vtype288 = 0;
-                        $xfer += $input->readMapBegin($_ktype287, $_vtype288, $_size286);
-                        for ($_i290 = 0; $_i290 < $_size286; ++$_i290) {
-                            $key291 = '';
-                            $val292 = '';
-                            $xfer += $input->readString($key291);
-                            $xfer += $input->readString($val292);
-                            $this->properties[$key291] = $val292;
+                        $_size270 = 0;
+                        $_ktype271 = 0;
+                        $_vtype272 = 0;
+                        $xfer += $input->readMapBegin($_ktype271, $_vtype272, $_size270);
+                        for ($_i274 = 0; $_i274 < $_size270; ++$_i274) {
+                            $key275 = '';
+                            $val276 = '';
+                            $xfer += $input->readString($key275);
+                            $xfer += $input->readString($val276);
+                            $this->properties[$key275] = $val276;
                         }
                         $xfer += $input->readMapEnd();
                     } else {
@@ -180,8 +180,8 @@ class MWalkPointEstimationService_EstimateWalkPoints_args
             }
             $xfer += $output->writeFieldBegin('sceneObjects', TType::LST, 1);
             $output->writeListBegin(TType::STRUCT, count($this->sceneObjects));
-            foreach ($this->sceneObjects as $iter293) {
-                $xfer += $iter293->write($output);
+            foreach ($this->sceneObjects as $iter277) {
+                $xfer += $iter277->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();
@@ -205,9 +205,9 @@ class MWalkPointEstimationService_EstimateWalkPoints_args
             }
             $xfer += $output->writeFieldBegin('properties', TType::MAP, 4);
             $output->writeMapBegin(TType::STRING, TType::STRING, count($this->properties));
-            foreach ($this->properties as $kiter294 => $viter295) {
-                $xfer += $output->writeString($kiter294);
-                $xfer += $output->writeString($viter295);
+            foreach ($this->properties as $kiter278 => $viter279) {
+                $xfer += $output->writeString($kiter278);
+                $xfer += $output->writeString($viter279);
             }
             $output->writeMapEnd();
             $xfer += $output->writeFieldEnd();

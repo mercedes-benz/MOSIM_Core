@@ -111,6 +111,8 @@ namespace UnityLocomotionMMU
         /// </summary>
         private Vector2 goalPosition = new Vector2();
 
+        private Vector2 lastGoalPosition;
+
         /// <summary>
         /// A reference to the animator
         /// </summary>
@@ -145,6 +147,8 @@ namespace UnityLocomotionMMU
         /// Flag indicates whether the motion should be aborted
         /// </summary>
         private bool abort = false;
+
+
 
 
         private readonly AnimationTracker leftFootAnimationTracker = new AnimationTracker();
@@ -287,6 +291,8 @@ namespace UnityLocomotionMMU
 
                 //Get the goal position
                 this.goalPosition = new Vector2((float)targetTransform.Position.X, (float)targetTransform.Position.Z);
+
+                this.lastGoalPosition = this.goalPosition;
 
                 //Fetch the trajectory if available
                 if (instruction.Properties.ContainsKey("Trajectory"))
@@ -570,12 +576,38 @@ namespace UnityLocomotionMMU
             Vector2 currentPosition = new Vector2(transform.position.x, transform.position.z);
             Quaternion currentRotation = transform.rotation;
 
+
+            //Check if target position has changed
+            float dist = (this.lastGoalPosition - this.goalPosition).magnitude;
+
             //Estimate the distance to the goal
             float goalDistance = (currentPosition - this.goalPosition).magnitude;
 
 
+            bool replanPath = false;
+
+
+
+
+            //Check if the target object has changed -> Replanning required
+            if (dist > 0.1f)
+            {
+                this.goalPosition = new Vector2(this.goalPosition.x, this.goalPosition.y);
+                replanPath = true;
+            }
+
+
+            //Check if replanning is enforced by replanning time
+            else
+            {
+                replanPath = goalDistance > 0.5f && replanningTime > 0 && elapsedTime.TotalMilliseconds > 0 && (int)elapsedTime.TotalMilliseconds % this.replanningTime == 0;
+            }
+
+
+
+
             //Optionally do reactive replanning
-            if (goalDistance > 0.5f && replanningTime > 0 && elapsedTime.TotalMilliseconds > 0 && (int)elapsedTime.TotalMilliseconds % this.replanningTime == 0)
+            if (replanPath)
             {
                 //Compute a new path
                 this.trajectory = this.ComputePath(new Vector2(transform.position.x, transform.position.z), this.goalPosition);

@@ -25,11 +25,6 @@ class MPathPlanningServiceHandler : virtual public MPathPlanningServiceIf {
     printf("ComputePath\n");
   }
 
-  void ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties) {
-    // Your implementation goes here
-    printf("ComputePathDirection\n");
-  }
-
 };
 
 int main(int argc, char **argv) {

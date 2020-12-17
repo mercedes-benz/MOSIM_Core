@@ -126,6 +126,26 @@ class MMUDescription
                 'class' => '\MParameter',
                 ),
         ),
+        18 => array(
+            'var' => 'Vendor',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        19 => array(
+            'var' => 'VendorDomain',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        20 => array(
+            'var' => 'MmuUrl',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        21 => array(
+            'var' => 'UpdateUrl',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
     );
 
     /**
@@ -188,6 +208,22 @@ class MMUDescription
      * @var \MParameter[]
      */
     public $SceneParameters = null;
+    /**
+     * @var string
+     */
+    public $Vendor = null;
+    /**
+     * @var string
+     */
+    public $VendorDomain = null;
+    /**
+     * @var string
+     */
+    public $MmuUrl = null;
+    /**
+     * @var string
+     */
+    public $UpdateUrl = null;
 
     public function __construct($vals = null)
     {
@@ -236,6 +272,18 @@ class MMUDescription
             }
             if (isset($vals['SceneParameters'])) {
                 $this->SceneParameters = $vals['SceneParameters'];
+            }
+            if (isset($vals['Vendor'])) {
+                $this->Vendor = $vals['Vendor'];
+            }
+            if (isset($vals['VendorDomain'])) {
+                $this->VendorDomain = $vals['VendorDomain'];
+            }
+            if (isset($vals['MmuUrl'])) {
+                $this->MmuUrl = $vals['MmuUrl'];
+            }
+            if (isset($vals['UpdateUrl'])) {
+                $this->UpdateUrl = $vals['UpdateUrl'];
             }
         }
     }
@@ -425,6 +473,34 @@ class MMUDescription
                         $xfer += $input->skip($ftype);
                     }
                     break;
+                case 18:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->Vendor);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 19:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->VendorDomain);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 20:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->MmuUrl);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 21:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->UpdateUrl);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
                 default:
                     $xfer += $input->skip($ftype);
                     break;
@@ -555,6 +631,26 @@ class MMUDescription
                 $xfer += $iter115->write($output);
             }
             $output->writeListEnd();
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->Vendor !== null) {
+            $xfer += $output->writeFieldBegin('Vendor', TType::STRING, 18);
+            $xfer += $output->writeString($this->Vendor);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->VendorDomain !== null) {
+            $xfer += $output->writeFieldBegin('VendorDomain', TType::STRING, 19);
+            $xfer += $output->writeString($this->VendorDomain);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->MmuUrl !== null) {
+            $xfer += $output->writeFieldBegin('MmuUrl', TType::STRING, 20);
+            $xfer += $output->writeString($this->MmuUrl);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->UpdateUrl !== null) {
+            $xfer += $output->writeFieldBegin('UpdateUrl', TType::STRING, 21);
+            $xfer += $output->writeString($this->UpdateUrl);
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();

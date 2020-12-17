@@ -24,7 +24,6 @@ class MPathPlanningServiceIf : virtual public MMIServiceBaseIf {
  public:
   virtual ~MPathPlanningServiceIf() {}
   virtual void ComputePath( ::MMIStandard::MPathConstraint& _return, const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties) = 0;
-  virtual void ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties) = 0;
 };
 
 class MPathPlanningServiceIfFactory : virtual public MMIServiceBaseIfFactory {
@@ -55,9 +54,6 @@ class MPathPlanningServiceNull : virtual public MPathPlanningServiceIf , virtual
  public:
   virtual ~MPathPlanningServiceNull() {}
   void ComputePath( ::MMIStandard::MPathConstraint& /* _return */, const  ::MMIStandard::MVector& /* start */, const  ::MMIStandard::MVector& /* goal */, const std::vector< ::MMIStandard::MSceneObject> & /* sceneObjects */, const std::map<std::string, std::string> & /* properties */) {
-    return;
-  }
-  void ComputePathDirection( ::MMIStandard::MVector& /* _return */, const  ::MMIStandard::MVector& /* current */, const  ::MMIStandard::MVector& /* goal */, const std::vector< ::MMIStandard::MSceneObject> & /* sceneObject */, const std::map<std::string, std::string> & /* properties */) {
     return;
   }
 };
@@ -187,131 +183,6 @@ class MPathPlanningService_ComputePath_presult {
 
 };
 
-typedef struct _MPathPlanningService_ComputePathDirection_args__isset {
-  _MPathPlanningService_ComputePathDirection_args__isset() : current(false), goal(false), sceneObject(false), properties(false) {}
-  bool current :1;
-  bool goal :1;
-  bool sceneObject :1;
-  bool properties :1;
-} _MPathPlanningService_ComputePathDirection_args__isset;
-
-class MPathPlanningService_ComputePathDirection_args {
- public:
-
-  MPathPlanningService_ComputePathDirection_args(const MPathPlanningService_ComputePathDirection_args&);
-  MPathPlanningService_ComputePathDirection_args& operator=(const MPathPlanningService_ComputePathDirection_args&);
-  MPathPlanningService_ComputePathDirection_args() {
-  }
-
-  virtual ~MPathPlanningService_ComputePathDirection_args() noexcept;
-   ::MMIStandard::MVector current;
-   ::MMIStandard::MVector goal;
-  std::vector< ::MMIStandard::MSceneObject>  sceneObject;
-  std::map<std::string, std::string>  properties;
-
-  _MPathPlanningService_ComputePathDirection_args__isset __isset;
-
-  void __set_current(const  ::MMIStandard::MVector& val);
-
-  void __set_goal(const  ::MMIStandard::MVector& val);
-
-  void __set_sceneObject(const std::vector< ::MMIStandard::MSceneObject> & val);
-
-  void __set_properties(const std::map<std::string, std::string> & val);
-
-  bool operator == (const MPathPlanningService_ComputePathDirection_args & rhs) const
-  {
-    if (!(current == rhs.current))
-      return false;
-    if (!(goal == rhs.goal))
-      return false;
-    if (!(sceneObject == rhs.sceneObject))
-      return false;
-    if (!(properties == rhs.properties))
-      return false;
-    return true;
-  }
-  bool operator != (const MPathPlanningService_ComputePathDirection_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const MPathPlanningService_ComputePathDirection_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class MPathPlanningService_ComputePathDirection_pargs {
- public:
-
-
-  virtual ~MPathPlanningService_ComputePathDirection_pargs() noexcept;
-  const  ::MMIStandard::MVector* current;
-  const  ::MMIStandard::MVector* goal;
-  const std::vector< ::MMIStandard::MSceneObject> * sceneObject;
-  const std::map<std::string, std::string> * properties;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _MPathPlanningService_ComputePathDirection_result__isset {
-  _MPathPlanningService_ComputePathDirection_result__isset() : success(false) {}
-  bool success :1;
-} _MPathPlanningService_ComputePathDirection_result__isset;
-
-class MPathPlanningService_ComputePathDirection_result {
- public:
-
-  MPathPlanningService_ComputePathDirection_result(const MPathPlanningService_ComputePathDirection_result&);
-  MPathPlanningService_ComputePathDirection_result& operator=(const MPathPlanningService_ComputePathDirection_result&);
-  MPathPlanningService_ComputePathDirection_result() {
-  }
-
-  virtual ~MPathPlanningService_ComputePathDirection_result() noexcept;
-   ::MMIStandard::MVector success;
-
-  _MPathPlanningService_ComputePathDirection_result__isset __isset;
-
-  void __set_success(const  ::MMIStandard::MVector& val);
-
-  bool operator == (const MPathPlanningService_ComputePathDirection_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    return true;
-  }
-  bool operator != (const MPathPlanningService_ComputePathDirection_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const MPathPlanningService_ComputePathDirection_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _MPathPlanningService_ComputePathDirection_presult__isset {
-  _MPathPlanningService_ComputePathDirection_presult__isset() : success(false) {}
-  bool success :1;
-} _MPathPlanningService_ComputePathDirection_presult__isset;
-
-class MPathPlanningService_ComputePathDirection_presult {
- public:
-
-
-  virtual ~MPathPlanningService_ComputePathDirection_presult() noexcept;
-   ::MMIStandard::MVector* success;
-
-  _MPathPlanningService_ComputePathDirection_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 class MPathPlanningServiceClient : virtual public MPathPlanningServiceIf, public MMIServiceBaseClient {
  public:
   MPathPlanningServiceClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) :
@@ -326,9 +197,6 @@ class MPathPlanningServiceClient : virtual public MPathPlanningServiceIf, public
   void ComputePath( ::MMIStandard::MPathConstraint& _return, const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties);
   void send_ComputePath(const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties);
   void recv_ComputePath( ::MMIStandard::MPathConstraint& _return);
-  void ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties);
-  void send_ComputePathDirection(const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties);
-  void recv_ComputePathDirection( ::MMIStandard::MVector& _return);
 };
 
 class MPathPlanningServiceProcessor : public MMIServiceBaseProcessor {
@@ -340,13 +208,11 @@ class MPathPlanningServiceProcessor : public MMIServiceBaseProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_ComputePath(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_ComputePathDirection(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   MPathPlanningServiceProcessor(::std::shared_ptr<MPathPlanningServiceIf> iface) :
     MMIServiceBaseProcessor(iface),
     iface_(iface) {
     processMap_["ComputePath"] = &MPathPlanningServiceProcessor::process_ComputePath;
-    processMap_["ComputePathDirection"] = &MPathPlanningServiceProcessor::process_ComputePathDirection;
   }
 
   virtual ~MPathPlanningServiceProcessor() {}
@@ -390,16 +256,6 @@ class MPathPlanningServiceMultiface : virtual public MPathPlanningServiceIf, pub
     return;
   }
 
-  void ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->ComputePathDirection(_return, current, goal, sceneObject, properties);
-    }
-    ifaces_[i]->ComputePathDirection(_return, current, goal, sceneObject, properties);
-    return;
-  }
-
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -419,9 +275,6 @@ class MPathPlanningServiceConcurrentClient : virtual public MPathPlanningService
   void ComputePath( ::MMIStandard::MPathConstraint& _return, const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties);
   int32_t send_ComputePath(const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties);
   void recv_ComputePath( ::MMIStandard::MPathConstraint& _return, const int32_t seqid);
-  void ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties);
-  int32_t send_ComputePathDirection(const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties);
-  void recv_ComputePathDirection( ::MMIStandard::MVector& _return, const int32_t seqid);
 };
 
 #ifdef _MSC_VER

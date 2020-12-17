@@ -191,6 +191,10 @@ namespace MMIUnity.TargetEngine.Scene
         /// <param name="avatarID">A unique id for the avatar</param>
         public virtual void Setup(string address, int port, string sessionId)
         {
+            //Save the initial position and rotation
+            Vector3 startPosition = this.transform.position;
+            Quaternion startRotation = this.transform.rotation;
+
             //Setup the retargeting
             this.SetupRetargeting();
 
@@ -223,6 +227,14 @@ namespace MMIUnity.TargetEngine.Scene
 
                 Debug.Log("Started Remote Skeleton Access Server with Avatar <" + this.AvatarID + ">");
             }
+
+
+            //Set the postion and rotation of the avatar to the desired one
+            this.transform.position = startPosition;
+            this.transform.rotation = startRotation;
+
+            //Apply the transform manipulations to update the avatar location
+            this.ApplyTransformManipulations();
         }
 
         /// <summary>

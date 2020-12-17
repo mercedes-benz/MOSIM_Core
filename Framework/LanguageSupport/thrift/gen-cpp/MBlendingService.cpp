@@ -45,8 +45,10 @@ uint32_t MBlendingService_SetBlendingMask_args::read(::apache::thrift::protocol:
             uint32_t _i256;
             for (_i256 = 0; _i256 < _size252; ++_i256)
             {
-               ::MMIStandard::MTransform _key257;
-              xfer += _key257.read(iprot);
+               ::MMIStandard::MJointType::type _key257;
+              int32_t ecast259;
+              xfer += iprot->readI32(ecast259);
+              _key257 = ( ::MMIStandard::MJointType::type)ecast259;
               double& _val258 = this->mask[_key257];
               xfer += iprot->readDouble(_val258);
             }
@@ -84,12 +86,12 @@ uint32_t MBlendingService_SetBlendingMask_args::write(::apache::thrift::protocol
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 1);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter259;
-    for (_iter259 = this->mask.begin(); _iter259 != this->mask.end(); ++_iter259)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter260;
+    for (_iter260 = this->mask.begin(); _iter260 != this->mask.end(); ++_iter260)
     {
-      xfer += _iter259->first.write(oprot);
-      xfer += oprot->writeDouble(_iter259->second);
+      xfer += oprot->writeI32((int32_t)_iter260->first);
+      xfer += oprot->writeDouble(_iter260->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -116,12 +118,12 @@ uint32_t MBlendingService_SetBlendingMask_pargs::write(::apache::thrift::protoco
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 1);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter260;
-    for (_iter260 = (*(this->mask)).begin(); _iter260 != (*(this->mask)).end(); ++_iter260)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter261;
+    for (_iter261 = (*(this->mask)).begin(); _iter261 != (*(this->mask)).end(); ++_iter261)
     {
-      xfer += _iter260->first.write(oprot);
-      xfer += oprot->writeDouble(_iter260->second);
+      xfer += oprot->writeI32((int32_t)_iter261->first);
+      xfer += oprot->writeDouble(_iter261->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -463,13 +465,13 @@ uint32_t MBlendingService_Blend_presult::read(::apache::thrift::protocol::TProto
   return xfer;
 }
 
-void MBlendingServiceClient::SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID)
+void MBlendingServiceClient::SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID)
 {
   send_SetBlendingMask(mask, avatarID);
   recv_SetBlendingMask(_return);
 }
 
-void MBlendingServiceClient::send_SetBlendingMask(const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID)
+void MBlendingServiceClient::send_SetBlendingMask(const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("SetBlendingMask", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -707,13 +709,13 @@ void MBlendingServiceProcessor::process_Blend(int32_t seqid, ::apache::thrift::p
   return processor;
 }
 
-void MBlendingServiceConcurrentClient::SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID)
+void MBlendingServiceConcurrentClient::SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID)
 {
   int32_t seqid = send_SetBlendingMask(mask, avatarID);
   recv_SetBlendingMask(_return, seqid);
 }
 
-int32_t MBlendingServiceConcurrentClient::send_SetBlendingMask(const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID)
+int32_t MBlendingServiceConcurrentClient::send_SetBlendingMask(const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());

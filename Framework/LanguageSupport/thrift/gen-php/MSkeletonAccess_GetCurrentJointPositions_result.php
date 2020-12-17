@@ -67,14 +67,14 @@ class MSkeletonAccess_GetCurrentJointPositions_result
                 case 0:
                     if ($ftype == TType::LST) {
                         $this->success = array();
-                        $_size317 = 0;
-                        $_etype320 = 0;
-                        $xfer += $input->readListBegin($_etype320, $_size317);
-                        for ($_i321 = 0; $_i321 < $_size317; ++$_i321) {
-                            $elem322 = null;
-                            $elem322 = new \MVector3();
-                            $xfer += $elem322->read($input);
-                            $this->success []= $elem322;
+                        $_size301 = 0;
+                        $_etype304 = 0;
+                        $xfer += $input->readListBegin($_etype304, $_size301);
+                        for ($_i305 = 0; $_i305 < $_size301; ++$_i305) {
+                            $elem306 = null;
+                            $elem306 = new \MVector3();
+                            $xfer += $elem306->read($input);
+                            $this->success []= $elem306;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -101,8 +101,8 @@ class MSkeletonAccess_GetCurrentJointPositions_result
             }
             $xfer += $output->writeFieldBegin('success', TType::LST, 0);
             $output->writeListBegin(TType::STRUCT, count($this->success));
-            foreach ($this->success as $iter323) {
-                $xfer += $iter323->write($output);
+            foreach ($this->success as $iter307) {
+                $xfer += $iter307->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

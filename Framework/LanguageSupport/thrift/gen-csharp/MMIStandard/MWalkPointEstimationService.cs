@@ -276,13 +276,13 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     SceneObjects = new List<MMIStandard.MSceneObject>();
-                    TList _list158 = iprot.ReadListBegin();
-                    for( int _i159 = 0; _i159 < _list158.Count; ++_i159)
+                    TList _list149 = iprot.ReadListBegin();
+                    for( int _i150 = 0; _i150 < _list149.Count; ++_i150)
                     {
-                      MMIStandard.MSceneObject _elem160;
-                      _elem160 = new MMIStandard.MSceneObject();
-                      _elem160.Read(iprot);
-                      SceneObjects.Add(_elem160);
+                      MMIStandard.MSceneObject _elem151;
+                      _elem151 = new MMIStandard.MSceneObject();
+                      _elem151.Read(iprot);
+                      SceneObjects.Add(_elem151);
                     }
                     iprot.ReadListEnd();
                   }
@@ -309,14 +309,14 @@ namespace MMIStandard
                 if (field.Type == TType.Map) {
                   {
                     Properties = new Dictionary<string, string>();
-                    TMap _map161 = iprot.ReadMapBegin();
-                    for( int _i162 = 0; _i162 < _map161.Count; ++_i162)
+                    TMap _map152 = iprot.ReadMapBegin();
+                    for( int _i153 = 0; _i153 < _map152.Count; ++_i153)
                     {
-                      string _key163;
-                      string _val164;
-                      _key163 = iprot.ReadString();
-                      _val164 = iprot.ReadString();
-                      Properties[_key163] = _val164;
+                      string _key154;
+                      string _val155;
+                      _key154 = iprot.ReadString();
+                      _val155 = iprot.ReadString();
+                      Properties[_key154] = _val155;
                     }
                     iprot.ReadMapEnd();
                   }
@@ -352,9 +352,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, SceneObjects.Count));
-              foreach (MMIStandard.MSceneObject _iter165 in SceneObjects)
+              foreach (MMIStandard.MSceneObject _iter156 in SceneObjects)
               {
-                _iter165.Write(oprot);
+                _iter156.Write(oprot);
               }
               oprot.WriteListEnd();
             }
@@ -383,10 +383,10 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteMapBegin(new TMap(TType.String, TType.String, Properties.Count));
-              foreach (string _iter166 in Properties.Keys)
+              foreach (string _iter157 in Properties.Keys)
               {
-                oprot.WriteString(_iter166);
-                oprot.WriteString(Properties[_iter166]);
+                oprot.WriteString(_iter157);
+                oprot.WriteString(Properties[_iter157]);
               }
               oprot.WriteMapEnd();
             }
@@ -486,13 +486,13 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     Success = new List<MWalkPoint>();
-                    TList _list167 = iprot.ReadListBegin();
-                    for( int _i168 = 0; _i168 < _list167.Count; ++_i168)
+                    TList _list158 = iprot.ReadListBegin();
+                    for( int _i159 = 0; _i159 < _list158.Count; ++_i159)
                     {
-                      MWalkPoint _elem169;
-                      _elem169 = new MWalkPoint();
-                      _elem169.Read(iprot);
-                      Success.Add(_elem169);
+                      MWalkPoint _elem160;
+                      _elem160 = new MWalkPoint();
+                      _elem160.Read(iprot);
+                      Success.Add(_elem160);
                     }
                     iprot.ReadListEnd();
                   }
@@ -530,9 +530,9 @@ namespace MMIStandard
               oprot.WriteFieldBegin(field);
               {
                 oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (MWalkPoint _iter170 in Success)
+                foreach (MWalkPoint _iter161 in Success)
                 {
-                  _iter170.Write(oprot);
+                  _iter161.Write(oprot);
                 }
                 oprot.WriteListEnd();
               }

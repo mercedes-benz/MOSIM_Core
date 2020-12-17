@@ -23,7 +23,7 @@ namespace MMIStandard {
 class MGraspPoseServiceIf : virtual public MMIServiceBaseIf {
  public:
   virtual ~MGraspPoseServiceIf() {}
-  virtual void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) = 0;
+  virtual void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) = 0;
 };
 
 class MGraspPoseServiceIfFactory : virtual public MMIServiceBaseIfFactory {
@@ -53,7 +53,7 @@ class MGraspPoseServiceIfSingletonFactory : virtual public MGraspPoseServiceIfFa
 class MGraspPoseServiceNull : virtual public MGraspPoseServiceIf , virtual public MMIServiceBaseNull {
  public:
   virtual ~MGraspPoseServiceNull() {}
-  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* posture */, const  ::MMIStandard::MTransform& /* handType */, const  ::MMIStandard::MSceneObject& /* sceneObject */, const bool /* repositionHand */) {
+  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* posture */, const  ::MMIStandard::MJointType::type /* handType */, const  ::MMIStandard::MSceneObject& /* sceneObject */, const bool /* repositionHand */) {
     return;
   }
 };
@@ -71,12 +71,12 @@ class MGraspPoseService_GetGraspPoses_args {
 
   MGraspPoseService_GetGraspPoses_args(const MGraspPoseService_GetGraspPoses_args&);
   MGraspPoseService_GetGraspPoses_args& operator=(const MGraspPoseService_GetGraspPoses_args&);
-  MGraspPoseService_GetGraspPoses_args() : repositionHand(0) {
+  MGraspPoseService_GetGraspPoses_args() : handType(( ::MMIStandard::MJointType::type)0), repositionHand(0) {
   }
 
   virtual ~MGraspPoseService_GetGraspPoses_args() noexcept;
    ::MMIStandard::MAvatarPostureValues posture;
-   ::MMIStandard::MTransform handType;
+   ::MMIStandard::MJointType::type handType;
    ::MMIStandard::MSceneObject sceneObject;
   bool repositionHand;
 
@@ -84,7 +84,7 @@ class MGraspPoseService_GetGraspPoses_args {
 
   void __set_posture(const  ::MMIStandard::MAvatarPostureValues& val);
 
-  void __set_handType(const  ::MMIStandard::MTransform& val);
+  void __set_handType(const  ::MMIStandard::MJointType::type val);
 
   void __set_sceneObject(const  ::MMIStandard::MSceneObject& val);
 
@@ -120,7 +120,7 @@ class MGraspPoseService_GetGraspPoses_pargs {
 
   virtual ~MGraspPoseService_GetGraspPoses_pargs() noexcept;
   const  ::MMIStandard::MAvatarPostureValues* posture;
-  const  ::MMIStandard::MTransform* handType;
+  const  ::MMIStandard::MJointType::type* handType;
   const  ::MMIStandard::MSceneObject* sceneObject;
   const bool* repositionHand;
 
@@ -194,8 +194,8 @@ class MGraspPoseServiceClient : virtual public MGraspPoseServiceIf, public MMISe
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
-  void send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
+  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
+  void send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
   void recv_GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return);
 };
 
@@ -246,7 +246,7 @@ class MGraspPoseServiceMultiface : virtual public MGraspPoseServiceIf, public MM
     ifaces_.push_back(iface);
   }
  public:
-  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) {
+  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -272,8 +272,8 @@ class MGraspPoseServiceConcurrentClient : virtual public MGraspPoseServiceIf, pu
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
-  int32_t send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
+  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
+  int32_t send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand);
   void recv_GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const int32_t seqid);
 };
 

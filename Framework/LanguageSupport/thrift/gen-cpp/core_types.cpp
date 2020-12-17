@@ -459,6 +459,26 @@ void MExecutableDescription::__set_Dependencies(const std::vector<std::string> &
   this->Dependencies = val;
 __isset.Dependencies = true;
 }
+
+void MExecutableDescription::__set_Vendor(const std::string& val) {
+  this->Vendor = val;
+__isset.Vendor = true;
+}
+
+void MExecutableDescription::__set_VendorDomain(const std::string& val) {
+  this->VendorDomain = val;
+__isset.VendorDomain = true;
+}
+
+void MExecutableDescription::__set_ServiceUrl(const std::string& val) {
+  this->ServiceUrl = val;
+__isset.ServiceUrl = true;
+}
+
+void MExecutableDescription::__set_UpdateUrl(const std::string& val) {
+  this->UpdateUrl = val;
+__isset.UpdateUrl = true;
+}
 std::ostream& operator<<(std::ostream& out, const MExecutableDescription& obj)
 {
   obj.printTo(out);
@@ -561,6 +581,38 @@ uint32_t MExecutableDescription::read(::apache::thrift::protocol::TProtocol* ipr
           xfer += iprot->skip(ftype);
         }
         break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->Vendor);
+          this->__isset.Vendor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->VendorDomain);
+          this->__isset.VendorDomain = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 10:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->ServiceUrl);
+          this->__isset.ServiceUrl = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 11:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->UpdateUrl);
+          this->__isset.UpdateUrl = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -627,6 +679,26 @@ uint32_t MExecutableDescription::write(::apache::thrift::protocol::TProtocol* op
     }
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.Vendor) {
+    xfer += oprot->writeFieldBegin("Vendor", ::apache::thrift::protocol::T_STRING, 8);
+    xfer += oprot->writeString(this->Vendor);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.VendorDomain) {
+    xfer += oprot->writeFieldBegin("VendorDomain", ::apache::thrift::protocol::T_STRING, 9);
+    xfer += oprot->writeString(this->VendorDomain);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.ServiceUrl) {
+    xfer += oprot->writeFieldBegin("ServiceUrl", ::apache::thrift::protocol::T_STRING, 10);
+    xfer += oprot->writeString(this->ServiceUrl);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.UpdateUrl) {
+    xfer += oprot->writeFieldBegin("UpdateUrl", ::apache::thrift::protocol::T_STRING, 11);
+    xfer += oprot->writeString(this->UpdateUrl);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -641,6 +713,10 @@ void swap(MExecutableDescription &a, MExecutableDescription &b) {
   swap(a.Author, b.Author);
   swap(a.Version, b.Version);
   swap(a.Dependencies, b.Dependencies);
+  swap(a.Vendor, b.Vendor);
+  swap(a.VendorDomain, b.VendorDomain);
+  swap(a.ServiceUrl, b.ServiceUrl);
+  swap(a.UpdateUrl, b.UpdateUrl);
   swap(a.__isset, b.__isset);
 }
 
@@ -652,6 +728,10 @@ MExecutableDescription::MExecutableDescription(const MExecutableDescription& oth
   Author = other18.Author;
   Version = other18.Version;
   Dependencies = other18.Dependencies;
+  Vendor = other18.Vendor;
+  VendorDomain = other18.VendorDomain;
+  ServiceUrl = other18.ServiceUrl;
+  UpdateUrl = other18.UpdateUrl;
   __isset = other18.__isset;
 }
 MExecutableDescription& MExecutableDescription::operator=(const MExecutableDescription& other19) {
@@ -662,6 +742,10 @@ MExecutableDescription& MExecutableDescription::operator=(const MExecutableDescr
   Author = other19.Author;
   Version = other19.Version;
   Dependencies = other19.Dependencies;
+  Vendor = other19.Vendor;
+  VendorDomain = other19.VendorDomain;
+  ServiceUrl = other19.ServiceUrl;
+  UpdateUrl = other19.UpdateUrl;
   __isset = other19.__isset;
   return *this;
 }
@@ -675,6 +759,10 @@ void MExecutableDescription::printTo(std::ostream& out) const {
   out << ", " << "Author=" << to_string(Author);
   out << ", " << "Version=" << to_string(Version);
   out << ", " << "Dependencies="; (__isset.Dependencies ? (out << to_string(Dependencies)) : (out << "<null>"));
+  out << ", " << "Vendor="; (__isset.Vendor ? (out << to_string(Vendor)) : (out << "<null>"));
+  out << ", " << "VendorDomain="; (__isset.VendorDomain ? (out << to_string(VendorDomain)) : (out << "<null>"));
+  out << ", " << "ServiceUrl="; (__isset.ServiceUrl ? (out << to_string(ServiceUrl)) : (out << "<null>"));
+  out << ", " << "UpdateUrl="; (__isset.UpdateUrl ? (out << to_string(UpdateUrl)) : (out << "<null>"));
   out << ")";
 }
 

@@ -256,8 +256,7 @@ class Blend_args(object):
                     self.mask = {}
                     (_ktype192, _vtype193, _size191) = iprot.readMapBegin()
                     for _i195 in range(_size191):
-                        _key196 = MMIStandard.math.ttypes.MTransform()
-                        _key196.read(iprot)
+                        _key196 = iprot.readI32()
                         _val197 = iprot.readDouble()
                         self.mask[_key196] = _val197
                     iprot.readMapEnd()
@@ -298,9 +297,9 @@ class Blend_args(object):
             oprot.writeFieldEnd()
         if self.mask is not None:
             oprot.writeFieldBegin('mask', TType.MAP, 4)
-            oprot.writeMapBegin(TType.STRUCT, TType.DOUBLE, len(self.mask))
+            oprot.writeMapBegin(TType.I32, TType.DOUBLE, len(self.mask))
             for kiter205, viter206 in self.mask.items():
-                kiter205.write(oprot)
+                oprot.writeI32(kiter205)
                 oprot.writeDouble(viter206)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -334,7 +333,7 @@ Blend_args.thrift_spec = (
     (1, TType.STRUCT, 'startPosture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 1
     (2, TType.STRUCT, 'targetPosture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 2
     (3, TType.DOUBLE, 'weight', None, None, ),  # 3
-    (4, TType.MAP, 'mask', (TType.STRUCT, [MMIStandard.math.ttypes.MTransform, None], TType.DOUBLE, None, False), None, ),  # 4
+    (4, TType.MAP, 'mask', (TType.I32, None, TType.DOUBLE, None, False), None, ),  # 4
     (5, TType.MAP, 'properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 5
 )
 
@@ -456,8 +455,7 @@ class BlendMany_args(object):
                     self.mask = {}
                     (_ktype216, _vtype217, _size215) = iprot.readMapBegin()
                     for _i219 in range(_size215):
-                        _key220 = MMIStandard.math.ttypes.MTransform()
-                        _key220.read(iprot)
+                        _key220 = iprot.readI32()
                         _val221 = iprot.readDouble()
                         self.mask[_key220] = _val221
                     iprot.readMapEnd()
@@ -501,9 +499,9 @@ class BlendMany_args(object):
             oprot.writeFieldEnd()
         if self.mask is not None:
             oprot.writeFieldBegin('mask', TType.MAP, 4)
-            oprot.writeMapBegin(TType.STRUCT, TType.DOUBLE, len(self.mask))
+            oprot.writeMapBegin(TType.I32, TType.DOUBLE, len(self.mask))
             for kiter230, viter231 in self.mask.items():
-                kiter230.write(oprot)
+                oprot.writeI32(kiter230)
                 oprot.writeDouble(viter231)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -537,7 +535,7 @@ BlendMany_args.thrift_spec = (
     (1, TType.STRUCT, 'startPosture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 1
     (2, TType.STRUCT, 'targetPosture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 2
     (3, TType.LIST, 'weights', (TType.DOUBLE, None, False), None, ),  # 3
-    (4, TType.MAP, 'mask', (TType.STRUCT, [MMIStandard.math.ttypes.MTransform, None], TType.DOUBLE, None, False), None, ),  # 4
+    (4, TType.MAP, 'mask', (TType.I32, None, TType.DOUBLE, None, False), None, ),  # 4
     (5, TType.MAP, 'properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 5
 )
 

@@ -925,10 +925,10 @@ class TransformToMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype327, _size324) = iprot.readListBegin()
-                    for _i328 in range(_size324):
-                        _elem329 = iprot.readI32()
-                        self.coordinateSystem.append(_elem329)
+                    (_etype311, _size308) = iprot.readListBegin()
+                    for _i312 in range(_size308):
+                        _elem313 = iprot.readI32()
+                        self.coordinateSystem.append(_elem313)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -949,8 +949,8 @@ class TransformToMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter330 in self.coordinateSystem:
-                oprot.writeI32(iter330)
+            for iter314 in self.coordinateSystem:
+                oprot.writeI32(iter314)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1231,10 +1231,10 @@ class TransformFromMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype334, _size331) = iprot.readListBegin()
-                    for _i335 in range(_size331):
-                        _elem336 = iprot.readI32()
-                        self.coordinateSystem.append(_elem336)
+                    (_etype318, _size315) = iprot.readListBegin()
+                    for _i319 in range(_size315):
+                        _elem320 = iprot.readI32()
+                        self.coordinateSystem.append(_elem320)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1255,8 +1255,8 @@ class TransformFromMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter337 in self.coordinateSystem:
-                oprot.writeI32(iter337)
+            for iter321 in self.coordinateSystem:
+                oprot.writeI32(iter321)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1537,10 +1537,10 @@ class QuaternionToMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype341, _size338) = iprot.readListBegin()
-                    for _i342 in range(_size338):
-                        _elem343 = iprot.readI32()
-                        self.coordinateSystem.append(_elem343)
+                    (_etype325, _size322) = iprot.readListBegin()
+                    for _i326 in range(_size322):
+                        _elem327 = iprot.readI32()
+                        self.coordinateSystem.append(_elem327)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1561,8 +1561,8 @@ class QuaternionToMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter344 in self.coordinateSystem:
-                oprot.writeI32(iter344)
+            for iter328 in self.coordinateSystem:
+                oprot.writeI32(iter328)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1843,10 +1843,10 @@ class QuaternionFromMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype348, _size345) = iprot.readListBegin()
-                    for _i349 in range(_size345):
-                        _elem350 = iprot.readI32()
-                        self.coordinateSystem.append(_elem350)
+                    (_etype332, _size329) = iprot.readListBegin()
+                    for _i333 in range(_size329):
+                        _elem334 = iprot.readI32()
+                        self.coordinateSystem.append(_elem334)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1867,8 +1867,8 @@ class QuaternionFromMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter351 in self.coordinateSystem:
-                oprot.writeI32(iter351)
+            for iter335 in self.coordinateSystem:
+                oprot.writeI32(iter335)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -2149,10 +2149,10 @@ class VectorToMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype355, _size352) = iprot.readListBegin()
-                    for _i356 in range(_size352):
-                        _elem357 = iprot.readI32()
-                        self.coordinateSystem.append(_elem357)
+                    (_etype339, _size336) = iprot.readListBegin()
+                    for _i340 in range(_size336):
+                        _elem341 = iprot.readI32()
+                        self.coordinateSystem.append(_elem341)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -2173,8 +2173,8 @@ class VectorToMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter358 in self.coordinateSystem:
-                oprot.writeI32(iter358)
+            for iter342 in self.coordinateSystem:
+                oprot.writeI32(iter342)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -2455,10 +2455,10 @@ class VectorFromMMI_L_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.coordinateSystem = []
-                    (_etype362, _size359) = iprot.readListBegin()
-                    for _i363 in range(_size359):
-                        _elem364 = iprot.readI32()
-                        self.coordinateSystem.append(_elem364)
+                    (_etype346, _size343) = iprot.readListBegin()
+                    for _i347 in range(_size343):
+                        _elem348 = iprot.readI32()
+                        self.coordinateSystem.append(_elem348)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -2479,8 +2479,8 @@ class VectorFromMMI_L_args(object):
         if self.coordinateSystem is not None:
             oprot.writeFieldBegin('coordinateSystem', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.coordinateSystem))
-            for iter365 in self.coordinateSystem:
-                oprot.writeI32(iter365)
+            for iter349 in self.coordinateSystem:
+                oprot.writeI32(iter349)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

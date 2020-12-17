@@ -24,12 +24,4 @@ interface MPathPlanningServiceIf extends \MMIServiceBaseIf
      * @return \MPathConstraint
      */
     public function ComputePath(\MVector $start, \MVector $goal, array $sceneObjects, array $properties);
-    /**
-     * @param \MVector $current
-     * @param \MVector $goal
-     * @param \MSceneObject[] $sceneObject
-     * @param array $properties
-     * @return \MVector
-     */
-    public function ComputePathDirection(\MVector $current, \MVector $goal, array $sceneObject, array $properties);
 }

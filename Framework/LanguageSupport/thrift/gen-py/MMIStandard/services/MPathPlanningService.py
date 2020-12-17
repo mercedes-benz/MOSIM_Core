@@ -31,17 +31,6 @@ class Iface(MMIStandard.services.MMIServiceBase.Iface):
         """
         pass
 
-    def ComputePathDirection(self, current, goal, sceneObject, properties):
-        """
-        Parameters:
-         - current
-         - goal
-         - sceneObject
-         - properties
-
-        """
-        pass
-
 
 class Client(MMIStandard.services.MMIServiceBase.Client, Iface):
     def __init__(self, iprot, oprot=None):
@@ -85,50 +74,11 @@ class Client(MMIStandard.services.MMIServiceBase.Client, Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "ComputePath failed: unknown result")
 
-    def ComputePathDirection(self, current, goal, sceneObject, properties):
-        """
-        Parameters:
-         - current
-         - goal
-         - sceneObject
-         - properties
-
-        """
-        self.send_ComputePathDirection(current, goal, sceneObject, properties)
-        return self.recv_ComputePathDirection()
-
-    def send_ComputePathDirection(self, current, goal, sceneObject, properties):
-        self._oprot.writeMessageBegin('ComputePathDirection', TMessageType.CALL, self._seqid)
-        args = ComputePathDirection_args()
-        args.current = current
-        args.goal = goal
-        args.sceneObject = sceneObject
-        args.properties = properties
-        args.write(self._oprot)
-        self._oprot.writeMessageEnd()
-        self._oprot.trans.flush()
-
-    def recv_ComputePathDirection(self):
-        iprot = self._iprot
-        (fname, mtype, rseqid) = iprot.readMessageBegin()
-        if mtype == TMessageType.EXCEPTION:
-            x = TApplicationException()
-            x.read(iprot)
-            iprot.readMessageEnd()
-            raise x
-        result = ComputePathDirection_result()
-        result.read(iprot)
-        iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ComputePathDirection failed: unknown result")
-
 
 class Processor(MMIStandard.services.MMIServiceBase.Processor, Iface, TProcessor):
     def __init__(self, handler):
         MMIStandard.services.MMIServiceBase.Processor.__init__(self, handler)
         self._processMap["ComputePath"] = Processor.process_ComputePath
-        self._processMap["ComputePathDirection"] = Processor.process_ComputePathDirection
         self._on_message_begin = None
 
     def on_message_begin(self, func):
@@ -170,29 +120,6 @@ class Processor(MMIStandard.services.MMIServiceBase.Processor, Iface, TProcessor
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("ComputePath", msg_type, seqid)
-        result.write(oprot)
-        oprot.writeMessageEnd()
-        oprot.trans.flush()
-
-    def process_ComputePathDirection(self, seqid, iprot, oprot):
-        args = ComputePathDirection_args()
-        args.read(iprot)
-        iprot.readMessageEnd()
-        result = ComputePathDirection_result()
-        try:
-            result.success = self._handler.ComputePathDirection(args.current, args.goal, args.sceneObject, args.properties)
-            msg_type = TMessageType.REPLY
-        except TTransport.TTransportException:
-            raise
-        except TApplicationException as ex:
-            logging.exception('TApplication exception in handler')
-            msg_type = TMessageType.EXCEPTION
-            result = ex
-        except Exception:
-            logging.exception('Unexpected exception in handler')
-            msg_type = TMessageType.EXCEPTION
-            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ComputePathDirection", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -378,187 +305,6 @@ class ComputePath_result(object):
 all_structs.append(ComputePath_result)
 ComputePath_result.thrift_spec = (
     (0, TType.STRUCT, 'success', [MMIStandard.constraints.ttypes.MPathConstraint, None], None, ),  # 0
-)
-
-
-class ComputePathDirection_args(object):
-    """
-    Attributes:
-     - current
-     - goal
-     - sceneObject
-     - properties
-
-    """
-
-
-    def __init__(self, current=None, goal=None, sceneObject=None, properties=None,):
-        self.current = current
-        self.goal = goal
-        self.sceneObject = sceneObject
-        self.properties = properties
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.STRUCT:
-                    self.current = MMIStandard.math.ttypes.MVector()
-                    self.current.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.goal = MMIStandard.math.ttypes.MVector()
-                    self.goal.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 3:
-                if ftype == TType.LIST:
-                    self.sceneObject = []
-                    (_etype260, _size257) = iprot.readListBegin()
-                    for _i261 in range(_size257):
-                        _elem262 = MMIStandard.scene.ttypes.MSceneObject()
-                        _elem262.read(iprot)
-                        self.sceneObject.append(_elem262)
-                    iprot.readListEnd()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 4:
-                if ftype == TType.MAP:
-                    self.properties = {}
-                    (_ktype264, _vtype265, _size263) = iprot.readMapBegin()
-                    for _i267 in range(_size263):
-                        _key268 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        _val269 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.properties[_key268] = _val269
-                    iprot.readMapEnd()
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('ComputePathDirection_args')
-        if self.current is not None:
-            oprot.writeFieldBegin('current', TType.STRUCT, 1)
-            self.current.write(oprot)
-            oprot.writeFieldEnd()
-        if self.goal is not None:
-            oprot.writeFieldBegin('goal', TType.STRUCT, 2)
-            self.goal.write(oprot)
-            oprot.writeFieldEnd()
-        if self.sceneObject is not None:
-            oprot.writeFieldBegin('sceneObject', TType.LIST, 3)
-            oprot.writeListBegin(TType.STRUCT, len(self.sceneObject))
-            for iter270 in self.sceneObject:
-                iter270.write(oprot)
-            oprot.writeListEnd()
-            oprot.writeFieldEnd()
-        if self.properties is not None:
-            oprot.writeFieldBegin('properties', TType.MAP, 4)
-            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.properties))
-            for kiter271, viter272 in self.properties.items():
-                oprot.writeString(kiter271.encode('utf-8') if sys.version_info[0] == 2 else kiter271)
-                oprot.writeString(viter272.encode('utf-8') if sys.version_info[0] == 2 else viter272)
-            oprot.writeMapEnd()
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(ComputePathDirection_args)
-ComputePathDirection_args.thrift_spec = (
-    None,  # 0
-    (1, TType.STRUCT, 'current', [MMIStandard.math.ttypes.MVector, None], None, ),  # 1
-    (2, TType.STRUCT, 'goal', [MMIStandard.math.ttypes.MVector, None], None, ),  # 2
-    (3, TType.LIST, 'sceneObject', (TType.STRUCT, [MMIStandard.scene.ttypes.MSceneObject, None], False), None, ),  # 3
-    (4, TType.MAP, 'properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 4
-)
-
-
-class ComputePathDirection_result(object):
-    """
-    Attributes:
-     - success
-
-    """
-
-
-    def __init__(self, success=None,):
-        self.success = success
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 0:
-                if ftype == TType.STRUCT:
-                    self.success = MMIStandard.math.ttypes.MVector()
-                    self.success.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('ComputePathDirection_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.STRUCT, 0)
-            self.success.write(oprot)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(ComputePathDirection_result)
-ComputePathDirection_result.thrift_spec = (
-    (0, TType.STRUCT, 'success', [MMIStandard.math.ttypes.MVector, None], None, ),  # 0
 )
 fix_spec(all_structs)
 del all_structs

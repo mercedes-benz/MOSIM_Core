@@ -19,17 +19,17 @@ namespace MMIStandard
 {
   public partial class MPostureBlendingService {
     public interface ISync : MMIServiceBase.ISync {
-      MMIStandard.MAvatarPostureValues Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties);
-      List<MMIStandard.MAvatarPostureValues> BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties);
+      MMIStandard.MAvatarPostureValues Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties);
+      List<MMIStandard.MAvatarPostureValues> BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties);
     }
 
     public interface Iface : ISync {
       #if SILVERLIGHT
-      IAsyncResult Begin_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties);
+      IAsyncResult Begin_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties);
       MMIStandard.MAvatarPostureValues End_Blend(IAsyncResult asyncResult);
       #endif
       #if SILVERLIGHT
-      IAsyncResult Begin_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties);
+      IAsyncResult Begin_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties);
       List<MMIStandard.MAvatarPostureValues> End_BlendMany(IAsyncResult asyncResult);
       #endif
     }
@@ -46,7 +46,7 @@ namespace MMIStandard
       
       #if SILVERLIGHT
       
-      public IAsyncResult Begin_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public IAsyncResult Begin_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         return send_Blend(callback, state, startPosture, targetPosture, weight, mask, properties);
       }
@@ -59,7 +59,7 @@ namespace MMIStandard
 
       #endif
 
-      public MMIStandard.MAvatarPostureValues Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public MMIStandard.MAvatarPostureValues Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         #if SILVERLIGHT
         var asyncResult = Begin_Blend(null, null, startPosture, targetPosture, weight, mask, properties);
@@ -72,7 +72,7 @@ namespace MMIStandard
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public IAsyncResult send_Blend(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         oprot_.WriteMessageBegin(new TMessage("Blend", TMessageType.Call, seqid_));
         Blend_args args = new Blend_args();
@@ -88,7 +88,7 @@ namespace MMIStandard
 
       #else
 
-      public void send_Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public void send_Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         oprot_.WriteMessageBegin(new TMessage("Blend", TMessageType.Call, seqid_));
         Blend_args args = new Blend_args();
@@ -123,7 +123,7 @@ namespace MMIStandard
       
       #if SILVERLIGHT
       
-      public IAsyncResult Begin_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public IAsyncResult Begin_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         return send_BlendMany(callback, state, startPosture, targetPosture, weights, mask, properties);
       }
@@ -136,7 +136,7 @@ namespace MMIStandard
 
       #endif
 
-      public List<MMIStandard.MAvatarPostureValues> BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public List<MMIStandard.MAvatarPostureValues> BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         #if SILVERLIGHT
         var asyncResult = Begin_BlendMany(null, null, startPosture, targetPosture, weights, mask, properties);
@@ -149,7 +149,7 @@ namespace MMIStandard
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public IAsyncResult send_BlendMany(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         oprot_.WriteMessageBegin(new TMessage("BlendMany", TMessageType.Call, seqid_));
         BlendMany_args args = new BlendMany_args();
@@ -165,7 +165,7 @@ namespace MMIStandard
 
       #else
 
-      public void send_BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MTransform, double> mask, Dictionary<string, string> properties)
+      public void send_BlendMany(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, List<double> weights, Dictionary<MMIStandard.MJointType, double> mask, Dictionary<string, string> properties)
       {
         oprot_.WriteMessageBegin(new TMessage("BlendMany", TMessageType.Call, seqid_));
         BlendMany_args args = new BlendMany_args();
@@ -301,7 +301,7 @@ namespace MMIStandard
       private MMIStandard.MAvatarPostureValues _startPosture;
       private MMIStandard.MAvatarPostureValues _targetPosture;
       private double _weight;
-      private Dictionary<MMIStandard.MTransform, double> _mask;
+      private Dictionary<MMIStandard.MJointType, double> _mask;
       private Dictionary<string, string> _properties;
 
       public MMIStandard.MAvatarPostureValues StartPosture
@@ -343,7 +343,7 @@ namespace MMIStandard
         }
       }
 
-      public Dictionary<MMIStandard.MTransform, double> Mask
+      public Dictionary<MMIStandard.MJointType, double> Mask
       {
         get
         {
@@ -426,14 +426,13 @@ namespace MMIStandard
               case 4:
                 if (field.Type == TType.Map) {
                   {
-                    Mask = new Dictionary<MMIStandard.MTransform, double>();
+                    Mask = new Dictionary<MMIStandard.MJointType, double>();
                     TMap _map108 = iprot.ReadMapBegin();
                     for( int _i109 = 0; _i109 < _map108.Count; ++_i109)
                     {
-                      MMIStandard.MTransform _key110;
+                      MMIStandard.MJointType _key110;
                       double _val111;
-                      _key110 = new MMIStandard.MTransform();
-                      _key110.Read(iprot);
+                      _key110 = (MMIStandard.MJointType)iprot.ReadI32();
                       _val111 = iprot.ReadDouble();
                       Mask[_key110] = _val111;
                     }
@@ -513,10 +512,10 @@ namespace MMIStandard
             field.ID = 4;
             oprot.WriteFieldBegin(field);
             {
-              oprot.WriteMapBegin(new TMap(TType.Struct, TType.Double, Mask.Count));
-              foreach (MMIStandard.MTransform _iter116 in Mask.Keys)
+              oprot.WriteMapBegin(new TMap(TType.I32, TType.Double, Mask.Count));
+              foreach (MMIStandard.MJointType _iter116 in Mask.Keys)
               {
-                _iter116.Write(oprot);
+                oprot.WriteI32((int)_iter116);
                 oprot.WriteDouble(Mask[_iter116]);
               }
               oprot.WriteMapEnd();
@@ -708,7 +707,7 @@ namespace MMIStandard
       private MMIStandard.MAvatarPostureValues _startPosture;
       private MMIStandard.MAvatarPostureValues _targetPosture;
       private List<double> _weights;
-      private Dictionary<MMIStandard.MTransform, double> _mask;
+      private Dictionary<MMIStandard.MJointType, double> _mask;
       private Dictionary<string, string> _properties;
 
       public MMIStandard.MAvatarPostureValues StartPosture
@@ -750,7 +749,7 @@ namespace MMIStandard
         }
       }
 
-      public Dictionary<MMIStandard.MTransform, double> Mask
+      public Dictionary<MMIStandard.MJointType, double> Mask
       {
         get
         {
@@ -843,14 +842,13 @@ namespace MMIStandard
               case 4:
                 if (field.Type == TType.Map) {
                   {
-                    Mask = new Dictionary<MMIStandard.MTransform, double>();
+                    Mask = new Dictionary<MMIStandard.MJointType, double>();
                     TMap _map121 = iprot.ReadMapBegin();
                     for( int _i122 = 0; _i122 < _map121.Count; ++_i122)
                     {
-                      MMIStandard.MTransform _key123;
+                      MMIStandard.MJointType _key123;
                       double _val124;
-                      _key123 = new MMIStandard.MTransform();
-                      _key123.Read(iprot);
+                      _key123 = (MMIStandard.MJointType)iprot.ReadI32();
                       _val124 = iprot.ReadDouble();
                       Mask[_key123] = _val124;
                     }
@@ -937,10 +935,10 @@ namespace MMIStandard
             field.ID = 4;
             oprot.WriteFieldBegin(field);
             {
-              oprot.WriteMapBegin(new TMap(TType.Struct, TType.Double, Mask.Count));
-              foreach (MMIStandard.MTransform _iter130 in Mask.Keys)
+              oprot.WriteMapBegin(new TMap(TType.I32, TType.Double, Mask.Count));
+              foreach (MMIStandard.MJointType _iter130 in Mask.Keys)
               {
-                _iter130.Write(oprot);
+                oprot.WriteI32((int)_iter130);
                 oprot.WriteDouble(Mask[_iter130]);
               }
               oprot.WriteMapEnd();

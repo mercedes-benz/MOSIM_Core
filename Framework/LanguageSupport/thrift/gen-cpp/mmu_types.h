@@ -416,7 +416,7 @@ void swap(MDependency &a, MDependency &b);
 std::ostream& operator<<(std::ostream& out, const MDependency& obj);
 
 typedef struct _MMUDescription__isset {
-  _MMUDescription__isset() : Prerequisites(false), Properties(false), Dependencies(false), Events(false), LongDescription(false), ShortDescription(false), Parameters(false), SceneParameters(false) {}
+  _MMUDescription__isset() : Prerequisites(false), Properties(false), Dependencies(false), Events(false), LongDescription(false), ShortDescription(false), Parameters(false), SceneParameters(false), Vendor(false), VendorDomain(false), MmuUrl(false), UpdateUrl(false) {}
   bool Prerequisites :1;
   bool Properties :1;
   bool Dependencies :1;
@@ -425,6 +425,10 @@ typedef struct _MMUDescription__isset {
   bool ShortDescription :1;
   bool Parameters :1;
   bool SceneParameters :1;
+  bool Vendor :1;
+  bool VendorDomain :1;
+  bool MmuUrl :1;
+  bool UpdateUrl :1;
 } _MMUDescription__isset;
 
 class MMUDescription : public virtual ::apache::thrift::TBase {
@@ -432,7 +436,7 @@ class MMUDescription : public virtual ::apache::thrift::TBase {
 
   MMUDescription(const MMUDescription&);
   MMUDescription& operator=(const MMUDescription&);
-  MMUDescription() : Name(), ID(), AssemblyName(), MotionType(), Language(), Author(), Version(), LongDescription(), ShortDescription() {
+  MMUDescription() : Name(), ID(), AssemblyName(), MotionType(), Language(), Author(), Version(), LongDescription(), ShortDescription(), Vendor(), VendorDomain(), MmuUrl(), UpdateUrl() {
   }
 
   virtual ~MMUDescription() noexcept;
@@ -451,6 +455,10 @@ class MMUDescription : public virtual ::apache::thrift::TBase {
   std::string ShortDescription;
   std::vector< ::MMIStandard::MParameter>  Parameters;
   std::vector< ::MMIStandard::MParameter>  SceneParameters;
+  std::string Vendor;
+  std::string VendorDomain;
+  std::string MmuUrl;
+  std::string UpdateUrl;
 
   _MMUDescription__isset __isset;
 
@@ -483,6 +491,14 @@ class MMUDescription : public virtual ::apache::thrift::TBase {
   void __set_Parameters(const std::vector< ::MMIStandard::MParameter> & val);
 
   void __set_SceneParameters(const std::vector< ::MMIStandard::MParameter> & val);
+
+  void __set_Vendor(const std::string& val);
+
+  void __set_VendorDomain(const std::string& val);
+
+  void __set_MmuUrl(const std::string& val);
+
+  void __set_UpdateUrl(const std::string& val);
 
   bool operator == (const MMUDescription & rhs) const
   {
@@ -531,6 +547,22 @@ class MMUDescription : public virtual ::apache::thrift::TBase {
     if (__isset.SceneParameters != rhs.__isset.SceneParameters)
       return false;
     else if (__isset.SceneParameters && !(SceneParameters == rhs.SceneParameters))
+      return false;
+    if (__isset.Vendor != rhs.__isset.Vendor)
+      return false;
+    else if (__isset.Vendor && !(Vendor == rhs.Vendor))
+      return false;
+    if (__isset.VendorDomain != rhs.__isset.VendorDomain)
+      return false;
+    else if (__isset.VendorDomain && !(VendorDomain == rhs.VendorDomain))
+      return false;
+    if (__isset.MmuUrl != rhs.__isset.MmuUrl)
+      return false;
+    else if (__isset.MmuUrl && !(MmuUrl == rhs.MmuUrl))
+      return false;
+    if (__isset.UpdateUrl != rhs.__isset.UpdateUrl)
+      return false;
+    else if (__isset.UpdateUrl && !(UpdateUrl == rhs.UpdateUrl))
       return false;
     return true;
   }

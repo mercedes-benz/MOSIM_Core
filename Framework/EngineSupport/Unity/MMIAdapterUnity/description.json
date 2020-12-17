@@ -1,0 +1,10 @@
+{
+  "__isset": { "Dependencies": true },
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Dependencies": [],
+  "ExecutableName": "UnityAdapter.exe",
+  "ID": "7189d17f-60fb-45da-9015-f4adde70a44d",
+  "Language": "UnityC#",
+  "Name": "UnityAdapter",
+  "Version": "1.0"
+}

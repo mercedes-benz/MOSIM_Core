@@ -389,16 +389,16 @@ uint32_t MSkeletonAccess_SetAnimatedJoints_args::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->joints.clear();
-            uint32_t _size385;
-            ::apache::thrift::protocol::TType _etype388;
-            xfer += iprot->readListBegin(_etype388, _size385);
-            this->joints.resize(_size385);
-            uint32_t _i389;
-            for (_i389 = 0; _i389 < _size385; ++_i389)
+            uint32_t _size373;
+            ::apache::thrift::protocol::TType _etype376;
+            xfer += iprot->readListBegin(_etype376, _size373);
+            this->joints.resize(_size373);
+            uint32_t _i377;
+            for (_i377 = 0; _i377 < _size373; ++_i377)
             {
-              int32_t ecast390;
-              xfer += iprot->readI32(ecast390);
-              this->joints[_i389] = ( ::MMIStandard::MJointType::type)ecast390;
+              int32_t ecast378;
+              xfer += iprot->readI32(ecast378);
+              this->joints[_i377] = ( ::MMIStandard::MJointType::type)ecast378;
             }
             xfer += iprot->readListEnd();
           }
@@ -431,10 +431,10 @@ uint32_t MSkeletonAccess_SetAnimatedJoints_args::write(::apache::thrift::protoco
   xfer += oprot->writeFieldBegin("joints", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->joints.size()));
-    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter391;
-    for (_iter391 = this->joints.begin(); _iter391 != this->joints.end(); ++_iter391)
+    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter379;
+    for (_iter379 = this->joints.begin(); _iter379 != this->joints.end(); ++_iter379)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter391));
+      xfer += oprot->writeI32((int32_t)(*_iter379));
     }
     xfer += oprot->writeListEnd();
   }
@@ -462,10 +462,10 @@ uint32_t MSkeletonAccess_SetAnimatedJoints_pargs::write(::apache::thrift::protoc
   xfer += oprot->writeFieldBegin("joints", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->joints)).size()));
-    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter392;
-    for (_iter392 = (*(this->joints)).begin(); _iter392 != (*(this->joints)).end(); ++_iter392)
+    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter380;
+    for (_iter380 = (*(this->joints)).begin(); _iter380 != (*(this->joints)).end(); ++_iter380)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter392));
+      xfer += oprot->writeI32((int32_t)(*_iter380));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1308,16 +1308,16 @@ uint32_t MSkeletonAccess_GetCurrentPostureValuesPartial_args::read(::apache::thr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->joints.clear();
-            uint32_t _size393;
-            ::apache::thrift::protocol::TType _etype396;
-            xfer += iprot->readListBegin(_etype396, _size393);
-            this->joints.resize(_size393);
-            uint32_t _i397;
-            for (_i397 = 0; _i397 < _size393; ++_i397)
+            uint32_t _size381;
+            ::apache::thrift::protocol::TType _etype384;
+            xfer += iprot->readListBegin(_etype384, _size381);
+            this->joints.resize(_size381);
+            uint32_t _i385;
+            for (_i385 = 0; _i385 < _size381; ++_i385)
             {
-              int32_t ecast398;
-              xfer += iprot->readI32(ecast398);
-              this->joints[_i397] = ( ::MMIStandard::MJointType::type)ecast398;
+              int32_t ecast386;
+              xfer += iprot->readI32(ecast386);
+              this->joints[_i385] = ( ::MMIStandard::MJointType::type)ecast386;
             }
             xfer += iprot->readListEnd();
           }
@@ -1350,10 +1350,10 @@ uint32_t MSkeletonAccess_GetCurrentPostureValuesPartial_args::write(::apache::th
   xfer += oprot->writeFieldBegin("joints", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->joints.size()));
-    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter399;
-    for (_iter399 = this->joints.begin(); _iter399 != this->joints.end(); ++_iter399)
+    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter387;
+    for (_iter387 = this->joints.begin(); _iter387 != this->joints.end(); ++_iter387)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter399));
+      xfer += oprot->writeI32((int32_t)(*_iter387));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1381,10 +1381,10 @@ uint32_t MSkeletonAccess_GetCurrentPostureValuesPartial_pargs::write(::apache::t
   xfer += oprot->writeFieldBegin("joints", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->joints)).size()));
-    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter400;
-    for (_iter400 = (*(this->joints)).begin(); _iter400 != (*(this->joints)).end(); ++_iter400)
+    std::vector< ::MMIStandard::MJointType::type> ::const_iterator _iter388;
+    for (_iter388 = (*(this->joints)).begin(); _iter388 != (*(this->joints)).end(); ++_iter388)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter400));
+      xfer += oprot->writeI32((int32_t)(*_iter388));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1612,14 +1612,14 @@ uint32_t MSkeletonAccess_GetCurrentJointPositions_result::read(::apache::thrift:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size401;
-            ::apache::thrift::protocol::TType _etype404;
-            xfer += iprot->readListBegin(_etype404, _size401);
-            this->success.resize(_size401);
-            uint32_t _i405;
-            for (_i405 = 0; _i405 < _size401; ++_i405)
+            uint32_t _size389;
+            ::apache::thrift::protocol::TType _etype392;
+            xfer += iprot->readListBegin(_etype392, _size389);
+            this->success.resize(_size389);
+            uint32_t _i393;
+            for (_i393 = 0; _i393 < _size389; ++_i393)
             {
-              xfer += this->success[_i405].read(iprot);
+              xfer += this->success[_i393].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1650,10 +1650,10 @@ uint32_t MSkeletonAccess_GetCurrentJointPositions_result::write(::apache::thrift
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector< ::MMIStandard::MVector3> ::const_iterator _iter406;
-      for (_iter406 = this->success.begin(); _iter406 != this->success.end(); ++_iter406)
+      std::vector< ::MMIStandard::MVector3> ::const_iterator _iter394;
+      for (_iter394 = this->success.begin(); _iter394 != this->success.end(); ++_iter394)
       {
-        xfer += (*_iter406).write(oprot);
+        xfer += (*_iter394).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1694,14 +1694,14 @@ uint32_t MSkeletonAccess_GetCurrentJointPositions_presult::read(::apache::thrift
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size407;
-            ::apache::thrift::protocol::TType _etype410;
-            xfer += iprot->readListBegin(_etype410, _size407);
-            (*(this->success)).resize(_size407);
-            uint32_t _i411;
-            for (_i411 = 0; _i411 < _size407; ++_i411)
+            uint32_t _size395;
+            ::apache::thrift::protocol::TType _etype398;
+            xfer += iprot->readListBegin(_etype398, _size395);
+            (*(this->success)).resize(_size395);
+            uint32_t _i399;
+            for (_i399 = 0; _i399 < _size395; ++_i399)
             {
-              xfer += (*(this->success))[_i411].read(iprot);
+              xfer += (*(this->success))[_i399].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2132,9 +2132,9 @@ uint32_t MSkeletonAccess_GetGlobalJointPosition_args::read(::apache::thrift::pro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast412;
-          xfer += iprot->readI32(ecast412);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast412;
+          int32_t ecast400;
+          xfer += iprot->readI32(ecast400);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast400;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2337,9 +2337,9 @@ uint32_t MSkeletonAccess_GetGlobalJointRotation_args::read(::apache::thrift::pro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast413;
-          xfer += iprot->readI32(ecast413);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast413;
+          int32_t ecast401;
+          xfer += iprot->readI32(ecast401);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast401;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2542,9 +2542,9 @@ uint32_t MSkeletonAccess_GetLocalJointPosition_args::read(::apache::thrift::prot
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast414;
-          xfer += iprot->readI32(ecast414);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast414;
+          int32_t ecast402;
+          xfer += iprot->readI32(ecast402);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast402;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2747,9 +2747,9 @@ uint32_t MSkeletonAccess_GetLocalJointRotation_args::read(::apache::thrift::prot
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast415;
-          xfer += iprot->readI32(ecast415);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast415;
+          int32_t ecast403;
+          xfer += iprot->readI32(ecast403);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast403;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3296,9 +3296,9 @@ uint32_t MSkeletonAccess_SetGlobalJointPosition_args::read(::apache::thrift::pro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast416;
-          xfer += iprot->readI32(ecast416);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast416;
+          int32_t ecast404;
+          xfer += iprot->readI32(ecast404);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast404;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3486,9 +3486,9 @@ uint32_t MSkeletonAccess_SetGlobalJointRotation_args::read(::apache::thrift::pro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast417;
-          xfer += iprot->readI32(ecast417);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast417;
+          int32_t ecast405;
+          xfer += iprot->readI32(ecast405);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast405;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3676,9 +3676,9 @@ uint32_t MSkeletonAccess_SetLocalJointPosition_args::read(::apache::thrift::prot
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast418;
-          xfer += iprot->readI32(ecast418);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast418;
+          int32_t ecast406;
+          xfer += iprot->readI32(ecast406);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast406;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3866,9 +3866,9 @@ uint32_t MSkeletonAccess_SetLocalJointRotation_args::read(::apache::thrift::prot
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast419;
-          xfer += iprot->readI32(ecast419);
-          this->joint = ( ::MMIStandard::MJointType::type)ecast419;
+          int32_t ecast407;
+          xfer += iprot->readI32(ecast407);
+          this->joint = ( ::MMIStandard::MJointType::type)ecast407;
           this->__isset.joint = true;
         } else {
           xfer += iprot->skip(ftype);

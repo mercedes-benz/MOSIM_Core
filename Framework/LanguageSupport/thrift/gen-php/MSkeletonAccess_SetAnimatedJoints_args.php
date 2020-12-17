@@ -85,13 +85,13 @@ class MSkeletonAccess_SetAnimatedJoints_args
                 case 2:
                     if ($ftype == TType::LST) {
                         $this->joints = array();
-                        $_size303 = 0;
-                        $_etype306 = 0;
-                        $xfer += $input->readListBegin($_etype306, $_size303);
-                        for ($_i307 = 0; $_i307 < $_size303; ++$_i307) {
-                            $elem308 = null;
-                            $xfer += $input->readI32($elem308);
-                            $this->joints []= $elem308;
+                        $_size287 = 0;
+                        $_etype290 = 0;
+                        $xfer += $input->readListBegin($_etype290, $_size287);
+                        for ($_i291 = 0; $_i291 < $_size287; ++$_i291) {
+                            $elem292 = null;
+                            $xfer += $input->readI32($elem292);
+                            $this->joints []= $elem292;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -123,8 +123,8 @@ class MSkeletonAccess_SetAnimatedJoints_args
             }
             $xfer += $output->writeFieldBegin('joints', TType::LST, 2);
             $output->writeListBegin(TType::I32, count($this->joints));
-            foreach ($this->joints as $iter309) {
-                $xfer += $output->writeI32($iter309);
+            foreach ($this->joints as $iter293) {
+                $xfer += $output->writeI32($iter293);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

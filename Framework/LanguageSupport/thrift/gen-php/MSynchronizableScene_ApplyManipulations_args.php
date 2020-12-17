@@ -67,14 +67,14 @@ class MSynchronizableScene_ApplyManipulations_args
                 case 1:
                     if ($ftype == TType::LST) {
                         $this->sceneManipulations = array();
-                        $_size366 = 0;
-                        $_etype369 = 0;
-                        $xfer += $input->readListBegin($_etype369, $_size366);
-                        for ($_i370 = 0; $_i370 < $_size366; ++$_i370) {
-                            $elem371 = null;
-                            $elem371 = new \MSceneManipulation();
-                            $xfer += $elem371->read($input);
-                            $this->sceneManipulations []= $elem371;
+                        $_size350 = 0;
+                        $_etype353 = 0;
+                        $xfer += $input->readListBegin($_etype353, $_size350);
+                        for ($_i354 = 0; $_i354 < $_size350; ++$_i354) {
+                            $elem355 = null;
+                            $elem355 = new \MSceneManipulation();
+                            $xfer += $elem355->read($input);
+                            $this->sceneManipulations []= $elem355;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -101,8 +101,8 @@ class MSynchronizableScene_ApplyManipulations_args
             }
             $xfer += $output->writeFieldBegin('sceneManipulations', TType::LST, 1);
             $output->writeListBegin(TType::STRUCT, count($this->sceneManipulations));
-            foreach ($this->sceneManipulations as $iter372) {
-                $xfer += $iter372->write($output);
+            foreach ($this->sceneManipulations as $iter356) {
+                $xfer += $iter356->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

@@ -1429,12 +1429,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list183 = iprot.ReadListBegin();
-                    for( int _i184 = 0; _i184 < _list183.Count; ++_i184)
+                    TList _list174 = iprot.ReadListBegin();
+                    for( int _i175 = 0; _i175 < _list174.Count; ++_i175)
                     {
-                      MDirection _elem185;
-                      _elem185 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem185);
+                      MDirection _elem176;
+                      _elem176 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem176);
                     }
                     iprot.ReadListEnd();
                   }
@@ -1478,9 +1478,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter186 in CoordinateSystem)
+              foreach (MDirection _iter177 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter186);
+                oprot.WriteI32((int)_iter177);
               }
               oprot.WriteListEnd();
             }
@@ -2044,12 +2044,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list187 = iprot.ReadListBegin();
-                    for( int _i188 = 0; _i188 < _list187.Count; ++_i188)
+                    TList _list178 = iprot.ReadListBegin();
+                    for( int _i179 = 0; _i179 < _list178.Count; ++_i179)
                     {
-                      MDirection _elem189;
-                      _elem189 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem189);
+                      MDirection _elem180;
+                      _elem180 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem180);
                     }
                     iprot.ReadListEnd();
                   }
@@ -2093,9 +2093,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter190 in CoordinateSystem)
+              foreach (MDirection _iter181 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter190);
+                oprot.WriteI32((int)_iter181);
               }
               oprot.WriteListEnd();
             }
@@ -2659,12 +2659,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list191 = iprot.ReadListBegin();
-                    for( int _i192 = 0; _i192 < _list191.Count; ++_i192)
+                    TList _list182 = iprot.ReadListBegin();
+                    for( int _i183 = 0; _i183 < _list182.Count; ++_i183)
                     {
-                      MDirection _elem193;
-                      _elem193 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem193);
+                      MDirection _elem184;
+                      _elem184 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem184);
                     }
                     iprot.ReadListEnd();
                   }
@@ -2708,9 +2708,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter194 in CoordinateSystem)
+              foreach (MDirection _iter185 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter194);
+                oprot.WriteI32((int)_iter185);
               }
               oprot.WriteListEnd();
             }
@@ -3274,12 +3274,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list195 = iprot.ReadListBegin();
-                    for( int _i196 = 0; _i196 < _list195.Count; ++_i196)
+                    TList _list186 = iprot.ReadListBegin();
+                    for( int _i187 = 0; _i187 < _list186.Count; ++_i187)
                     {
-                      MDirection _elem197;
-                      _elem197 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem197);
+                      MDirection _elem188;
+                      _elem188 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem188);
                     }
                     iprot.ReadListEnd();
                   }
@@ -3323,9 +3323,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter198 in CoordinateSystem)
+              foreach (MDirection _iter189 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter198);
+                oprot.WriteI32((int)_iter189);
               }
               oprot.WriteListEnd();
             }
@@ -3889,12 +3889,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list199 = iprot.ReadListBegin();
-                    for( int _i200 = 0; _i200 < _list199.Count; ++_i200)
+                    TList _list190 = iprot.ReadListBegin();
+                    for( int _i191 = 0; _i191 < _list190.Count; ++_i191)
                     {
-                      MDirection _elem201;
-                      _elem201 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem201);
+                      MDirection _elem192;
+                      _elem192 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem192);
                     }
                     iprot.ReadListEnd();
                   }
@@ -3938,9 +3938,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter202 in CoordinateSystem)
+              foreach (MDirection _iter193 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter202);
+                oprot.WriteI32((int)_iter193);
               }
               oprot.WriteListEnd();
             }
@@ -4504,12 +4504,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     CoordinateSystem = new List<MDirection>();
-                    TList _list203 = iprot.ReadListBegin();
-                    for( int _i204 = 0; _i204 < _list203.Count; ++_i204)
+                    TList _list194 = iprot.ReadListBegin();
+                    for( int _i195 = 0; _i195 < _list194.Count; ++_i195)
                     {
-                      MDirection _elem205;
-                      _elem205 = (MDirection)iprot.ReadI32();
-                      CoordinateSystem.Add(_elem205);
+                      MDirection _elem196;
+                      _elem196 = (MDirection)iprot.ReadI32();
+                      CoordinateSystem.Add(_elem196);
                     }
                     iprot.ReadListEnd();
                   }
@@ -4553,9 +4553,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, CoordinateSystem.Count));
-              foreach (MDirection _iter206 in CoordinateSystem)
+              foreach (MDirection _iter197 in CoordinateSystem)
               {
-                oprot.WriteI32((int)_iter206);
+                oprot.WriteI32((int)_iter197);
               }
               oprot.WriteListEnd();
             }

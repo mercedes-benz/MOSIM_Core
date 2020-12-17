@@ -62,17 +62,19 @@ uint32_t MPostureBlendingService_Blend_args::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->mask.clear();
-            uint32_t _size261;
-            ::apache::thrift::protocol::TType _ktype262;
-            ::apache::thrift::protocol::TType _vtype263;
-            xfer += iprot->readMapBegin(_ktype262, _vtype263, _size261);
-            uint32_t _i265;
-            for (_i265 = 0; _i265 < _size261; ++_i265)
+            uint32_t _size262;
+            ::apache::thrift::protocol::TType _ktype263;
+            ::apache::thrift::protocol::TType _vtype264;
+            xfer += iprot->readMapBegin(_ktype263, _vtype264, _size262);
+            uint32_t _i266;
+            for (_i266 = 0; _i266 < _size262; ++_i266)
             {
-               ::MMIStandard::MTransform _key266;
-              xfer += _key266.read(iprot);
-              double& _val267 = this->mask[_key266];
-              xfer += iprot->readDouble(_val267);
+               ::MMIStandard::MJointType::type _key267;
+              int32_t ecast269;
+              xfer += iprot->readI32(ecast269);
+              _key267 = ( ::MMIStandard::MJointType::type)ecast269;
+              double& _val268 = this->mask[_key267];
+              xfer += iprot->readDouble(_val268);
             }
             xfer += iprot->readMapEnd();
           }
@@ -85,17 +87,17 @@ uint32_t MPostureBlendingService_Blend_args::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
-            uint32_t _size268;
-            ::apache::thrift::protocol::TType _ktype269;
-            ::apache::thrift::protocol::TType _vtype270;
-            xfer += iprot->readMapBegin(_ktype269, _vtype270, _size268);
-            uint32_t _i272;
-            for (_i272 = 0; _i272 < _size268; ++_i272)
+            uint32_t _size270;
+            ::apache::thrift::protocol::TType _ktype271;
+            ::apache::thrift::protocol::TType _vtype272;
+            xfer += iprot->readMapBegin(_ktype271, _vtype272, _size270);
+            uint32_t _i274;
+            for (_i274 = 0; _i274 < _size270; ++_i274)
             {
-              std::string _key273;
-              xfer += iprot->readString(_key273);
-              std::string& _val274 = this->properties[_key273];
-              xfer += iprot->readString(_val274);
+              std::string _key275;
+              xfer += iprot->readString(_key275);
+              std::string& _val276 = this->properties[_key275];
+              xfer += iprot->readString(_val276);
             }
             xfer += iprot->readMapEnd();
           }
@@ -135,12 +137,12 @@ uint32_t MPostureBlendingService_Blend_args::write(::apache::thrift::protocol::T
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 4);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter275;
-    for (_iter275 = this->mask.begin(); _iter275 != this->mask.end(); ++_iter275)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter277;
+    for (_iter277 = this->mask.begin(); _iter277 != this->mask.end(); ++_iter277)
     {
-      xfer += _iter275->first.write(oprot);
-      xfer += oprot->writeDouble(_iter275->second);
+      xfer += oprot->writeI32((int32_t)_iter277->first);
+      xfer += oprot->writeDouble(_iter277->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -149,11 +151,11 @@ uint32_t MPostureBlendingService_Blend_args::write(::apache::thrift::protocol::T
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter276;
-    for (_iter276 = this->properties.begin(); _iter276 != this->properties.end(); ++_iter276)
+    std::map<std::string, std::string> ::const_iterator _iter278;
+    for (_iter278 = this->properties.begin(); _iter278 != this->properties.end(); ++_iter278)
     {
-      xfer += oprot->writeString(_iter276->first);
-      xfer += oprot->writeString(_iter276->second);
+      xfer += oprot->writeString(_iter278->first);
+      xfer += oprot->writeString(_iter278->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -188,12 +190,12 @@ uint32_t MPostureBlendingService_Blend_pargs::write(::apache::thrift::protocol::
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 4);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter277;
-    for (_iter277 = (*(this->mask)).begin(); _iter277 != (*(this->mask)).end(); ++_iter277)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter279;
+    for (_iter279 = (*(this->mask)).begin(); _iter279 != (*(this->mask)).end(); ++_iter279)
     {
-      xfer += _iter277->first.write(oprot);
-      xfer += oprot->writeDouble(_iter277->second);
+      xfer += oprot->writeI32((int32_t)_iter279->first);
+      xfer += oprot->writeDouble(_iter279->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -202,11 +204,11 @@ uint32_t MPostureBlendingService_Blend_pargs::write(::apache::thrift::protocol::
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter278;
-    for (_iter278 = (*(this->properties)).begin(); _iter278 != (*(this->properties)).end(); ++_iter278)
+    std::map<std::string, std::string> ::const_iterator _iter280;
+    for (_iter280 = (*(this->properties)).begin(); _iter280 != (*(this->properties)).end(); ++_iter280)
     {
-      xfer += oprot->writeString(_iter278->first);
-      xfer += oprot->writeString(_iter278->second);
+      xfer += oprot->writeString(_iter280->first);
+      xfer += oprot->writeString(_iter280->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -371,14 +373,14 @@ uint32_t MPostureBlendingService_BlendMany_args::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->weights.clear();
-            uint32_t _size279;
-            ::apache::thrift::protocol::TType _etype282;
-            xfer += iprot->readListBegin(_etype282, _size279);
-            this->weights.resize(_size279);
-            uint32_t _i283;
-            for (_i283 = 0; _i283 < _size279; ++_i283)
+            uint32_t _size281;
+            ::apache::thrift::protocol::TType _etype284;
+            xfer += iprot->readListBegin(_etype284, _size281);
+            this->weights.resize(_size281);
+            uint32_t _i285;
+            for (_i285 = 0; _i285 < _size281; ++_i285)
             {
-              xfer += iprot->readDouble(this->weights[_i283]);
+              xfer += iprot->readDouble(this->weights[_i285]);
             }
             xfer += iprot->readListEnd();
           }
@@ -391,17 +393,19 @@ uint32_t MPostureBlendingService_BlendMany_args::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->mask.clear();
-            uint32_t _size284;
-            ::apache::thrift::protocol::TType _ktype285;
-            ::apache::thrift::protocol::TType _vtype286;
-            xfer += iprot->readMapBegin(_ktype285, _vtype286, _size284);
-            uint32_t _i288;
-            for (_i288 = 0; _i288 < _size284; ++_i288)
+            uint32_t _size286;
+            ::apache::thrift::protocol::TType _ktype287;
+            ::apache::thrift::protocol::TType _vtype288;
+            xfer += iprot->readMapBegin(_ktype287, _vtype288, _size286);
+            uint32_t _i290;
+            for (_i290 = 0; _i290 < _size286; ++_i290)
             {
-               ::MMIStandard::MTransform _key289;
-              xfer += _key289.read(iprot);
-              double& _val290 = this->mask[_key289];
-              xfer += iprot->readDouble(_val290);
+               ::MMIStandard::MJointType::type _key291;
+              int32_t ecast293;
+              xfer += iprot->readI32(ecast293);
+              _key291 = ( ::MMIStandard::MJointType::type)ecast293;
+              double& _val292 = this->mask[_key291];
+              xfer += iprot->readDouble(_val292);
             }
             xfer += iprot->readMapEnd();
           }
@@ -414,17 +418,17 @@ uint32_t MPostureBlendingService_BlendMany_args::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
-            uint32_t _size291;
-            ::apache::thrift::protocol::TType _ktype292;
-            ::apache::thrift::protocol::TType _vtype293;
-            xfer += iprot->readMapBegin(_ktype292, _vtype293, _size291);
-            uint32_t _i295;
-            for (_i295 = 0; _i295 < _size291; ++_i295)
+            uint32_t _size294;
+            ::apache::thrift::protocol::TType _ktype295;
+            ::apache::thrift::protocol::TType _vtype296;
+            xfer += iprot->readMapBegin(_ktype295, _vtype296, _size294);
+            uint32_t _i298;
+            for (_i298 = 0; _i298 < _size294; ++_i298)
             {
-              std::string _key296;
-              xfer += iprot->readString(_key296);
-              std::string& _val297 = this->properties[_key296];
-              xfer += iprot->readString(_val297);
+              std::string _key299;
+              xfer += iprot->readString(_key299);
+              std::string& _val300 = this->properties[_key299];
+              xfer += iprot->readString(_val300);
             }
             xfer += iprot->readMapEnd();
           }
@@ -461,10 +465,10 @@ uint32_t MPostureBlendingService_BlendMany_args::write(::apache::thrift::protoco
   xfer += oprot->writeFieldBegin("weights", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->weights.size()));
-    std::vector<double> ::const_iterator _iter298;
-    for (_iter298 = this->weights.begin(); _iter298 != this->weights.end(); ++_iter298)
+    std::vector<double> ::const_iterator _iter301;
+    for (_iter301 = this->weights.begin(); _iter301 != this->weights.end(); ++_iter301)
     {
-      xfer += oprot->writeDouble((*_iter298));
+      xfer += oprot->writeDouble((*_iter301));
     }
     xfer += oprot->writeListEnd();
   }
@@ -472,12 +476,12 @@ uint32_t MPostureBlendingService_BlendMany_args::write(::apache::thrift::protoco
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 4);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter299;
-    for (_iter299 = this->mask.begin(); _iter299 != this->mask.end(); ++_iter299)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>(this->mask.size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter302;
+    for (_iter302 = this->mask.begin(); _iter302 != this->mask.end(); ++_iter302)
     {
-      xfer += _iter299->first.write(oprot);
-      xfer += oprot->writeDouble(_iter299->second);
+      xfer += oprot->writeI32((int32_t)_iter302->first);
+      xfer += oprot->writeDouble(_iter302->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -486,11 +490,11 @@ uint32_t MPostureBlendingService_BlendMany_args::write(::apache::thrift::protoco
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter300;
-    for (_iter300 = this->properties.begin(); _iter300 != this->properties.end(); ++_iter300)
+    std::map<std::string, std::string> ::const_iterator _iter303;
+    for (_iter303 = this->properties.begin(); _iter303 != this->properties.end(); ++_iter303)
     {
-      xfer += oprot->writeString(_iter300->first);
-      xfer += oprot->writeString(_iter300->second);
+      xfer += oprot->writeString(_iter303->first);
+      xfer += oprot->writeString(_iter303->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -522,10 +526,10 @@ uint32_t MPostureBlendingService_BlendMany_pargs::write(::apache::thrift::protoc
   xfer += oprot->writeFieldBegin("weights", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->weights)).size()));
-    std::vector<double> ::const_iterator _iter301;
-    for (_iter301 = (*(this->weights)).begin(); _iter301 != (*(this->weights)).end(); ++_iter301)
+    std::vector<double> ::const_iterator _iter304;
+    for (_iter304 = (*(this->weights)).begin(); _iter304 != (*(this->weights)).end(); ++_iter304)
     {
-      xfer += oprot->writeDouble((*_iter301));
+      xfer += oprot->writeDouble((*_iter304));
     }
     xfer += oprot->writeListEnd();
   }
@@ -533,12 +537,12 @@ uint32_t MPostureBlendingService_BlendMany_pargs::write(::apache::thrift::protoc
 
   xfer += oprot->writeFieldBegin("mask", ::apache::thrift::protocol::T_MAP, 4);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRUCT, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
-    std::map< ::MMIStandard::MTransform, double> ::const_iterator _iter302;
-    for (_iter302 = (*(this->mask)).begin(); _iter302 != (*(this->mask)).end(); ++_iter302)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_I32, ::apache::thrift::protocol::T_DOUBLE, static_cast<uint32_t>((*(this->mask)).size()));
+    std::map< ::MMIStandard::MJointType::type, double> ::const_iterator _iter305;
+    for (_iter305 = (*(this->mask)).begin(); _iter305 != (*(this->mask)).end(); ++_iter305)
     {
-      xfer += _iter302->first.write(oprot);
-      xfer += oprot->writeDouble(_iter302->second);
+      xfer += oprot->writeI32((int32_t)_iter305->first);
+      xfer += oprot->writeDouble(_iter305->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -547,11 +551,11 @@ uint32_t MPostureBlendingService_BlendMany_pargs::write(::apache::thrift::protoc
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 5);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter303;
-    for (_iter303 = (*(this->properties)).begin(); _iter303 != (*(this->properties)).end(); ++_iter303)
+    std::map<std::string, std::string> ::const_iterator _iter306;
+    for (_iter306 = (*(this->properties)).begin(); _iter306 != (*(this->properties)).end(); ++_iter306)
     {
-      xfer += oprot->writeString(_iter303->first);
-      xfer += oprot->writeString(_iter303->second);
+      xfer += oprot->writeString(_iter306->first);
+      xfer += oprot->writeString(_iter306->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -592,14 +596,14 @@ uint32_t MPostureBlendingService_BlendMany_result::read(::apache::thrift::protoc
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size304;
-            ::apache::thrift::protocol::TType _etype307;
-            xfer += iprot->readListBegin(_etype307, _size304);
-            this->success.resize(_size304);
-            uint32_t _i308;
-            for (_i308 = 0; _i308 < _size304; ++_i308)
+            uint32_t _size307;
+            ::apache::thrift::protocol::TType _etype310;
+            xfer += iprot->readListBegin(_etype310, _size307);
+            this->success.resize(_size307);
+            uint32_t _i311;
+            for (_i311 = 0; _i311 < _size307; ++_i311)
             {
-              xfer += this->success[_i308].read(iprot);
+              xfer += this->success[_i311].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -630,10 +634,10 @@ uint32_t MPostureBlendingService_BlendMany_result::write(::apache::thrift::proto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector< ::MMIStandard::MAvatarPostureValues> ::const_iterator _iter309;
-      for (_iter309 = this->success.begin(); _iter309 != this->success.end(); ++_iter309)
+      std::vector< ::MMIStandard::MAvatarPostureValues> ::const_iterator _iter312;
+      for (_iter312 = this->success.begin(); _iter312 != this->success.end(); ++_iter312)
       {
-        xfer += (*_iter309).write(oprot);
+        xfer += (*_iter312).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -674,14 +678,14 @@ uint32_t MPostureBlendingService_BlendMany_presult::read(::apache::thrift::proto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size310;
-            ::apache::thrift::protocol::TType _etype313;
-            xfer += iprot->readListBegin(_etype313, _size310);
-            (*(this->success)).resize(_size310);
-            uint32_t _i314;
-            for (_i314 = 0; _i314 < _size310; ++_i314)
+            uint32_t _size313;
+            ::apache::thrift::protocol::TType _etype316;
+            xfer += iprot->readListBegin(_etype316, _size313);
+            (*(this->success)).resize(_size313);
+            uint32_t _i317;
+            for (_i317 = 0; _i317 < _size313; ++_i317)
             {
-              xfer += (*(this->success))[_i314].read(iprot);
+              xfer += (*(this->success))[_i317].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -702,13 +706,13 @@ uint32_t MPostureBlendingService_BlendMany_presult::read(::apache::thrift::proto
   return xfer;
 }
 
-void MPostureBlendingServiceClient::Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceClient::Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   send_Blend(startPosture, targetPosture, weight, mask, properties);
   recv_Blend(_return);
 }
 
-void MPostureBlendingServiceClient::send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceClient::send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("Blend", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -764,13 +768,13 @@ void MPostureBlendingServiceClient::recv_Blend( ::MMIStandard::MAvatarPostureVal
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "Blend failed: unknown result");
 }
 
-void MPostureBlendingServiceClient::BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceClient::BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   send_BlendMany(startPosture, targetPosture, weights, mask, properties);
   recv_BlendMany(_return);
 }
 
-void MPostureBlendingServiceClient::send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceClient::send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("BlendMany", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -951,13 +955,13 @@ void MPostureBlendingServiceProcessor::process_BlendMany(int32_t seqid, ::apache
   return processor;
 }
 
-void MPostureBlendingServiceConcurrentClient::Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceConcurrentClient::Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t seqid = send_Blend(startPosture, targetPosture, weight, mask, properties);
   recv_Blend(_return, seqid);
 }
 
-int32_t MPostureBlendingServiceConcurrentClient::send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+int32_t MPostureBlendingServiceConcurrentClient::send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -1039,13 +1043,13 @@ void MPostureBlendingServiceConcurrentClient::recv_Blend( ::MMIStandard::MAvatar
   } // end while(true)
 }
 
-void MPostureBlendingServiceConcurrentClient::BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+void MPostureBlendingServiceConcurrentClient::BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t seqid = send_BlendMany(startPosture, targetPosture, weights, mask, properties);
   recv_BlendMany(_return, seqid);
 }
 
-int32_t MPostureBlendingServiceConcurrentClient::send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties)
+int32_t MPostureBlendingServiceConcurrentClient::send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());

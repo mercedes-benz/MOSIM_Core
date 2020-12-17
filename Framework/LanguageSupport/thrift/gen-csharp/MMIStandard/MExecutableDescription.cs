@@ -24,6 +24,10 @@ namespace MMIStandard
   public partial class MExecutableDescription : TBase
   {
     private List<string> _Dependencies;
+    private string _Vendor;
+    private string _VendorDomain;
+    private string _ServiceUrl;
+    private string _UpdateUrl;
 
     public string Name { get; set; }
 
@@ -50,6 +54,58 @@ namespace MMIStandard
       }
     }
 
+    public string Vendor
+    {
+      get
+      {
+        return _Vendor;
+      }
+      set
+      {
+        __isset.Vendor = true;
+        this._Vendor = value;
+      }
+    }
+
+    public string VendorDomain
+    {
+      get
+      {
+        return _VendorDomain;
+      }
+      set
+      {
+        __isset.VendorDomain = true;
+        this._VendorDomain = value;
+      }
+    }
+
+    public string ServiceUrl
+    {
+      get
+      {
+        return _ServiceUrl;
+      }
+      set
+      {
+        __isset.ServiceUrl = true;
+        this._ServiceUrl = value;
+      }
+    }
+
+    public string UpdateUrl
+    {
+      get
+      {
+        return _UpdateUrl;
+      }
+      set
+      {
+        __isset.UpdateUrl = true;
+        this._UpdateUrl = value;
+      }
+    }
+
 
     public Isset __isset;
     #if !SILVERLIGHT
@@ -57,6 +113,10 @@ namespace MMIStandard
     #endif
     public struct Isset {
       public bool Dependencies;
+      public bool Vendor;
+      public bool VendorDomain;
+      public bool ServiceUrl;
+      public bool UpdateUrl;
     }
 
     public MExecutableDescription() {
@@ -157,6 +217,34 @@ namespace MMIStandard
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 8:
+              if (field.Type == TType.String) {
+                Vendor = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 9:
+              if (field.Type == TType.String) {
+                VendorDomain = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 10:
+              if (field.Type == TType.String) {
+                ServiceUrl = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 11:
+              if (field.Type == TType.String) {
+                UpdateUrl = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -253,6 +341,38 @@ namespace MMIStandard
           }
           oprot.WriteFieldEnd();
         }
+        if (Vendor != null && __isset.Vendor) {
+          field.Name = "Vendor";
+          field.Type = TType.String;
+          field.ID = 8;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Vendor);
+          oprot.WriteFieldEnd();
+        }
+        if (VendorDomain != null && __isset.VendorDomain) {
+          field.Name = "VendorDomain";
+          field.Type = TType.String;
+          field.ID = 9;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(VendorDomain);
+          oprot.WriteFieldEnd();
+        }
+        if (ServiceUrl != null && __isset.ServiceUrl) {
+          field.Name = "ServiceUrl";
+          field.Type = TType.String;
+          field.ID = 10;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ServiceUrl);
+          oprot.WriteFieldEnd();
+        }
+        if (UpdateUrl != null && __isset.UpdateUrl) {
+          field.Name = "UpdateUrl";
+          field.Type = TType.String;
+          field.ID = 11;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(UpdateUrl);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -279,6 +399,22 @@ namespace MMIStandard
       if (Dependencies != null && __isset.Dependencies) {
         __sb.Append(", Dependencies: ");
         __sb.Append(Dependencies);
+      }
+      if (Vendor != null && __isset.Vendor) {
+        __sb.Append(", Vendor: ");
+        __sb.Append(Vendor);
+      }
+      if (VendorDomain != null && __isset.VendorDomain) {
+        __sb.Append(", VendorDomain: ");
+        __sb.Append(VendorDomain);
+      }
+      if (ServiceUrl != null && __isset.ServiceUrl) {
+        __sb.Append(", ServiceUrl: ");
+        __sb.Append(ServiceUrl);
+      }
+      if (UpdateUrl != null && __isset.UpdateUrl) {
+        __sb.Append(", UpdateUrl: ");
+        __sb.Append(UpdateUrl);
       }
       __sb.Append(")");
       return __sb.ToString();

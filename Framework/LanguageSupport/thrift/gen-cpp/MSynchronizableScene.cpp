@@ -225,14 +225,14 @@ uint32_t MSynchronizableScene_ApplyManipulations_args::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->sceneManipulations.clear();
-            uint32_t _size486;
-            ::apache::thrift::protocol::TType _etype489;
-            xfer += iprot->readListBegin(_etype489, _size486);
-            this->sceneManipulations.resize(_size486);
-            uint32_t _i490;
-            for (_i490 = 0; _i490 < _size486; ++_i490)
+            uint32_t _size474;
+            ::apache::thrift::protocol::TType _etype477;
+            xfer += iprot->readListBegin(_etype477, _size474);
+            this->sceneManipulations.resize(_size474);
+            uint32_t _i478;
+            for (_i478 = 0; _i478 < _size474; ++_i478)
             {
-              xfer += this->sceneManipulations[_i490].read(iprot);
+              xfer += this->sceneManipulations[_i478].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -261,10 +261,10 @@ uint32_t MSynchronizableScene_ApplyManipulations_args::write(::apache::thrift::p
   xfer += oprot->writeFieldBegin("sceneManipulations", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->sceneManipulations.size()));
-    std::vector< ::MMIStandard::MSceneManipulation> ::const_iterator _iter491;
-    for (_iter491 = this->sceneManipulations.begin(); _iter491 != this->sceneManipulations.end(); ++_iter491)
+    std::vector< ::MMIStandard::MSceneManipulation> ::const_iterator _iter479;
+    for (_iter479 = this->sceneManipulations.begin(); _iter479 != this->sceneManipulations.end(); ++_iter479)
     {
-      xfer += (*_iter491).write(oprot);
+      xfer += (*_iter479).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -288,10 +288,10 @@ uint32_t MSynchronizableScene_ApplyManipulations_pargs::write(::apache::thrift::
   xfer += oprot->writeFieldBegin("sceneManipulations", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->sceneManipulations)).size()));
-    std::vector< ::MMIStandard::MSceneManipulation> ::const_iterator _iter492;
-    for (_iter492 = (*(this->sceneManipulations)).begin(); _iter492 != (*(this->sceneManipulations)).end(); ++_iter492)
+    std::vector< ::MMIStandard::MSceneManipulation> ::const_iterator _iter480;
+    for (_iter480 = (*(this->sceneManipulations)).begin(); _iter480 != (*(this->sceneManipulations)).end(); ++_iter480)
     {
-      xfer += (*_iter492).write(oprot);
+      xfer += (*_iter480).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }

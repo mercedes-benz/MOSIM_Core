@@ -2807,12 +2807,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     Joints = new List<MMIStandard.MJointType>();
-                    TList _list171 = iprot.ReadListBegin();
-                    for( int _i172 = 0; _i172 < _list171.Count; ++_i172)
+                    TList _list162 = iprot.ReadListBegin();
+                    for( int _i163 = 0; _i163 < _list162.Count; ++_i163)
                     {
-                      MMIStandard.MJointType _elem173;
-                      _elem173 = (MMIStandard.MJointType)iprot.ReadI32();
-                      Joints.Add(_elem173);
+                      MMIStandard.MJointType _elem164;
+                      _elem164 = (MMIStandard.MJointType)iprot.ReadI32();
+                      Joints.Add(_elem164);
                     }
                     iprot.ReadListEnd();
                   }
@@ -2856,9 +2856,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, Joints.Count));
-              foreach (MMIStandard.MJointType _iter174 in Joints)
+              foreach (MMIStandard.MJointType _iter165 in Joints)
               {
-                oprot.WriteI32((int)_iter174);
+                oprot.WriteI32((int)_iter165);
               }
               oprot.WriteListEnd();
             }
@@ -3863,12 +3863,12 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     Joints = new List<MMIStandard.MJointType>();
-                    TList _list175 = iprot.ReadListBegin();
-                    for( int _i176 = 0; _i176 < _list175.Count; ++_i176)
+                    TList _list166 = iprot.ReadListBegin();
+                    for( int _i167 = 0; _i167 < _list166.Count; ++_i167)
                     {
-                      MMIStandard.MJointType _elem177;
-                      _elem177 = (MMIStandard.MJointType)iprot.ReadI32();
-                      Joints.Add(_elem177);
+                      MMIStandard.MJointType _elem168;
+                      _elem168 = (MMIStandard.MJointType)iprot.ReadI32();
+                      Joints.Add(_elem168);
                     }
                     iprot.ReadListEnd();
                   }
@@ -3912,9 +3912,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.I32, Joints.Count));
-              foreach (MMIStandard.MJointType _iter178 in Joints)
+              foreach (MMIStandard.MJointType _iter169 in Joints)
               {
-                oprot.WriteI32((int)_iter178);
+                oprot.WriteI32((int)_iter169);
               }
               oprot.WriteListEnd();
             }
@@ -4222,13 +4222,13 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     Success = new List<MMIStandard.MVector3>();
-                    TList _list179 = iprot.ReadListBegin();
-                    for( int _i180 = 0; _i180 < _list179.Count; ++_i180)
+                    TList _list170 = iprot.ReadListBegin();
+                    for( int _i171 = 0; _i171 < _list170.Count; ++_i171)
                     {
-                      MMIStandard.MVector3 _elem181;
-                      _elem181 = new MMIStandard.MVector3();
-                      _elem181.Read(iprot);
-                      Success.Add(_elem181);
+                      MMIStandard.MVector3 _elem172;
+                      _elem172 = new MMIStandard.MVector3();
+                      _elem172.Read(iprot);
+                      Success.Add(_elem172);
                     }
                     iprot.ReadListEnd();
                   }
@@ -4266,9 +4266,9 @@ namespace MMIStandard
               oprot.WriteFieldBegin(field);
               {
                 oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (MMIStandard.MVector3 _iter182 in Success)
+                foreach (MMIStandard.MVector3 _iter173 in Success)
                 {
-                  _iter182.Write(oprot);
+                  _iter173.Write(oprot);
                 }
                 oprot.WriteListEnd();
               }

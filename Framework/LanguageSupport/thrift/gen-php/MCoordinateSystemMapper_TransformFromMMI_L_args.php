@@ -87,13 +87,13 @@ class MCoordinateSystemMapper_TransformFromMMI_L_args
                 case 2:
                     if ($ftype == TType::LST) {
                         $this->coordinateSystem = array();
-                        $_size331 = 0;
-                        $_etype334 = 0;
-                        $xfer += $input->readListBegin($_etype334, $_size331);
-                        for ($_i335 = 0; $_i335 < $_size331; ++$_i335) {
-                            $elem336 = null;
-                            $xfer += $input->readI32($elem336);
-                            $this->coordinateSystem []= $elem336;
+                        $_size315 = 0;
+                        $_etype318 = 0;
+                        $xfer += $input->readListBegin($_etype318, $_size315);
+                        for ($_i319 = 0; $_i319 < $_size315; ++$_i319) {
+                            $elem320 = null;
+                            $xfer += $input->readI32($elem320);
+                            $this->coordinateSystem []= $elem320;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -128,8 +128,8 @@ class MCoordinateSystemMapper_TransformFromMMI_L_args
             }
             $xfer += $output->writeFieldBegin('coordinateSystem', TType::LST, 2);
             $output->writeListBegin(TType::I32, count($this->coordinateSystem));
-            foreach ($this->coordinateSystem as $iter337) {
-                $xfer += $output->writeI32($iter337);
+            foreach ($this->coordinateSystem as $iter321) {
+                $xfer += $output->writeI32($iter321);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

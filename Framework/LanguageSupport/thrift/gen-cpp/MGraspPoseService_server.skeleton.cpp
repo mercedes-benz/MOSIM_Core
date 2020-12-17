@@ -20,7 +20,7 @@ class MGraspPoseServiceHandler : virtual public MGraspPoseServiceIf {
     // Your initialization goes here
   }
 
-  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) {
+  void GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand) {
     // Your implementation goes here
     printf("GetGraspPoses\n");
   }

@@ -211,7 +211,7 @@ namespace MMICSharp.Adapter.MMUProvider
                 string descriptionFile = Directory.GetFiles(folderPath).ToList().Find(s => s.Contains("description.json"));
                 mmuDescription = Serialization.FromJsonString<MMUDescription>(File.ReadAllText(descriptionFile));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

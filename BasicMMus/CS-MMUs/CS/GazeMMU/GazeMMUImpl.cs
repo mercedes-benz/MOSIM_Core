@@ -94,7 +94,7 @@ namespace GazeMMU
             //Create a new simulation result
             MSimulationResult result = new MSimulationResult()
             {
-                Events = new List<MSimulationEvent>(),
+                Events = simulationState.Events ?? new List<MSimulationEvent>(),
                 Constraints = simulationState.Constraints ?? new List<MConstraint>(),
                 SceneManipulations = simulationState.SceneManipulations?? new List<MSceneManipulation>(),
                 Posture = simulationState.Current

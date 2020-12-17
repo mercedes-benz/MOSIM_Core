@@ -117,7 +117,7 @@ namespace MMICSharp.Adapter
                     client.Access.UnregisterAdapter(description);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

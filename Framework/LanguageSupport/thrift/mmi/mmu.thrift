@@ -147,7 +147,11 @@ struct MMUDescription
 	//All parameters which are provided by the MMU (e.g. subject, target, velocity)
 	16: optional list<core.MParameter> Parameters;
 	17: optional list<core.MParameter> SceneParameters;
-
+	//Additional parameters utilized by MMU library, first two should actually be required but are left as optional for backward compatibility, their enforcing could come from MMU Description Editor or MMU validator
+	18: optional string Vendor;
+	19: optional string VendorDomain;
+	20: optional string MmuUrl;
+	21: optional string UpdateUrl;
 }
 
 
@@ -156,7 +160,7 @@ struct MMUDescription
 //Format for intended motion instructions/control input
 struct MInstruction 
 {
-    1: required string ID;                           
+    1: required string ID;
     2: required string Name;
     3: required string MotionType;
     4: optional map<string,string> Properties;

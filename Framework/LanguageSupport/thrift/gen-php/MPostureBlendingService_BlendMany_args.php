@@ -44,11 +44,10 @@ class MPostureBlendingService_BlendMany_args
             'var' => 'mask',
             'isRequired' => false,
             'type' => TType::MAP,
-            'ktype' => TType::STRUCT,
+            'ktype' => TType::I32,
             'vtype' => TType::DOUBLE,
             'key' => array(
-                'type' => TType::STRUCT,
-                'class' => '\MTransform',
+                'type' => TType::I32,
             ),
             'val' => array(
                 'type' => TType::DOUBLE,
@@ -170,10 +169,9 @@ class MPostureBlendingService_BlendMany_args
                         $_vtype217 = 0;
                         $xfer += $input->readMapBegin($_ktype216, $_vtype217, $_size215);
                         for ($_i219 = 0; $_i219 < $_size215; ++$_i219) {
-                            $key220 = new \MTransform();
+                            $key220 = 0;
                             $val221 = 0.0;
-                            $key220 = new \MTransform();
-                            $xfer += $key220->read($input);
+                            $xfer += $input->readI32($key220);
                             $xfer += $input->readDouble($val221);
                             $this->mask[$key220] = $val221;
                         }
@@ -248,9 +246,9 @@ class MPostureBlendingService_BlendMany_args
                 throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
             }
             $xfer += $output->writeFieldBegin('mask', TType::MAP, 4);
-            $output->writeMapBegin(TType::STRUCT, TType::DOUBLE, count($this->mask));
+            $output->writeMapBegin(TType::I32, TType::DOUBLE, count($this->mask));
             foreach ($this->mask as $kiter230 => $viter231) {
-                $xfer += $kiter230->write($output);
+                $xfer += $output->writeI32($kiter230);
                 $xfer += $output->writeDouble($viter231);
             }
             $output->writeMapEnd();

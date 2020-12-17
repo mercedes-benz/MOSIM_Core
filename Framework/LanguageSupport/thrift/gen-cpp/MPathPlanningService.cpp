@@ -54,14 +54,14 @@ uint32_t MPathPlanningService_ComputePath_args::read(::apache::thrift::protocol:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->sceneObjects.clear();
-            uint32_t _size315;
-            ::apache::thrift::protocol::TType _etype318;
-            xfer += iprot->readListBegin(_etype318, _size315);
-            this->sceneObjects.resize(_size315);
-            uint32_t _i319;
-            for (_i319 = 0; _i319 < _size315; ++_i319)
+            uint32_t _size318;
+            ::apache::thrift::protocol::TType _etype321;
+            xfer += iprot->readListBegin(_etype321, _size318);
+            this->sceneObjects.resize(_size318);
+            uint32_t _i322;
+            for (_i322 = 0; _i322 < _size318; ++_i322)
             {
-              xfer += this->sceneObjects[_i319].read(iprot);
+              xfer += this->sceneObjects[_i322].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -74,17 +74,17 @@ uint32_t MPathPlanningService_ComputePath_args::read(::apache::thrift::protocol:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
-            uint32_t _size320;
-            ::apache::thrift::protocol::TType _ktype321;
-            ::apache::thrift::protocol::TType _vtype322;
-            xfer += iprot->readMapBegin(_ktype321, _vtype322, _size320);
-            uint32_t _i324;
-            for (_i324 = 0; _i324 < _size320; ++_i324)
+            uint32_t _size323;
+            ::apache::thrift::protocol::TType _ktype324;
+            ::apache::thrift::protocol::TType _vtype325;
+            xfer += iprot->readMapBegin(_ktype324, _vtype325, _size323);
+            uint32_t _i327;
+            for (_i327 = 0; _i327 < _size323; ++_i327)
             {
-              std::string _key325;
-              xfer += iprot->readString(_key325);
-              std::string& _val326 = this->properties[_key325];
-              xfer += iprot->readString(_val326);
+              std::string _key328;
+              xfer += iprot->readString(_key328);
+              std::string& _val329 = this->properties[_key328];
+              xfer += iprot->readString(_val329);
             }
             xfer += iprot->readMapEnd();
           }
@@ -121,10 +121,10 @@ uint32_t MPathPlanningService_ComputePath_args::write(::apache::thrift::protocol
   xfer += oprot->writeFieldBegin("sceneObjects", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->sceneObjects.size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter327;
-    for (_iter327 = this->sceneObjects.begin(); _iter327 != this->sceneObjects.end(); ++_iter327)
+    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter330;
+    for (_iter330 = this->sceneObjects.begin(); _iter330 != this->sceneObjects.end(); ++_iter330)
     {
-      xfer += (*_iter327).write(oprot);
+      xfer += (*_iter330).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -133,11 +133,11 @@ uint32_t MPathPlanningService_ComputePath_args::write(::apache::thrift::protocol
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter328;
-    for (_iter328 = this->properties.begin(); _iter328 != this->properties.end(); ++_iter328)
+    std::map<std::string, std::string> ::const_iterator _iter331;
+    for (_iter331 = this->properties.begin(); _iter331 != this->properties.end(); ++_iter331)
     {
-      xfer += oprot->writeString(_iter328->first);
-      xfer += oprot->writeString(_iter328->second);
+      xfer += oprot->writeString(_iter331->first);
+      xfer += oprot->writeString(_iter331->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -169,10 +169,10 @@ uint32_t MPathPlanningService_ComputePath_pargs::write(::apache::thrift::protoco
   xfer += oprot->writeFieldBegin("sceneObjects", ::apache::thrift::protocol::T_LIST, 3);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->sceneObjects)).size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter329;
-    for (_iter329 = (*(this->sceneObjects)).begin(); _iter329 != (*(this->sceneObjects)).end(); ++_iter329)
+    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter332;
+    for (_iter332 = (*(this->sceneObjects)).begin(); _iter332 != (*(this->sceneObjects)).end(); ++_iter332)
     {
-      xfer += (*_iter329).write(oprot);
+      xfer += (*_iter332).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -181,11 +181,11 @@ uint32_t MPathPlanningService_ComputePath_pargs::write(::apache::thrift::protoco
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter330;
-    for (_iter330 = (*(this->properties)).begin(); _iter330 != (*(this->properties)).end(); ++_iter330)
+    std::map<std::string, std::string> ::const_iterator _iter333;
+    for (_iter333 = (*(this->properties)).begin(); _iter333 != (*(this->properties)).end(); ++_iter333)
     {
-      xfer += oprot->writeString(_iter330->first);
-      xfer += oprot->writeString(_iter330->second);
+      xfer += oprot->writeString(_iter333->first);
+      xfer += oprot->writeString(_iter333->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -304,302 +304,6 @@ uint32_t MPathPlanningService_ComputePath_presult::read(::apache::thrift::protoc
   return xfer;
 }
 
-
-MPathPlanningService_ComputePathDirection_args::~MPathPlanningService_ComputePathDirection_args() noexcept {
-}
-
-
-uint32_t MPathPlanningService_ComputePathDirection_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->current.read(iprot);
-          this->__isset.current = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->goal.read(iprot);
-          this->__isset.goal = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_LIST) {
-          {
-            this->sceneObject.clear();
-            uint32_t _size331;
-            ::apache::thrift::protocol::TType _etype334;
-            xfer += iprot->readListBegin(_etype334, _size331);
-            this->sceneObject.resize(_size331);
-            uint32_t _i335;
-            for (_i335 = 0; _i335 < _size331; ++_i335)
-            {
-              xfer += this->sceneObject[_i335].read(iprot);
-            }
-            xfer += iprot->readListEnd();
-          }
-          this->__isset.sceneObject = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->properties.clear();
-            uint32_t _size336;
-            ::apache::thrift::protocol::TType _ktype337;
-            ::apache::thrift::protocol::TType _vtype338;
-            xfer += iprot->readMapBegin(_ktype337, _vtype338, _size336);
-            uint32_t _i340;
-            for (_i340 = 0; _i340 < _size336; ++_i340)
-            {
-              std::string _key341;
-              xfer += iprot->readString(_key341);
-              std::string& _val342 = this->properties[_key341];
-              xfer += iprot->readString(_val342);
-            }
-            xfer += iprot->readMapEnd();
-          }
-          this->__isset.properties = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t MPathPlanningService_ComputePathDirection_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("MPathPlanningService_ComputePathDirection_args");
-
-  xfer += oprot->writeFieldBegin("current", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->current.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("goal", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->goal.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("sceneObject", ::apache::thrift::protocol::T_LIST, 3);
-  {
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->sceneObject.size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter343;
-    for (_iter343 = this->sceneObject.begin(); _iter343 != this->sceneObject.end(); ++_iter343)
-    {
-      xfer += (*_iter343).write(oprot);
-    }
-    xfer += oprot->writeListEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter344;
-    for (_iter344 = this->properties.begin(); _iter344 != this->properties.end(); ++_iter344)
-    {
-      xfer += oprot->writeString(_iter344->first);
-      xfer += oprot->writeString(_iter344->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-MPathPlanningService_ComputePathDirection_pargs::~MPathPlanningService_ComputePathDirection_pargs() noexcept {
-}
-
-
-uint32_t MPathPlanningService_ComputePathDirection_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("MPathPlanningService_ComputePathDirection_pargs");
-
-  xfer += oprot->writeFieldBegin("current", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->current)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("goal", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->goal)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("sceneObject", ::apache::thrift::protocol::T_LIST, 3);
-  {
-    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->sceneObject)).size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter345;
-    for (_iter345 = (*(this->sceneObject)).begin(); _iter345 != (*(this->sceneObject)).end(); ++_iter345)
-    {
-      xfer += (*_iter345).write(oprot);
-    }
-    xfer += oprot->writeListEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
-  {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter346;
-    for (_iter346 = (*(this->properties)).begin(); _iter346 != (*(this->properties)).end(); ++_iter346)
-    {
-      xfer += oprot->writeString(_iter346->first);
-      xfer += oprot->writeString(_iter346->second);
-    }
-    xfer += oprot->writeMapEnd();
-  }
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-MPathPlanningService_ComputePathDirection_result::~MPathPlanningService_ComputePathDirection_result() noexcept {
-}
-
-
-uint32_t MPathPlanningService_ComputePathDirection_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t MPathPlanningService_ComputePathDirection_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("MPathPlanningService_ComputePathDirection_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-MPathPlanningService_ComputePathDirection_presult::~MPathPlanningService_ComputePathDirection_presult() noexcept {
-}
-
-
-uint32_t MPathPlanningService_ComputePathDirection_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
 void MPathPlanningServiceClient::ComputePath( ::MMIStandard::MPathConstraint& _return, const  ::MMIStandard::MVector& start, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObjects, const std::map<std::string, std::string> & properties)
 {
   send_ComputePath(start, goal, sceneObjects, properties);
@@ -659,67 +363,6 @@ void MPathPlanningServiceClient::recv_ComputePath( ::MMIStandard::MPathConstrain
     return;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComputePath failed: unknown result");
-}
-
-void MPathPlanningServiceClient::ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties)
-{
-  send_ComputePathDirection(current, goal, sceneObject, properties);
-  recv_ComputePathDirection(_return);
-}
-
-void MPathPlanningServiceClient::send_ComputePathDirection(const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("ComputePathDirection", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  MPathPlanningService_ComputePathDirection_pargs args;
-  args.current = &current;
-  args.goal = &goal;
-  args.sceneObject = &sceneObject;
-  args.properties = &properties;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void MPathPlanningServiceClient::recv_ComputePathDirection( ::MMIStandard::MVector& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("ComputePathDirection") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  MPathPlanningService_ComputePathDirection_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComputePathDirection failed: unknown result");
 }
 
 bool MPathPlanningServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -783,60 +426,6 @@ void MPathPlanningServiceProcessor::process_ComputePath(int32_t seqid, ::apache:
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "MPathPlanningService.ComputePath", bytes);
-  }
-}
-
-void MPathPlanningServiceProcessor::process_ComputePathDirection(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("MPathPlanningService.ComputePathDirection", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "MPathPlanningService.ComputePathDirection");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "MPathPlanningService.ComputePathDirection");
-  }
-
-  MPathPlanningService_ComputePathDirection_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "MPathPlanningService.ComputePathDirection", bytes);
-  }
-
-  MPathPlanningService_ComputePathDirection_result result;
-  try {
-    iface_->ComputePathDirection(result.success, args.current, args.goal, args.sceneObject, args.properties);
-    result.__isset.success = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "MPathPlanningService.ComputePathDirection");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("ComputePathDirection", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "MPathPlanningService.ComputePathDirection");
-  }
-
-  oprot->writeMessageBegin("ComputePathDirection", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "MPathPlanningService.ComputePathDirection", bytes);
   }
 }
 
@@ -925,93 +514,6 @@ void MPathPlanningServiceConcurrentClient::recv_ComputePath( ::MMIStandard::MPat
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComputePath failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void MPathPlanningServiceConcurrentClient::ComputePathDirection( ::MMIStandard::MVector& _return, const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties)
-{
-  int32_t seqid = send_ComputePathDirection(current, goal, sceneObject, properties);
-  recv_ComputePathDirection(_return, seqid);
-}
-
-int32_t MPathPlanningServiceConcurrentClient::send_ComputePathDirection(const  ::MMIStandard::MVector& current, const  ::MMIStandard::MVector& goal, const std::vector< ::MMIStandard::MSceneObject> & sceneObject, const std::map<std::string, std::string> & properties)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("ComputePathDirection", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  MPathPlanningService_ComputePathDirection_pargs args;
-  args.current = &current;
-  args.goal = &goal;
-  args.sceneObject = &sceneObject;
-  args.properties = &properties;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void MPathPlanningServiceConcurrentClient::recv_ComputePathDirection( ::MMIStandard::MVector& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("ComputePathDirection") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      MPathPlanningService_ComputePathDirection_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "ComputePathDirection failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

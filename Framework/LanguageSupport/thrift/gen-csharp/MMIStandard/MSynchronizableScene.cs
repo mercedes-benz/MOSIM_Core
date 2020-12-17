@@ -549,13 +549,13 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     SceneManipulations = new List<MMIStandard.MSceneManipulation>();
-                    TList _list207 = iprot.ReadListBegin();
-                    for( int _i208 = 0; _i208 < _list207.Count; ++_i208)
+                    TList _list198 = iprot.ReadListBegin();
+                    for( int _i199 = 0; _i199 < _list198.Count; ++_i199)
                     {
-                      MMIStandard.MSceneManipulation _elem209;
-                      _elem209 = new MMIStandard.MSceneManipulation();
-                      _elem209.Read(iprot);
-                      SceneManipulations.Add(_elem209);
+                      MMIStandard.MSceneManipulation _elem200;
+                      _elem200 = new MMIStandard.MSceneManipulation();
+                      _elem200.Read(iprot);
+                      SceneManipulations.Add(_elem200);
                     }
                     iprot.ReadListEnd();
                   }
@@ -591,9 +591,9 @@ namespace MMIStandard
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.Struct, SceneManipulations.Count));
-              foreach (MMIStandard.MSceneManipulation _iter210 in SceneManipulations)
+              foreach (MMIStandard.MSceneManipulation _iter201 in SceneManipulations)
               {
-                _iter210.Write(oprot);
+                _iter201.Write(oprot);
               }
               oprot.WriteListEnd();
             }

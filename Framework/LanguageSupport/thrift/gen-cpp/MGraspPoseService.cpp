@@ -43,8 +43,10 @@ uint32_t MGraspPoseService_GetGraspPoses_args::read(::apache::thrift::protocol::
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->handType.read(iprot);
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          int32_t ecast334;
+          xfer += iprot->readI32(ecast334);
+          this->handType = ( ::MMIStandard::MJointType::type)ecast334;
           this->__isset.handType = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -87,8 +89,8 @@ uint32_t MGraspPoseService_GetGraspPoses_args::write(::apache::thrift::protocol:
   xfer += this->posture.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("handType", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->handType.write(oprot);
+  xfer += oprot->writeFieldBegin("handType", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((int32_t)this->handType);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("sceneObject", ::apache::thrift::protocol::T_STRUCT, 3);
@@ -118,8 +120,8 @@ uint32_t MGraspPoseService_GetGraspPoses_pargs::write(::apache::thrift::protocol
   xfer += (*(this->posture)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("handType", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->handType)).write(oprot);
+  xfer += oprot->writeFieldBegin("handType", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((int32_t)(*(this->handType)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("sceneObject", ::apache::thrift::protocol::T_STRUCT, 3);
@@ -165,14 +167,14 @@ uint32_t MGraspPoseService_GetGraspPoses_result::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size347;
-            ::apache::thrift::protocol::TType _etype350;
-            xfer += iprot->readListBegin(_etype350, _size347);
-            this->success.resize(_size347);
-            uint32_t _i351;
-            for (_i351 = 0; _i351 < _size347; ++_i351)
+            uint32_t _size335;
+            ::apache::thrift::protocol::TType _etype338;
+            xfer += iprot->readListBegin(_etype338, _size335);
+            this->success.resize(_size335);
+            uint32_t _i339;
+            for (_i339 = 0; _i339 < _size335; ++_i339)
             {
-              xfer += this->success[_i351].read(iprot);
+              xfer += this->success[_i339].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -203,10 +205,10 @@ uint32_t MGraspPoseService_GetGraspPoses_result::write(::apache::thrift::protoco
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector< ::MMIStandard::MGeometryConstraint> ::const_iterator _iter352;
-      for (_iter352 = this->success.begin(); _iter352 != this->success.end(); ++_iter352)
+      std::vector< ::MMIStandard::MGeometryConstraint> ::const_iterator _iter340;
+      for (_iter340 = this->success.begin(); _iter340 != this->success.end(); ++_iter340)
       {
-        xfer += (*_iter352).write(oprot);
+        xfer += (*_iter340).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -247,14 +249,14 @@ uint32_t MGraspPoseService_GetGraspPoses_presult::read(::apache::thrift::protoco
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size353;
-            ::apache::thrift::protocol::TType _etype356;
-            xfer += iprot->readListBegin(_etype356, _size353);
-            (*(this->success)).resize(_size353);
-            uint32_t _i357;
-            for (_i357 = 0; _i357 < _size353; ++_i357)
+            uint32_t _size341;
+            ::apache::thrift::protocol::TType _etype344;
+            xfer += iprot->readListBegin(_etype344, _size341);
+            (*(this->success)).resize(_size341);
+            uint32_t _i345;
+            for (_i345 = 0; _i345 < _size341; ++_i345)
             {
-              xfer += (*(this->success))[_i357].read(iprot);
+              xfer += (*(this->success))[_i345].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -275,13 +277,13 @@ uint32_t MGraspPoseService_GetGraspPoses_presult::read(::apache::thrift::protoco
   return xfer;
 }
 
-void MGraspPoseServiceClient::GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
+void MGraspPoseServiceClient::GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
 {
   send_GetGraspPoses(posture, handType, sceneObject, repositionHand);
   recv_GetGraspPoses(_return);
 }
 
-void MGraspPoseServiceClient::send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
+void MGraspPoseServiceClient::send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("GetGraspPoses", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -407,13 +409,13 @@ void MGraspPoseServiceProcessor::process_GetGraspPoses(int32_t seqid, ::apache::
   return processor;
 }
 
-void MGraspPoseServiceConcurrentClient::GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
+void MGraspPoseServiceConcurrentClient::GetGraspPoses(std::vector< ::MMIStandard::MGeometryConstraint> & _return, const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
 {
   int32_t seqid = send_GetGraspPoses(posture, handType, sceneObject, repositionHand);
   recv_GetGraspPoses(_return, seqid);
 }
 
-int32_t MGraspPoseServiceConcurrentClient::send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MTransform& handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
+int32_t MGraspPoseServiceConcurrentClient::send_GetGraspPoses(const  ::MMIStandard::MAvatarPostureValues& posture, const  ::MMIStandard::MJointType::type handType, const  ::MMIStandard::MSceneObject& sceneObject, const bool repositionHand)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());

@@ -22,13 +22,13 @@ class MGraspPoseServiceClient extends \MMIServiceBaseClient implements \MGraspPo
     }
 
 
-    public function GetGraspPoses(\MAvatarPostureValues $posture, \MTransform $handType, \MSceneObject $sceneObject, $repositionHand)
+    public function GetGraspPoses(\MAvatarPostureValues $posture, $handType, \MSceneObject $sceneObject, $repositionHand)
     {
         $this->send_GetGraspPoses($posture, $handType, $sceneObject, $repositionHand);
         return $this->recv_GetGraspPoses();
     }
 
-    public function send_GetGraspPoses(\MAvatarPostureValues $posture, \MTransform $handType, \MSceneObject $sceneObject, $repositionHand)
+    public function send_GetGraspPoses(\MAvatarPostureValues $posture, $handType, \MSceneObject $sceneObject, $repositionHand)
     {
         $args = new \MGraspPoseService_GetGraspPoses_args();
         $args->posture = $posture;

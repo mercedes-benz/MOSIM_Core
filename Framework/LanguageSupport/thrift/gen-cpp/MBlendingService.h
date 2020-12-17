@@ -23,7 +23,7 @@ namespace MMIStandard {
 class MBlendingServiceIf : virtual public MMIServiceBaseIf {
  public:
   virtual ~MBlendingServiceIf() {}
-  virtual void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID) = 0;
+  virtual void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID) = 0;
   virtual void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight) = 0;
 };
 
@@ -54,7 +54,7 @@ class MBlendingServiceIfSingletonFactory : virtual public MBlendingServiceIfFact
 class MBlendingServiceNull : virtual public MBlendingServiceIf , virtual public MMIServiceBaseNull {
  public:
   virtual ~MBlendingServiceNull() {}
-  void SetBlendingMask( ::MMIStandard::MBoolResponse& /* _return */, const std::map< ::MMIStandard::MTransform, double> & /* mask */, const std::string& /* avatarID */) {
+  void SetBlendingMask( ::MMIStandard::MBoolResponse& /* _return */, const std::map< ::MMIStandard::MJointType::type, double> & /* mask */, const std::string& /* avatarID */) {
     return;
   }
   void Blend( ::MMIStandard::MAvatarPostureValues& /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* startPosture */, const  ::MMIStandard::MAvatarPostureValues& /* targetPosture */, const double /* weight */) {
@@ -77,12 +77,12 @@ class MBlendingService_SetBlendingMask_args {
   }
 
   virtual ~MBlendingService_SetBlendingMask_args() noexcept;
-  std::map< ::MMIStandard::MTransform, double>  mask;
+  std::map< ::MMIStandard::MJointType::type, double>  mask;
   std::string avatarID;
 
   _MBlendingService_SetBlendingMask_args__isset __isset;
 
-  void __set_mask(const std::map< ::MMIStandard::MTransform, double> & val);
+  void __set_mask(const std::map< ::MMIStandard::MJointType::type, double> & val);
 
   void __set_avatarID(const std::string& val);
 
@@ -111,7 +111,7 @@ class MBlendingService_SetBlendingMask_pargs {
 
 
   virtual ~MBlendingService_SetBlendingMask_pargs() noexcept;
-  const std::map< ::MMIStandard::MTransform, double> * mask;
+  const std::map< ::MMIStandard::MJointType::type, double> * mask;
   const std::string* avatarID;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -302,8 +302,8 @@ class MBlendingServiceClient : virtual public MBlendingServiceIf, public MMIServ
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID);
-  void send_SetBlendingMask(const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID);
+  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID);
+  void send_SetBlendingMask(const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID);
   void recv_SetBlendingMask( ::MMIStandard::MBoolResponse& _return);
   void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight);
   void send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight);
@@ -359,7 +359,7 @@ class MBlendingServiceMultiface : virtual public MBlendingServiceIf, public MMIS
     ifaces_.push_back(iface);
   }
  public:
-  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID) {
+  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -395,8 +395,8 @@ class MBlendingServiceConcurrentClient : virtual public MBlendingServiceIf, publ
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID);
-  int32_t send_SetBlendingMask(const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID);
+  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID);
+  int32_t send_SetBlendingMask(const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID);
   void recv_SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const int32_t seqid);
   void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight);
   int32_t send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight);

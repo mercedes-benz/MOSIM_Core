@@ -117,7 +117,7 @@ namespace MMICSharp.Services
                     client.Access.UnregisterService(description);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

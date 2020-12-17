@@ -46,16 +46,16 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_L_args::read(::apache::thrift::p
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size420;
-            ::apache::thrift::protocol::TType _etype423;
-            xfer += iprot->readListBegin(_etype423, _size420);
-            this->coordinateSystem.resize(_size420);
-            uint32_t _i424;
-            for (_i424 = 0; _i424 < _size420; ++_i424)
+            uint32_t _size408;
+            ::apache::thrift::protocol::TType _etype411;
+            xfer += iprot->readListBegin(_etype411, _size408);
+            this->coordinateSystem.resize(_size408);
+            uint32_t _i412;
+            for (_i412 = 0; _i412 < _size408; ++_i412)
             {
-              int32_t ecast425;
-              xfer += iprot->readI32(ecast425);
-              this->coordinateSystem[_i424] = (MDirection::type)ecast425;
+              int32_t ecast413;
+              xfer += iprot->readI32(ecast413);
+              this->coordinateSystem[_i412] = (MDirection::type)ecast413;
             }
             xfer += iprot->readListEnd();
           }
@@ -88,10 +88,10 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_L_args::write(::apache::thrift::
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter426;
-    for (_iter426 = this->coordinateSystem.begin(); _iter426 != this->coordinateSystem.end(); ++_iter426)
+    std::vector<MDirection::type> ::const_iterator _iter414;
+    for (_iter414 = this->coordinateSystem.begin(); _iter414 != this->coordinateSystem.end(); ++_iter414)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter426));
+      xfer += oprot->writeI32((int32_t)(*_iter414));
     }
     xfer += oprot->writeListEnd();
   }
@@ -119,10 +119,10 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_L_pargs::write(::apache::thrift:
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter427;
-    for (_iter427 = (*(this->coordinateSystem)).begin(); _iter427 != (*(this->coordinateSystem)).end(); ++_iter427)
+    std::vector<MDirection::type> ::const_iterator _iter415;
+    for (_iter415 = (*(this->coordinateSystem)).begin(); _iter415 != (*(this->coordinateSystem)).end(); ++_iter415)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter427));
+      xfer += oprot->writeI32((int32_t)(*_iter415));
     }
     xfer += oprot->writeListEnd();
   }
@@ -277,9 +277,9 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_args::read(::apache::thrift::pro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast428;
-          xfer += iprot->readI32(ecast428);
-          this->firstAxis = (MDirection::type)ecast428;
+          int32_t ecast416;
+          xfer += iprot->readI32(ecast416);
+          this->firstAxis = (MDirection::type)ecast416;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -287,9 +287,9 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_args::read(::apache::thrift::pro
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast429;
-          xfer += iprot->readI32(ecast429);
-          this->secondAxis = (MDirection::type)ecast429;
+          int32_t ecast417;
+          xfer += iprot->readI32(ecast417);
+          this->secondAxis = (MDirection::type)ecast417;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -297,9 +297,9 @@ uint32_t MCoordinateSystemMapper_TransformToMMI_args::read(::apache::thrift::pro
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast430;
-          xfer += iprot->readI32(ecast430);
-          this->thirdAxis = (MDirection::type)ecast430;
+          int32_t ecast418;
+          xfer += iprot->readI32(ecast418);
+          this->thirdAxis = (MDirection::type)ecast418;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -520,16 +520,16 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_L_args::read(::apache::thrift:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size431;
-            ::apache::thrift::protocol::TType _etype434;
-            xfer += iprot->readListBegin(_etype434, _size431);
-            this->coordinateSystem.resize(_size431);
-            uint32_t _i435;
-            for (_i435 = 0; _i435 < _size431; ++_i435)
+            uint32_t _size419;
+            ::apache::thrift::protocol::TType _etype422;
+            xfer += iprot->readListBegin(_etype422, _size419);
+            this->coordinateSystem.resize(_size419);
+            uint32_t _i423;
+            for (_i423 = 0; _i423 < _size419; ++_i423)
             {
-              int32_t ecast436;
-              xfer += iprot->readI32(ecast436);
-              this->coordinateSystem[_i435] = (MDirection::type)ecast436;
+              int32_t ecast424;
+              xfer += iprot->readI32(ecast424);
+              this->coordinateSystem[_i423] = (MDirection::type)ecast424;
             }
             xfer += iprot->readListEnd();
           }
@@ -562,10 +562,10 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_L_args::write(::apache::thrift
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter437;
-    for (_iter437 = this->coordinateSystem.begin(); _iter437 != this->coordinateSystem.end(); ++_iter437)
+    std::vector<MDirection::type> ::const_iterator _iter425;
+    for (_iter425 = this->coordinateSystem.begin(); _iter425 != this->coordinateSystem.end(); ++_iter425)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter437));
+      xfer += oprot->writeI32((int32_t)(*_iter425));
     }
     xfer += oprot->writeListEnd();
   }
@@ -593,10 +593,10 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_L_pargs::write(::apache::thrif
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter438;
-    for (_iter438 = (*(this->coordinateSystem)).begin(); _iter438 != (*(this->coordinateSystem)).end(); ++_iter438)
+    std::vector<MDirection::type> ::const_iterator _iter426;
+    for (_iter426 = (*(this->coordinateSystem)).begin(); _iter426 != (*(this->coordinateSystem)).end(); ++_iter426)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter438));
+      xfer += oprot->writeI32((int32_t)(*_iter426));
     }
     xfer += oprot->writeListEnd();
   }
@@ -751,9 +751,9 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_args::read(::apache::thrift::p
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast439;
-          xfer += iprot->readI32(ecast439);
-          this->firstAxis = (MDirection::type)ecast439;
+          int32_t ecast427;
+          xfer += iprot->readI32(ecast427);
+          this->firstAxis = (MDirection::type)ecast427;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -761,9 +761,9 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_args::read(::apache::thrift::p
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast440;
-          xfer += iprot->readI32(ecast440);
-          this->secondAxis = (MDirection::type)ecast440;
+          int32_t ecast428;
+          xfer += iprot->readI32(ecast428);
+          this->secondAxis = (MDirection::type)ecast428;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -771,9 +771,9 @@ uint32_t MCoordinateSystemMapper_TransformFromMMI_args::read(::apache::thrift::p
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast441;
-          xfer += iprot->readI32(ecast441);
-          this->thirdAxis = (MDirection::type)ecast441;
+          int32_t ecast429;
+          xfer += iprot->readI32(ecast429);
+          this->thirdAxis = (MDirection::type)ecast429;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -994,16 +994,16 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_L_args::read(::apache::thrift::
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size442;
-            ::apache::thrift::protocol::TType _etype445;
-            xfer += iprot->readListBegin(_etype445, _size442);
-            this->coordinateSystem.resize(_size442);
-            uint32_t _i446;
-            for (_i446 = 0; _i446 < _size442; ++_i446)
+            uint32_t _size430;
+            ::apache::thrift::protocol::TType _etype433;
+            xfer += iprot->readListBegin(_etype433, _size430);
+            this->coordinateSystem.resize(_size430);
+            uint32_t _i434;
+            for (_i434 = 0; _i434 < _size430; ++_i434)
             {
-              int32_t ecast447;
-              xfer += iprot->readI32(ecast447);
-              this->coordinateSystem[_i446] = (MDirection::type)ecast447;
+              int32_t ecast435;
+              xfer += iprot->readI32(ecast435);
+              this->coordinateSystem[_i434] = (MDirection::type)ecast435;
             }
             xfer += iprot->readListEnd();
           }
@@ -1036,10 +1036,10 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_L_args::write(::apache::thrift:
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter448;
-    for (_iter448 = this->coordinateSystem.begin(); _iter448 != this->coordinateSystem.end(); ++_iter448)
+    std::vector<MDirection::type> ::const_iterator _iter436;
+    for (_iter436 = this->coordinateSystem.begin(); _iter436 != this->coordinateSystem.end(); ++_iter436)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter448));
+      xfer += oprot->writeI32((int32_t)(*_iter436));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1067,10 +1067,10 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_L_pargs::write(::apache::thrift
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter449;
-    for (_iter449 = (*(this->coordinateSystem)).begin(); _iter449 != (*(this->coordinateSystem)).end(); ++_iter449)
+    std::vector<MDirection::type> ::const_iterator _iter437;
+    for (_iter437 = (*(this->coordinateSystem)).begin(); _iter437 != (*(this->coordinateSystem)).end(); ++_iter437)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter449));
+      xfer += oprot->writeI32((int32_t)(*_iter437));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1225,9 +1225,9 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_args::read(::apache::thrift::pr
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast450;
-          xfer += iprot->readI32(ecast450);
-          this->firstAxis = (MDirection::type)ecast450;
+          int32_t ecast438;
+          xfer += iprot->readI32(ecast438);
+          this->firstAxis = (MDirection::type)ecast438;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1235,9 +1235,9 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_args::read(::apache::thrift::pr
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast451;
-          xfer += iprot->readI32(ecast451);
-          this->secondAxis = (MDirection::type)ecast451;
+          int32_t ecast439;
+          xfer += iprot->readI32(ecast439);
+          this->secondAxis = (MDirection::type)ecast439;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1245,9 +1245,9 @@ uint32_t MCoordinateSystemMapper_QuaternionToMMI_args::read(::apache::thrift::pr
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast452;
-          xfer += iprot->readI32(ecast452);
-          this->thirdAxis = (MDirection::type)ecast452;
+          int32_t ecast440;
+          xfer += iprot->readI32(ecast440);
+          this->thirdAxis = (MDirection::type)ecast440;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1468,16 +1468,16 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_L_args::read(::apache::thrift
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size453;
-            ::apache::thrift::protocol::TType _etype456;
-            xfer += iprot->readListBegin(_etype456, _size453);
-            this->coordinateSystem.resize(_size453);
-            uint32_t _i457;
-            for (_i457 = 0; _i457 < _size453; ++_i457)
+            uint32_t _size441;
+            ::apache::thrift::protocol::TType _etype444;
+            xfer += iprot->readListBegin(_etype444, _size441);
+            this->coordinateSystem.resize(_size441);
+            uint32_t _i445;
+            for (_i445 = 0; _i445 < _size441; ++_i445)
             {
-              int32_t ecast458;
-              xfer += iprot->readI32(ecast458);
-              this->coordinateSystem[_i457] = (MDirection::type)ecast458;
+              int32_t ecast446;
+              xfer += iprot->readI32(ecast446);
+              this->coordinateSystem[_i445] = (MDirection::type)ecast446;
             }
             xfer += iprot->readListEnd();
           }
@@ -1510,10 +1510,10 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_L_args::write(::apache::thrif
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter459;
-    for (_iter459 = this->coordinateSystem.begin(); _iter459 != this->coordinateSystem.end(); ++_iter459)
+    std::vector<MDirection::type> ::const_iterator _iter447;
+    for (_iter447 = this->coordinateSystem.begin(); _iter447 != this->coordinateSystem.end(); ++_iter447)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter459));
+      xfer += oprot->writeI32((int32_t)(*_iter447));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1541,10 +1541,10 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_L_pargs::write(::apache::thri
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter460;
-    for (_iter460 = (*(this->coordinateSystem)).begin(); _iter460 != (*(this->coordinateSystem)).end(); ++_iter460)
+    std::vector<MDirection::type> ::const_iterator _iter448;
+    for (_iter448 = (*(this->coordinateSystem)).begin(); _iter448 != (*(this->coordinateSystem)).end(); ++_iter448)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter460));
+      xfer += oprot->writeI32((int32_t)(*_iter448));
     }
     xfer += oprot->writeListEnd();
   }
@@ -1699,9 +1699,9 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_args::read(::apache::thrift::
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast461;
-          xfer += iprot->readI32(ecast461);
-          this->firstAxis = (MDirection::type)ecast461;
+          int32_t ecast449;
+          xfer += iprot->readI32(ecast449);
+          this->firstAxis = (MDirection::type)ecast449;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1709,9 +1709,9 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_args::read(::apache::thrift::
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast462;
-          xfer += iprot->readI32(ecast462);
-          this->secondAxis = (MDirection::type)ecast462;
+          int32_t ecast450;
+          xfer += iprot->readI32(ecast450);
+          this->secondAxis = (MDirection::type)ecast450;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1719,9 +1719,9 @@ uint32_t MCoordinateSystemMapper_QuaternionFromMMI_args::read(::apache::thrift::
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast463;
-          xfer += iprot->readI32(ecast463);
-          this->thirdAxis = (MDirection::type)ecast463;
+          int32_t ecast451;
+          xfer += iprot->readI32(ecast451);
+          this->thirdAxis = (MDirection::type)ecast451;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1942,16 +1942,16 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_L_args::read(::apache::thrift::prot
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size464;
-            ::apache::thrift::protocol::TType _etype467;
-            xfer += iprot->readListBegin(_etype467, _size464);
-            this->coordinateSystem.resize(_size464);
-            uint32_t _i468;
-            for (_i468 = 0; _i468 < _size464; ++_i468)
+            uint32_t _size452;
+            ::apache::thrift::protocol::TType _etype455;
+            xfer += iprot->readListBegin(_etype455, _size452);
+            this->coordinateSystem.resize(_size452);
+            uint32_t _i456;
+            for (_i456 = 0; _i456 < _size452; ++_i456)
             {
-              int32_t ecast469;
-              xfer += iprot->readI32(ecast469);
-              this->coordinateSystem[_i468] = (MDirection::type)ecast469;
+              int32_t ecast457;
+              xfer += iprot->readI32(ecast457);
+              this->coordinateSystem[_i456] = (MDirection::type)ecast457;
             }
             xfer += iprot->readListEnd();
           }
@@ -1984,10 +1984,10 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_L_args::write(::apache::thrift::pro
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter470;
-    for (_iter470 = this->coordinateSystem.begin(); _iter470 != this->coordinateSystem.end(); ++_iter470)
+    std::vector<MDirection::type> ::const_iterator _iter458;
+    for (_iter458 = this->coordinateSystem.begin(); _iter458 != this->coordinateSystem.end(); ++_iter458)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter470));
+      xfer += oprot->writeI32((int32_t)(*_iter458));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2015,10 +2015,10 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_L_pargs::write(::apache::thrift::pr
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter471;
-    for (_iter471 = (*(this->coordinateSystem)).begin(); _iter471 != (*(this->coordinateSystem)).end(); ++_iter471)
+    std::vector<MDirection::type> ::const_iterator _iter459;
+    for (_iter459 = (*(this->coordinateSystem)).begin(); _iter459 != (*(this->coordinateSystem)).end(); ++_iter459)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter471));
+      xfer += oprot->writeI32((int32_t)(*_iter459));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2173,9 +2173,9 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_args::read(::apache::thrift::protoc
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast472;
-          xfer += iprot->readI32(ecast472);
-          this->firstAxis = (MDirection::type)ecast472;
+          int32_t ecast460;
+          xfer += iprot->readI32(ecast460);
+          this->firstAxis = (MDirection::type)ecast460;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2183,9 +2183,9 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_args::read(::apache::thrift::protoc
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast473;
-          xfer += iprot->readI32(ecast473);
-          this->secondAxis = (MDirection::type)ecast473;
+          int32_t ecast461;
+          xfer += iprot->readI32(ecast461);
+          this->secondAxis = (MDirection::type)ecast461;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2193,9 +2193,9 @@ uint32_t MCoordinateSystemMapper_VectorToMMI_args::read(::apache::thrift::protoc
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast474;
-          xfer += iprot->readI32(ecast474);
-          this->thirdAxis = (MDirection::type)ecast474;
+          int32_t ecast462;
+          xfer += iprot->readI32(ecast462);
+          this->thirdAxis = (MDirection::type)ecast462;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2416,16 +2416,16 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_L_args::read(::apache::thrift::pr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->coordinateSystem.clear();
-            uint32_t _size475;
-            ::apache::thrift::protocol::TType _etype478;
-            xfer += iprot->readListBegin(_etype478, _size475);
-            this->coordinateSystem.resize(_size475);
-            uint32_t _i479;
-            for (_i479 = 0; _i479 < _size475; ++_i479)
+            uint32_t _size463;
+            ::apache::thrift::protocol::TType _etype466;
+            xfer += iprot->readListBegin(_etype466, _size463);
+            this->coordinateSystem.resize(_size463);
+            uint32_t _i467;
+            for (_i467 = 0; _i467 < _size463; ++_i467)
             {
-              int32_t ecast480;
-              xfer += iprot->readI32(ecast480);
-              this->coordinateSystem[_i479] = (MDirection::type)ecast480;
+              int32_t ecast468;
+              xfer += iprot->readI32(ecast468);
+              this->coordinateSystem[_i467] = (MDirection::type)ecast468;
             }
             xfer += iprot->readListEnd();
           }
@@ -2458,10 +2458,10 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_L_args::write(::apache::thrift::p
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->coordinateSystem.size()));
-    std::vector<MDirection::type> ::const_iterator _iter481;
-    for (_iter481 = this->coordinateSystem.begin(); _iter481 != this->coordinateSystem.end(); ++_iter481)
+    std::vector<MDirection::type> ::const_iterator _iter469;
+    for (_iter469 = this->coordinateSystem.begin(); _iter469 != this->coordinateSystem.end(); ++_iter469)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter481));
+      xfer += oprot->writeI32((int32_t)(*_iter469));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2489,10 +2489,10 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_L_pargs::write(::apache::thrift::
   xfer += oprot->writeFieldBegin("coordinateSystem", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I32, static_cast<uint32_t>((*(this->coordinateSystem)).size()));
-    std::vector<MDirection::type> ::const_iterator _iter482;
-    for (_iter482 = (*(this->coordinateSystem)).begin(); _iter482 != (*(this->coordinateSystem)).end(); ++_iter482)
+    std::vector<MDirection::type> ::const_iterator _iter470;
+    for (_iter470 = (*(this->coordinateSystem)).begin(); _iter470 != (*(this->coordinateSystem)).end(); ++_iter470)
     {
-      xfer += oprot->writeI32((int32_t)(*_iter482));
+      xfer += oprot->writeI32((int32_t)(*_iter470));
     }
     xfer += oprot->writeListEnd();
   }
@@ -2647,9 +2647,9 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_args::read(::apache::thrift::prot
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast483;
-          xfer += iprot->readI32(ecast483);
-          this->firstAxis = (MDirection::type)ecast483;
+          int32_t ecast471;
+          xfer += iprot->readI32(ecast471);
+          this->firstAxis = (MDirection::type)ecast471;
           this->__isset.firstAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2657,9 +2657,9 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_args::read(::apache::thrift::prot
         break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast484;
-          xfer += iprot->readI32(ecast484);
-          this->secondAxis = (MDirection::type)ecast484;
+          int32_t ecast472;
+          xfer += iprot->readI32(ecast472);
+          this->secondAxis = (MDirection::type)ecast472;
           this->__isset.secondAxis = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2667,9 +2667,9 @@ uint32_t MCoordinateSystemMapper_VectorFromMMI_args::read(::apache::thrift::prot
         break;
       case 4:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast485;
-          xfer += iprot->readI32(ecast485);
-          this->thirdAxis = (MDirection::type)ecast485;
+          int32_t ecast473;
+          xfer += iprot->readI32(ecast473);
+          this->thirdAxis = (MDirection::type)ecast473;
           this->__isset.thirdAxis = true;
         } else {
           xfer += iprot->skip(ftype);

@@ -23,8 +23,8 @@ namespace MMIStandard {
 class MPostureBlendingServiceIf : virtual public MMIServiceBaseIf {
  public:
   virtual ~MPostureBlendingServiceIf() {}
-  virtual void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) = 0;
-  virtual void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) = 0;
+  virtual void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) = 0;
+  virtual void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) = 0;
 };
 
 class MPostureBlendingServiceIfFactory : virtual public MMIServiceBaseIfFactory {
@@ -54,10 +54,10 @@ class MPostureBlendingServiceIfSingletonFactory : virtual public MPostureBlendin
 class MPostureBlendingServiceNull : virtual public MPostureBlendingServiceIf , virtual public MMIServiceBaseNull {
  public:
   virtual ~MPostureBlendingServiceNull() {}
-  void Blend( ::MMIStandard::MAvatarPostureValues& /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* startPosture */, const  ::MMIStandard::MAvatarPostureValues& /* targetPosture */, const double /* weight */, const std::map< ::MMIStandard::MTransform, double> & /* mask */, const std::map<std::string, std::string> & /* properties */) {
+  void Blend( ::MMIStandard::MAvatarPostureValues& /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* startPosture */, const  ::MMIStandard::MAvatarPostureValues& /* targetPosture */, const double /* weight */, const std::map< ::MMIStandard::MJointType::type, double> & /* mask */, const std::map<std::string, std::string> & /* properties */) {
     return;
   }
-  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* startPosture */, const  ::MMIStandard::MAvatarPostureValues& /* targetPosture */, const std::vector<double> & /* weights */, const std::map< ::MMIStandard::MTransform, double> & /* mask */, const std::map<std::string, std::string> & /* properties */) {
+  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & /* _return */, const  ::MMIStandard::MAvatarPostureValues& /* startPosture */, const  ::MMIStandard::MAvatarPostureValues& /* targetPosture */, const std::vector<double> & /* weights */, const std::map< ::MMIStandard::MJointType::type, double> & /* mask */, const std::map<std::string, std::string> & /* properties */) {
     return;
   }
 };
@@ -83,7 +83,7 @@ class MPostureBlendingService_Blend_args {
    ::MMIStandard::MAvatarPostureValues startPosture;
    ::MMIStandard::MAvatarPostureValues targetPosture;
   double weight;
-  std::map< ::MMIStandard::MTransform, double>  mask;
+  std::map< ::MMIStandard::MJointType::type, double>  mask;
   std::map<std::string, std::string>  properties;
 
   _MPostureBlendingService_Blend_args__isset __isset;
@@ -94,7 +94,7 @@ class MPostureBlendingService_Blend_args {
 
   void __set_weight(const double val);
 
-  void __set_mask(const std::map< ::MMIStandard::MTransform, double> & val);
+  void __set_mask(const std::map< ::MMIStandard::MJointType::type, double> & val);
 
   void __set_properties(const std::map<std::string, std::string> & val);
 
@@ -132,7 +132,7 @@ class MPostureBlendingService_Blend_pargs {
   const  ::MMIStandard::MAvatarPostureValues* startPosture;
   const  ::MMIStandard::MAvatarPostureValues* targetPosture;
   const double* weight;
-  const std::map< ::MMIStandard::MTransform, double> * mask;
+  const std::map< ::MMIStandard::MJointType::type, double> * mask;
   const std::map<std::string, std::string> * properties;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -215,7 +215,7 @@ class MPostureBlendingService_BlendMany_args {
    ::MMIStandard::MAvatarPostureValues startPosture;
    ::MMIStandard::MAvatarPostureValues targetPosture;
   std::vector<double>  weights;
-  std::map< ::MMIStandard::MTransform, double>  mask;
+  std::map< ::MMIStandard::MJointType::type, double>  mask;
   std::map<std::string, std::string>  properties;
 
   _MPostureBlendingService_BlendMany_args__isset __isset;
@@ -226,7 +226,7 @@ class MPostureBlendingService_BlendMany_args {
 
   void __set_weights(const std::vector<double> & val);
 
-  void __set_mask(const std::map< ::MMIStandard::MTransform, double> & val);
+  void __set_mask(const std::map< ::MMIStandard::MJointType::type, double> & val);
 
   void __set_properties(const std::map<std::string, std::string> & val);
 
@@ -264,7 +264,7 @@ class MPostureBlendingService_BlendMany_pargs {
   const  ::MMIStandard::MAvatarPostureValues* startPosture;
   const  ::MMIStandard::MAvatarPostureValues* targetPosture;
   const std::vector<double> * weights;
-  const std::map< ::MMIStandard::MTransform, double> * mask;
+  const std::map< ::MMIStandard::MJointType::type, double> * mask;
   const std::map<std::string, std::string> * properties;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -337,11 +337,11 @@ class MPostureBlendingServiceClient : virtual public MPostureBlendingServiceIf, 
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
-  void send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
+  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
+  void send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
   void recv_Blend( ::MMIStandard::MAvatarPostureValues& _return);
-  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
-  void send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
+  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
+  void send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
   void recv_BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return);
 };
 
@@ -394,7 +394,7 @@ class MPostureBlendingServiceMultiface : virtual public MPostureBlendingServiceI
     ifaces_.push_back(iface);
   }
  public:
-  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) {
+  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -404,7 +404,7 @@ class MPostureBlendingServiceMultiface : virtual public MPostureBlendingServiceI
     return;
   }
 
-  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) {
+  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -430,11 +430,11 @@ class MPostureBlendingServiceConcurrentClient : virtual public MPostureBlendingS
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
-  int32_t send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
+  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
+  int32_t send_Blend(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
   void recv_Blend( ::MMIStandard::MAvatarPostureValues& _return, const int32_t seqid);
-  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
-  int32_t send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties);
+  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
+  int32_t send_BlendMany(const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties);
   void recv_BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const int32_t seqid);
 };
 

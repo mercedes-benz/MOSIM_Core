@@ -20,12 +20,12 @@ class MPostureBlendingServiceHandler : virtual public MPostureBlendingServiceIf 
     // Your initialization goes here
   }
 
-  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) {
+  void Blend( ::MMIStandard::MAvatarPostureValues& _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const double weight, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) {
     // Your implementation goes here
     printf("Blend\n");
   }
 
-  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MTransform, double> & mask, const std::map<std::string, std::string> & properties) {
+  void BlendMany(std::vector< ::MMIStandard::MAvatarPostureValues> & _return, const  ::MMIStandard::MAvatarPostureValues& startPosture, const  ::MMIStandard::MAvatarPostureValues& targetPosture, const std::vector<double> & weights, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::map<std::string, std::string> & properties) {
     // Your implementation goes here
     printf("BlendMany\n");
   }

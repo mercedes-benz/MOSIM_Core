@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('   GetGraspPoses(MAvatarPostureValues posture, MTransform handType, MSceneObject sceneObject, bool repositionHand)')
+    print('   GetGraspPoses(MAvatarPostureValues posture, MJointType handType, MSceneObject sceneObject, bool repositionHand)')
     print('   GetStatus()')
     print('  MServiceDescription GetDescription()')
     print('  MBoolResponse Setup(MAvatarDescription avatar,  properties)')

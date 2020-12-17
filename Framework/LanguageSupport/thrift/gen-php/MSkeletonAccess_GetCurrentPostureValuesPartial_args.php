@@ -85,13 +85,13 @@ class MSkeletonAccess_GetCurrentPostureValuesPartial_args
                 case 2:
                     if ($ftype == TType::LST) {
                         $this->joints = array();
-                        $_size310 = 0;
-                        $_etype313 = 0;
-                        $xfer += $input->readListBegin($_etype313, $_size310);
-                        for ($_i314 = 0; $_i314 < $_size310; ++$_i314) {
-                            $elem315 = null;
-                            $xfer += $input->readI32($elem315);
-                            $this->joints []= $elem315;
+                        $_size294 = 0;
+                        $_etype297 = 0;
+                        $xfer += $input->readListBegin($_etype297, $_size294);
+                        for ($_i298 = 0; $_i298 < $_size294; ++$_i298) {
+                            $elem299 = null;
+                            $xfer += $input->readI32($elem299);
+                            $this->joints []= $elem299;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -123,8 +123,8 @@ class MSkeletonAccess_GetCurrentPostureValuesPartial_args
             }
             $xfer += $output->writeFieldBegin('joints', TType::LST, 2);
             $output->writeListBegin(TType::I32, count($this->joints));
-            foreach ($this->joints as $iter316) {
-                $xfer += $output->writeI32($iter316);
+            foreach ($this->joints as $iter300) {
+                $xfer += $output->writeI32($iter300);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

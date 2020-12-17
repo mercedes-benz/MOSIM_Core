@@ -35,7 +35,7 @@ struct MParameter
 	4:required bool Required;
 }
 
-//Description format of an executable file
+//Description format of an executable file (content of description.json)
 struct MExecutableDescription
 {
     1: required string Name; 
@@ -45,9 +45,14 @@ struct MExecutableDescription
 	5: required string Author;
 	6: required string Version;
 	7: optional list<string> Dependencies;
+	//Parameters required for service library
+	8: optional string Vendor;
+	9: optional string VendorDomain;
+	10: optional string ServiceUrl;
+	11: optional string UpdateUrl;
 }
 
-//Format to describe the main aspects of a service
+//Format to describe the main aspects of a service (data passed through thrift)
 struct MServiceDescription
 {
 	1: required string Name;

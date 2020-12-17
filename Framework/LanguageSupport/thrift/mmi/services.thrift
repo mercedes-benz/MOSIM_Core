@@ -85,15 +85,15 @@ service MCollisionDetectionService extends MMIServiceBase
 //To check -> in future provide motion/posture blending service
 service MBlendingService extends MMIServiceBase
 {
-	core.MBoolResponse SetBlendingMask(1: map<math.MTransform, double> mask, 2: string avatarID),
+	core.MBoolResponse SetBlendingMask(1: map<avatar.MJointType, double> mask, 2: string avatarID),
 	avatar.MAvatarPostureValues Blend (1: avatar.MAvatarPostureValues startPosture, 2: avatar.MAvatarPostureValues targetPosture, 3: double weight)
 }
 
 //Specific interface for a posture blending service
 service MPostureBlendingService extends MMIServiceBase
 {
-	avatar.MAvatarPostureValues Blend (1: avatar.MAvatarPostureValues startPosture, 2: avatar.MAvatarPostureValues targetPosture, 3: double weight, 4: map<math.MTransform, double> mask, 5:map<string,string> properties),
-	list<avatar.MAvatarPostureValues> BlendMany (1: avatar.MAvatarPostureValues startPosture, 2: avatar.MAvatarPostureValues targetPosture, 3: list<double> weights, 4: map<math.MTransform, double> mask, 5:map<string,string> properties)
+	avatar.MAvatarPostureValues Blend (1: avatar.MAvatarPostureValues startPosture, 2: avatar.MAvatarPostureValues targetPosture, 3: double weight, 4: map<avatar.MJointType, double> mask, 5:map<string,string> properties),
+	list<avatar.MAvatarPostureValues> BlendMany (1: avatar.MAvatarPostureValues startPosture, 2: avatar.MAvatarPostureValues targetPosture, 3: list<double> weights, 4: map<avatar.MJointType, double> mask, 5:map<string,string> properties)
 }
 
 
@@ -101,10 +101,6 @@ service MPostureBlendingService extends MMIServiceBase
 service MPathPlanningService extends MMIServiceBase
 {
 	constraints.MPathConstraint ComputePath(1: math.MVector start, 2: math.MVector goal, 3: list<scene.MSceneObject> sceneObjects, 4: map<string,string> properties),
-  
-  // properties: "ReuseEnvironment" should be used to prevent overhead
-  // returns current target direction scaled by velocity (in m/s) 
-  math.MVector ComputePathDirection(1: math.MVector current, 2: math.MVector goal, 3: list<scene.MSceneObject> sceneObject, 4: map<string,string> properties)
 }
 
  
@@ -117,7 +113,7 @@ service MRetargetingService extends MMIServiceBase
 
 service MGraspPoseService extends MMIServiceBase
 {
-  list<constraints.MGeometryConstraint> GetGraspPoses(1: avatar.MAvatarPostureValues posture, 2: math.MTransform handType, 3: scene.MSceneObject sceneObject, 4: bool repositionHand),
+  list<constraints.MGeometryConstraint> GetGraspPoses(1: avatar.MAvatarPostureValues posture, 2: avatar.MJointType handType, 3: scene.MSceneObject sceneObject, 4: bool repositionHand),
 	//scene.MHandPose ComputeGraspPose(1: avatar.MAvatarPosture posture, 2: math.MTransform handType, 3: scene.MSceneObject sceneObject, 4: bool repositionHand),
 }
 

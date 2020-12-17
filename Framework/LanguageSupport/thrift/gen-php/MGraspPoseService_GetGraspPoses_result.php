@@ -67,14 +67,14 @@ class MGraspPoseService_GetGraspPoses_result
                 case 0:
                     if ($ftype == TType::LST) {
                         $this->success = array();
-                        $_size273 = 0;
-                        $_etype276 = 0;
-                        $xfer += $input->readListBegin($_etype276, $_size273);
-                        for ($_i277 = 0; $_i277 < $_size273; ++$_i277) {
-                            $elem278 = null;
-                            $elem278 = new \MGeometryConstraint();
-                            $xfer += $elem278->read($input);
-                            $this->success []= $elem278;
+                        $_size257 = 0;
+                        $_etype260 = 0;
+                        $xfer += $input->readListBegin($_etype260, $_size257);
+                        for ($_i261 = 0; $_i261 < $_size257; ++$_i261) {
+                            $elem262 = null;
+                            $elem262 = new \MGeometryConstraint();
+                            $xfer += $elem262->read($input);
+                            $this->success []= $elem262;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -101,8 +101,8 @@ class MGraspPoseService_GetGraspPoses_result
             }
             $xfer += $output->writeFieldBegin('success', TType::LST, 0);
             $output->writeListBegin(TType::STRUCT, count($this->success));
-            foreach ($this->success as $iter279) {
-                $xfer += $iter279->write($output);
+            foreach ($this->success as $iter263) {
+                $xfer += $iter263->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

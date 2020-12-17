@@ -1,3 +1,6 @@
+# Ignore MMIStandard src folder as it is copied by the deploy procedure automatically
+MMIStandard/src
+
 */**/.vs
 */**/__pycache__
 *.py[cod]

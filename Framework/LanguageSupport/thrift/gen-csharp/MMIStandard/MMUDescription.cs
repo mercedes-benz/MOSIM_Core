@@ -31,6 +31,10 @@ namespace MMIStandard
     private string _ShortDescription;
     private List<MMIStandard.MParameter> _Parameters;
     private List<MMIStandard.MParameter> _SceneParameters;
+    private string _Vendor;
+    private string _VendorDomain;
+    private string _MmuUrl;
+    private string _UpdateUrl;
 
     public string Name { get; set; }
 
@@ -150,6 +154,58 @@ namespace MMIStandard
       }
     }
 
+    public string Vendor
+    {
+      get
+      {
+        return _Vendor;
+      }
+      set
+      {
+        __isset.Vendor = true;
+        this._Vendor = value;
+      }
+    }
+
+    public string VendorDomain
+    {
+      get
+      {
+        return _VendorDomain;
+      }
+      set
+      {
+        __isset.VendorDomain = true;
+        this._VendorDomain = value;
+      }
+    }
+
+    public string MmuUrl
+    {
+      get
+      {
+        return _MmuUrl;
+      }
+      set
+      {
+        __isset.MmuUrl = true;
+        this._MmuUrl = value;
+      }
+    }
+
+    public string UpdateUrl
+    {
+      get
+      {
+        return _UpdateUrl;
+      }
+      set
+      {
+        __isset.UpdateUrl = true;
+        this._UpdateUrl = value;
+      }
+    }
+
 
     public Isset __isset;
     #if !SILVERLIGHT
@@ -164,6 +220,10 @@ namespace MMIStandard
       public bool ShortDescription;
       public bool Parameters;
       public bool SceneParameters;
+      public bool Vendor;
+      public bool VendorDomain;
+      public bool MmuUrl;
+      public bool UpdateUrl;
     }
 
     public MMUDescription() {
@@ -379,6 +439,34 @@ namespace MMIStandard
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 18:
+              if (field.Type == TType.String) {
+                Vendor = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 19:
+              if (field.Type == TType.String) {
+                VendorDomain = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 20:
+              if (field.Type == TType.String) {
+                MmuUrl = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 21:
+              if (field.Type == TType.String) {
+                UpdateUrl = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -577,6 +665,38 @@ namespace MMIStandard
           }
           oprot.WriteFieldEnd();
         }
+        if (Vendor != null && __isset.Vendor) {
+          field.Name = "Vendor";
+          field.Type = TType.String;
+          field.ID = 18;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Vendor);
+          oprot.WriteFieldEnd();
+        }
+        if (VendorDomain != null && __isset.VendorDomain) {
+          field.Name = "VendorDomain";
+          field.Type = TType.String;
+          field.ID = 19;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(VendorDomain);
+          oprot.WriteFieldEnd();
+        }
+        if (MmuUrl != null && __isset.MmuUrl) {
+          field.Name = "MmuUrl";
+          field.Type = TType.String;
+          field.ID = 20;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(MmuUrl);
+          oprot.WriteFieldEnd();
+        }
+        if (UpdateUrl != null && __isset.UpdateUrl) {
+          field.Name = "UpdateUrl";
+          field.Type = TType.String;
+          field.ID = 21;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(UpdateUrl);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -633,6 +753,22 @@ namespace MMIStandard
       if (SceneParameters != null && __isset.SceneParameters) {
         __sb.Append(", SceneParameters: ");
         __sb.Append(SceneParameters);
+      }
+      if (Vendor != null && __isset.Vendor) {
+        __sb.Append(", Vendor: ");
+        __sb.Append(Vendor);
+      }
+      if (VendorDomain != null && __isset.VendorDomain) {
+        __sb.Append(", VendorDomain: ");
+        __sb.Append(VendorDomain);
+      }
+      if (MmuUrl != null && __isset.MmuUrl) {
+        __sb.Append(", MmuUrl: ");
+        __sb.Append(MmuUrl);
+      }
+      if (UpdateUrl != null && __isset.UpdateUrl) {
+        __sb.Append(", UpdateUrl: ");
+        __sb.Append(UpdateUrl);
       }
       __sb.Append(")");
       return __sb.ToString();

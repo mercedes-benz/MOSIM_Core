@@ -58,6 +58,26 @@ class MExecutableDescription
                 'type' => TType::STRING,
                 ),
         ),
+        8 => array(
+            'var' => 'Vendor',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        9 => array(
+            'var' => 'VendorDomain',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        10 => array(
+            'var' => 'ServiceUrl',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
+        11 => array(
+            'var' => 'UpdateUrl',
+            'isRequired' => false,
+            'type' => TType::STRING,
+        ),
     );
 
     /**
@@ -88,6 +108,22 @@ class MExecutableDescription
      * @var string[]
      */
     public $Dependencies = null;
+    /**
+     * @var string
+     */
+    public $Vendor = null;
+    /**
+     * @var string
+     */
+    public $VendorDomain = null;
+    /**
+     * @var string
+     */
+    public $ServiceUrl = null;
+    /**
+     * @var string
+     */
+    public $UpdateUrl = null;
 
     public function __construct($vals = null)
     {
@@ -112,6 +148,18 @@ class MExecutableDescription
             }
             if (isset($vals['Dependencies'])) {
                 $this->Dependencies = $vals['Dependencies'];
+            }
+            if (isset($vals['Vendor'])) {
+                $this->Vendor = $vals['Vendor'];
+            }
+            if (isset($vals['VendorDomain'])) {
+                $this->VendorDomain = $vals['VendorDomain'];
+            }
+            if (isset($vals['ServiceUrl'])) {
+                $this->ServiceUrl = $vals['ServiceUrl'];
+            }
+            if (isset($vals['UpdateUrl'])) {
+                $this->UpdateUrl = $vals['UpdateUrl'];
             }
         }
     }
@@ -193,6 +241,34 @@ class MExecutableDescription
                         $xfer += $input->skip($ftype);
                     }
                     break;
+                case 8:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->Vendor);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 9:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->VendorDomain);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 10:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->ServiceUrl);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 11:
+                    if ($ftype == TType::STRING) {
+                        $xfer += $input->readString($this->UpdateUrl);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
                 default:
                     $xfer += $input->skip($ftype);
                     break;
@@ -247,6 +323,26 @@ class MExecutableDescription
                 $xfer += $output->writeString($iter13);
             }
             $output->writeListEnd();
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->Vendor !== null) {
+            $xfer += $output->writeFieldBegin('Vendor', TType::STRING, 8);
+            $xfer += $output->writeString($this->Vendor);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->VendorDomain !== null) {
+            $xfer += $output->writeFieldBegin('VendorDomain', TType::STRING, 9);
+            $xfer += $output->writeString($this->VendorDomain);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->ServiceUrl !== null) {
+            $xfer += $output->writeFieldBegin('ServiceUrl', TType::STRING, 10);
+            $xfer += $output->writeString($this->ServiceUrl);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->UpdateUrl !== null) {
+            $xfer += $output->writeFieldBegin('UpdateUrl', TType::STRING, 11);
+            $xfer += $output->writeString($this->UpdateUrl);
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();

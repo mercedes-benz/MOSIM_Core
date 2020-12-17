@@ -173,8 +173,12 @@ void swap(MParameter &a, MParameter &b);
 std::ostream& operator<<(std::ostream& out, const MParameter& obj);
 
 typedef struct _MExecutableDescription__isset {
-  _MExecutableDescription__isset() : Dependencies(false) {}
+  _MExecutableDescription__isset() : Dependencies(false), Vendor(false), VendorDomain(false), ServiceUrl(false), UpdateUrl(false) {}
   bool Dependencies :1;
+  bool Vendor :1;
+  bool VendorDomain :1;
+  bool ServiceUrl :1;
+  bool UpdateUrl :1;
 } _MExecutableDescription__isset;
 
 class MExecutableDescription : public virtual ::apache::thrift::TBase {
@@ -182,7 +186,7 @@ class MExecutableDescription : public virtual ::apache::thrift::TBase {
 
   MExecutableDescription(const MExecutableDescription&);
   MExecutableDescription& operator=(const MExecutableDescription&);
-  MExecutableDescription() : Name(), ID(), Language(), ExecutableName(), Author(), Version() {
+  MExecutableDescription() : Name(), ID(), Language(), ExecutableName(), Author(), Version(), Vendor(), VendorDomain(), ServiceUrl(), UpdateUrl() {
   }
 
   virtual ~MExecutableDescription() noexcept;
@@ -193,6 +197,10 @@ class MExecutableDescription : public virtual ::apache::thrift::TBase {
   std::string Author;
   std::string Version;
   std::vector<std::string>  Dependencies;
+  std::string Vendor;
+  std::string VendorDomain;
+  std::string ServiceUrl;
+  std::string UpdateUrl;
 
   _MExecutableDescription__isset __isset;
 
@@ -209,6 +217,14 @@ class MExecutableDescription : public virtual ::apache::thrift::TBase {
   void __set_Version(const std::string& val);
 
   void __set_Dependencies(const std::vector<std::string> & val);
+
+  void __set_Vendor(const std::string& val);
+
+  void __set_VendorDomain(const std::string& val);
+
+  void __set_ServiceUrl(const std::string& val);
+
+  void __set_UpdateUrl(const std::string& val);
 
   bool operator == (const MExecutableDescription & rhs) const
   {
@@ -227,6 +243,22 @@ class MExecutableDescription : public virtual ::apache::thrift::TBase {
     if (__isset.Dependencies != rhs.__isset.Dependencies)
       return false;
     else if (__isset.Dependencies && !(Dependencies == rhs.Dependencies))
+      return false;
+    if (__isset.Vendor != rhs.__isset.Vendor)
+      return false;
+    else if (__isset.Vendor && !(Vendor == rhs.Vendor))
+      return false;
+    if (__isset.VendorDomain != rhs.__isset.VendorDomain)
+      return false;
+    else if (__isset.VendorDomain && !(VendorDomain == rhs.VendorDomain))
+      return false;
+    if (__isset.ServiceUrl != rhs.__isset.ServiceUrl)
+      return false;
+    else if (__isset.ServiceUrl && !(ServiceUrl == rhs.ServiceUrl))
+      return false;
+    if (__isset.UpdateUrl != rhs.__isset.UpdateUrl)
+      return false;
+    else if (__isset.UpdateUrl && !(UpdateUrl == rhs.UpdateUrl))
       return false;
     return true;
   }

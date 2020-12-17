@@ -1752,10 +1752,10 @@ class SetAnimatedJoints_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.joints = []
-                    (_etype306, _size303) = iprot.readListBegin()
-                    for _i307 in range(_size303):
-                        _elem308 = iprot.readI32()
-                        self.joints.append(_elem308)
+                    (_etype290, _size287) = iprot.readListBegin()
+                    for _i291 in range(_size287):
+                        _elem292 = iprot.readI32()
+                        self.joints.append(_elem292)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1776,8 +1776,8 @@ class SetAnimatedJoints_args(object):
         if self.joints is not None:
             oprot.writeFieldBegin('joints', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.joints))
-            for iter309 in self.joints:
-                oprot.writeI32(iter309)
+            for iter293 in self.joints:
+                oprot.writeI32(iter293)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -2355,10 +2355,10 @@ class GetCurrentPostureValuesPartial_args(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.joints = []
-                    (_etype313, _size310) = iprot.readListBegin()
-                    for _i314 in range(_size310):
-                        _elem315 = iprot.readI32()
-                        self.joints.append(_elem315)
+                    (_etype297, _size294) = iprot.readListBegin()
+                    for _i298 in range(_size294):
+                        _elem299 = iprot.readI32()
+                        self.joints.append(_elem299)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -2379,8 +2379,8 @@ class GetCurrentPostureValuesPartial_args(object):
         if self.joints is not None:
             oprot.writeFieldBegin('joints', TType.LIST, 2)
             oprot.writeListBegin(TType.I32, len(self.joints))
-            for iter316 in self.joints:
-                oprot.writeI32(iter316)
+            for iter300 in self.joints:
+                oprot.writeI32(iter300)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -2554,11 +2554,11 @@ class GetCurrentJointPositions_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype320, _size317) = iprot.readListBegin()
-                    for _i321 in range(_size317):
-                        _elem322 = MMIStandard.math.ttypes.MVector3()
-                        _elem322.read(iprot)
-                        self.success.append(_elem322)
+                    (_etype304, _size301) = iprot.readListBegin()
+                    for _i305 in range(_size301):
+                        _elem306 = MMIStandard.math.ttypes.MVector3()
+                        _elem306.read(iprot)
+                        self.success.append(_elem306)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -2575,8 +2575,8 @@ class GetCurrentJointPositions_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter323 in self.success:
-                iter323.write(oprot)
+            for iter307 in self.success:
+                iter307.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

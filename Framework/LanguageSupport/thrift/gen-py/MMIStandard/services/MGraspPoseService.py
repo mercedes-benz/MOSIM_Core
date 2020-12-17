@@ -160,9 +160,8 @@ class GetGraspPoses_args(object):
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.handType = MMIStandard.math.ttypes.MTransform()
-                    self.handType.read(iprot)
+                if ftype == TType.I32:
+                    self.handType = iprot.readI32()
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
@@ -191,8 +190,8 @@ class GetGraspPoses_args(object):
             self.posture.write(oprot)
             oprot.writeFieldEnd()
         if self.handType is not None:
-            oprot.writeFieldBegin('handType', TType.STRUCT, 2)
-            self.handType.write(oprot)
+            oprot.writeFieldBegin('handType', TType.I32, 2)
+            oprot.writeI32(self.handType)
             oprot.writeFieldEnd()
         if self.sceneObject is not None:
             oprot.writeFieldBegin('sceneObject', TType.STRUCT, 3)
@@ -222,7 +221,7 @@ all_structs.append(GetGraspPoses_args)
 GetGraspPoses_args.thrift_spec = (
     None,  # 0
     (1, TType.STRUCT, 'posture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 1
-    (2, TType.STRUCT, 'handType', [MMIStandard.math.ttypes.MTransform, None], None, ),  # 2
+    (2, TType.I32, 'handType', None, None, ),  # 2
     (3, TType.STRUCT, 'sceneObject', [MMIStandard.scene.ttypes.MSceneObject, None], None, ),  # 3
     (4, TType.BOOL, 'repositionHand', None, None, ),  # 4
 )
@@ -251,11 +250,11 @@ class GetGraspPoses_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype276, _size273) = iprot.readListBegin()
-                    for _i277 in range(_size273):
-                        _elem278 = MMIStandard.constraints.ttypes.MGeometryConstraint()
-                        _elem278.read(iprot)
-                        self.success.append(_elem278)
+                    (_etype260, _size257) = iprot.readListBegin()
+                    for _i261 in range(_size257):
+                        _elem262 = MMIStandard.constraints.ttypes.MGeometryConstraint()
+                        _elem262.read(iprot)
+                        self.success.append(_elem262)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -272,8 +271,8 @@ class GetGraspPoses_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter279 in self.success:
-                iter279.write(oprot)
+            for iter263 in self.success:
+                iter263.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()

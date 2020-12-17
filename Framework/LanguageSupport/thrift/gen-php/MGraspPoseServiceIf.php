@@ -18,10 +18,10 @@ interface MGraspPoseServiceIf extends \MMIServiceBaseIf
 {
     /**
      * @param \MAvatarPostureValues $posture
-     * @param \MTransform $handType
+     * @param int $handType
      * @param \MSceneObject $sceneObject
      * @param bool $repositionHand
      * @return \MGeometryConstraint[]
      */
-    public function GetGraspPoses(\MAvatarPostureValues $posture, \MTransform $handType, \MSceneObject $sceneObject, $repositionHand);
+    public function GetGraspPoses(\MAvatarPostureValues $posture, $handType, \MSceneObject $sceneObject, $repositionHand);
 }

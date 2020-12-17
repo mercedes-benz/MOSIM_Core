@@ -67,14 +67,14 @@ class MWalkPointEstimationService_EstimateWalkPoints_result
                 case 0:
                     if ($ftype == TType::LST) {
                         $this->success = array();
-                        $_size296 = 0;
-                        $_etype299 = 0;
-                        $xfer += $input->readListBegin($_etype299, $_size296);
-                        for ($_i300 = 0; $_i300 < $_size296; ++$_i300) {
-                            $elem301 = null;
-                            $elem301 = new \MWalkPoint();
-                            $xfer += $elem301->read($input);
-                            $this->success []= $elem301;
+                        $_size280 = 0;
+                        $_etype283 = 0;
+                        $xfer += $input->readListBegin($_etype283, $_size280);
+                        for ($_i284 = 0; $_i284 < $_size280; ++$_i284) {
+                            $elem285 = null;
+                            $elem285 = new \MWalkPoint();
+                            $xfer += $elem285->read($input);
+                            $this->success []= $elem285;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -101,8 +101,8 @@ class MWalkPointEstimationService_EstimateWalkPoints_result
             }
             $xfer += $output->writeFieldBegin('success', TType::LST, 0);
             $output->writeListBegin(TType::STRUCT, count($this->success));
-            foreach ($this->success as $iter302) {
-                $xfer += $iter302->write($output);
+            foreach ($this->success as $iter286) {
+                $xfer += $iter286->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

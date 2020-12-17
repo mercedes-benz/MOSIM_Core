@@ -699,11 +699,15 @@ class MMUDescription(object):
      - ShortDescription
      - Parameters
      - SceneParameters
+     - Vendor
+     - VendorDomain
+     - MmuUrl
+     - UpdateUrl
 
     """
 
 
-    def __init__(self, Name=None, ID=None, AssemblyName=None, MotionType=None, Language=None, Author=None, Version=None, Prerequisites=None, Properties=None, Dependencies=None, Events=None, LongDescription=None, ShortDescription=None, Parameters=None, SceneParameters=None,):
+    def __init__(self, Name=None, ID=None, AssemblyName=None, MotionType=None, Language=None, Author=None, Version=None, Prerequisites=None, Properties=None, Dependencies=None, Events=None, LongDescription=None, ShortDescription=None, Parameters=None, SceneParameters=None, Vendor=None, VendorDomain=None, MmuUrl=None, UpdateUrl=None,):
         self.Name = Name
         self.ID = ID
         self.AssemblyName = AssemblyName
@@ -719,6 +723,10 @@ class MMUDescription(object):
         self.ShortDescription = ShortDescription
         self.Parameters = Parameters
         self.SceneParameters = SceneParameters
+        self.Vendor = Vendor
+        self.VendorDomain = VendorDomain
+        self.MmuUrl = MmuUrl
+        self.UpdateUrl = UpdateUrl
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -839,6 +847,26 @@ class MMUDescription(object):
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
+            elif fid == 18:
+                if ftype == TType.STRING:
+                    self.Vendor = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 19:
+                if ftype == TType.STRING:
+                    self.VendorDomain = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 20:
+                if ftype == TType.STRING:
+                    self.MmuUrl = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 21:
+                if ftype == TType.STRING:
+                    self.UpdateUrl = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -927,6 +955,22 @@ class MMUDescription(object):
             for iter115 in self.SceneParameters:
                 iter115.write(oprot)
             oprot.writeListEnd()
+            oprot.writeFieldEnd()
+        if self.Vendor is not None:
+            oprot.writeFieldBegin('Vendor', TType.STRING, 18)
+            oprot.writeString(self.Vendor.encode('utf-8') if sys.version_info[0] == 2 else self.Vendor)
+            oprot.writeFieldEnd()
+        if self.VendorDomain is not None:
+            oprot.writeFieldBegin('VendorDomain', TType.STRING, 19)
+            oprot.writeString(self.VendorDomain.encode('utf-8') if sys.version_info[0] == 2 else self.VendorDomain)
+            oprot.writeFieldEnd()
+        if self.MmuUrl is not None:
+            oprot.writeFieldBegin('MmuUrl', TType.STRING, 20)
+            oprot.writeString(self.MmuUrl.encode('utf-8') if sys.version_info[0] == 2 else self.MmuUrl)
+            oprot.writeFieldEnd()
+        if self.UpdateUrl is not None:
+            oprot.writeFieldBegin('UpdateUrl', TType.STRING, 21)
+            oprot.writeString(self.UpdateUrl.encode('utf-8') if sys.version_info[0] == 2 else self.UpdateUrl)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -1202,6 +1246,10 @@ MMUDescription.thrift_spec = (
     (15, TType.STRING, 'ShortDescription', 'UTF8', None, ),  # 15
     (16, TType.LIST, 'Parameters', (TType.STRUCT, [MMIStandard.core.ttypes.MParameter, None], False), None, ),  # 16
     (17, TType.LIST, 'SceneParameters', (TType.STRUCT, [MMIStandard.core.ttypes.MParameter, None], False), None, ),  # 17
+    (18, TType.STRING, 'Vendor', 'UTF8', None, ),  # 18
+    (19, TType.STRING, 'VendorDomain', 'UTF8', None, ),  # 19
+    (20, TType.STRING, 'MmuUrl', 'UTF8', None, ),  # 20
+    (21, TType.STRING, 'UpdateUrl', 'UTF8', None, ),  # 21
 )
 all_structs.append(MInstruction)
 MInstruction.thrift_spec = (

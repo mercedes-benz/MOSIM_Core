@@ -19,13 +19,13 @@ namespace MMIStandard
 {
   public partial class MBlendingService {
     public interface ISync : MMIServiceBase.ISync {
-      MMIStandard.MBoolResponse SetBlendingMask(Dictionary<MMIStandard.MTransform, double> mask, string avatarID);
+      MMIStandard.MBoolResponse SetBlendingMask(Dictionary<MMIStandard.MJointType, double> mask, string avatarID);
       MMIStandard.MAvatarPostureValues Blend(MMIStandard.MAvatarPostureValues startPosture, MMIStandard.MAvatarPostureValues targetPosture, double weight);
     }
 
     public interface Iface : ISync {
       #if SILVERLIGHT
-      IAsyncResult Begin_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MTransform, double> mask, string avatarID);
+      IAsyncResult Begin_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MJointType, double> mask, string avatarID);
       MMIStandard.MBoolResponse End_SetBlendingMask(IAsyncResult asyncResult);
       #endif
       #if SILVERLIGHT
@@ -46,7 +46,7 @@ namespace MMIStandard
       
       #if SILVERLIGHT
       
-      public IAsyncResult Begin_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MTransform, double> mask, string avatarID)
+      public IAsyncResult Begin_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MJointType, double> mask, string avatarID)
       {
         return send_SetBlendingMask(callback, state, mask, avatarID);
       }
@@ -59,7 +59,7 @@ namespace MMIStandard
 
       #endif
 
-      public MMIStandard.MBoolResponse SetBlendingMask(Dictionary<MMIStandard.MTransform, double> mask, string avatarID)
+      public MMIStandard.MBoolResponse SetBlendingMask(Dictionary<MMIStandard.MJointType, double> mask, string avatarID)
       {
         #if SILVERLIGHT
         var asyncResult = Begin_SetBlendingMask(null, null, mask, avatarID);
@@ -72,7 +72,7 @@ namespace MMIStandard
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MTransform, double> mask, string avatarID)
+      public IAsyncResult send_SetBlendingMask(AsyncCallback callback, object state, Dictionary<MMIStandard.MJointType, double> mask, string avatarID)
       {
         oprot_.WriteMessageBegin(new TMessage("SetBlendingMask", TMessageType.Call, seqid_));
         SetBlendingMask_args args = new SetBlendingMask_args();
@@ -85,7 +85,7 @@ namespace MMIStandard
 
       #else
 
-      public void send_SetBlendingMask(Dictionary<MMIStandard.MTransform, double> mask, string avatarID)
+      public void send_SetBlendingMask(Dictionary<MMIStandard.MJointType, double> mask, string avatarID)
       {
         oprot_.WriteMessageBegin(new TMessage("SetBlendingMask", TMessageType.Call, seqid_));
         SetBlendingMask_args args = new SetBlendingMask_args();
@@ -288,10 +288,10 @@ namespace MMIStandard
     #endif
     public partial class SetBlendingMask_args : TBase
     {
-      private Dictionary<MMIStandard.MTransform, double> _mask;
+      private Dictionary<MMIStandard.MJointType, double> _mask;
       private string _avatarID;
 
-      public Dictionary<MMIStandard.MTransform, double> Mask
+      public Dictionary<MMIStandard.MJointType, double> Mask
       {
         get
         {
@@ -348,14 +348,13 @@ namespace MMIStandard
               case 1:
                 if (field.Type == TType.Map) {
                   {
-                    Mask = new Dictionary<MMIStandard.MTransform, double>();
+                    Mask = new Dictionary<MMIStandard.MJointType, double>();
                     TMap _map103 = iprot.ReadMapBegin();
                     for( int _i104 = 0; _i104 < _map103.Count; ++_i104)
                     {
-                      MMIStandard.MTransform _key105;
+                      MMIStandard.MJointType _key105;
                       double _val106;
-                      _key105 = new MMIStandard.MTransform();
-                      _key105.Read(iprot);
+                      _key105 = (MMIStandard.MJointType)iprot.ReadI32();
                       _val106 = iprot.ReadDouble();
                       Mask[_key105] = _val106;
                     }
@@ -399,10 +398,10 @@ namespace MMIStandard
             field.ID = 1;
             oprot.WriteFieldBegin(field);
             {
-              oprot.WriteMapBegin(new TMap(TType.Struct, TType.Double, Mask.Count));
-              foreach (MMIStandard.MTransform _iter107 in Mask.Keys)
+              oprot.WriteMapBegin(new TMap(TType.I32, TType.Double, Mask.Count));
+              foreach (MMIStandard.MJointType _iter107 in Mask.Keys)
               {
-                _iter107.Write(oprot);
+                oprot.WriteI32((int)_iter107);
                 oprot.WriteDouble(Mask[_iter107]);
               }
               oprot.WriteMapEnd();

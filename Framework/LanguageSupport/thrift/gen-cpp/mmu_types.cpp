@@ -1276,6 +1276,26 @@ void MMUDescription::__set_SceneParameters(const std::vector< ::MMIStandard::MPa
   this->SceneParameters = val;
 __isset.SceneParameters = true;
 }
+
+void MMUDescription::__set_Vendor(const std::string& val) {
+  this->Vendor = val;
+__isset.Vendor = true;
+}
+
+void MMUDescription::__set_VendorDomain(const std::string& val) {
+  this->VendorDomain = val;
+__isset.VendorDomain = true;
+}
+
+void MMUDescription::__set_MmuUrl(const std::string& val) {
+  this->MmuUrl = val;
+__isset.MmuUrl = true;
+}
+
+void MMUDescription::__set_UpdateUrl(const std::string& val) {
+  this->UpdateUrl = val;
+__isset.UpdateUrl = true;
+}
 std::ostream& operator<<(std::ostream& out, const MMUDescription& obj)
 {
   obj.printTo(out);
@@ -1506,6 +1526,38 @@ uint32_t MMUDescription::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 18:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->Vendor);
+          this->__isset.Vendor = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 19:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->VendorDomain);
+          this->__isset.VendorDomain = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 20:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->MmuUrl);
+          this->__isset.MmuUrl = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 21:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->UpdateUrl);
+          this->__isset.UpdateUrl = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1654,6 +1706,26 @@ uint32_t MMUDescription::write(::apache::thrift::protocol::TProtocol* oprot) con
     }
     xfer += oprot->writeFieldEnd();
   }
+  if (this->__isset.Vendor) {
+    xfer += oprot->writeFieldBegin("Vendor", ::apache::thrift::protocol::T_STRING, 18);
+    xfer += oprot->writeString(this->Vendor);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.VendorDomain) {
+    xfer += oprot->writeFieldBegin("VendorDomain", ::apache::thrift::protocol::T_STRING, 19);
+    xfer += oprot->writeString(this->VendorDomain);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.MmuUrl) {
+    xfer += oprot->writeFieldBegin("MmuUrl", ::apache::thrift::protocol::T_STRING, 20);
+    xfer += oprot->writeString(this->MmuUrl);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.UpdateUrl) {
+    xfer += oprot->writeFieldBegin("UpdateUrl", ::apache::thrift::protocol::T_STRING, 21);
+    xfer += oprot->writeString(this->UpdateUrl);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1676,6 +1748,10 @@ void swap(MMUDescription &a, MMUDescription &b) {
   swap(a.ShortDescription, b.ShortDescription);
   swap(a.Parameters, b.Parameters);
   swap(a.SceneParameters, b.SceneParameters);
+  swap(a.Vendor, b.Vendor);
+  swap(a.VendorDomain, b.VendorDomain);
+  swap(a.MmuUrl, b.MmuUrl);
+  swap(a.UpdateUrl, b.UpdateUrl);
   swap(a.__isset, b.__isset);
 }
 
@@ -1695,6 +1771,10 @@ MMUDescription::MMUDescription(const MMUDescription& other111) {
   ShortDescription = other111.ShortDescription;
   Parameters = other111.Parameters;
   SceneParameters = other111.SceneParameters;
+  Vendor = other111.Vendor;
+  VendorDomain = other111.VendorDomain;
+  MmuUrl = other111.MmuUrl;
+  UpdateUrl = other111.UpdateUrl;
   __isset = other111.__isset;
 }
 MMUDescription& MMUDescription::operator=(const MMUDescription& other112) {
@@ -1713,6 +1793,10 @@ MMUDescription& MMUDescription::operator=(const MMUDescription& other112) {
   ShortDescription = other112.ShortDescription;
   Parameters = other112.Parameters;
   SceneParameters = other112.SceneParameters;
+  Vendor = other112.Vendor;
+  VendorDomain = other112.VendorDomain;
+  MmuUrl = other112.MmuUrl;
+  UpdateUrl = other112.UpdateUrl;
   __isset = other112.__isset;
   return *this;
 }
@@ -1734,6 +1818,10 @@ void MMUDescription::printTo(std::ostream& out) const {
   out << ", " << "ShortDescription="; (__isset.ShortDescription ? (out << to_string(ShortDescription)) : (out << "<null>"));
   out << ", " << "Parameters="; (__isset.Parameters ? (out << to_string(Parameters)) : (out << "<null>"));
   out << ", " << "SceneParameters="; (__isset.SceneParameters ? (out << to_string(SceneParameters)) : (out << "<null>"));
+  out << ", " << "Vendor="; (__isset.Vendor ? (out << to_string(Vendor)) : (out << "<null>"));
+  out << ", " << "VendorDomain="; (__isset.VendorDomain ? (out << to_string(VendorDomain)) : (out << "<null>"));
+  out << ", " << "MmuUrl="; (__isset.MmuUrl ? (out << to_string(MmuUrl)) : (out << "<null>"));
+  out << ", " << "UpdateUrl="; (__isset.UpdateUrl ? (out << to_string(UpdateUrl)) : (out << "<null>"));
   out << ")";
 }
 

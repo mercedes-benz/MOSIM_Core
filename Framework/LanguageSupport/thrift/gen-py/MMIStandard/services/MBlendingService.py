@@ -218,8 +218,7 @@ class SetBlendingMask_args(object):
                     self.mask = {}
                     (_ktype183, _vtype184, _size182) = iprot.readMapBegin()
                     for _i186 in range(_size182):
-                        _key187 = MMIStandard.math.ttypes.MTransform()
-                        _key187.read(iprot)
+                        _key187 = iprot.readI32()
                         _val188 = iprot.readDouble()
                         self.mask[_key187] = _val188
                     iprot.readMapEnd()
@@ -242,9 +241,9 @@ class SetBlendingMask_args(object):
         oprot.writeStructBegin('SetBlendingMask_args')
         if self.mask is not None:
             oprot.writeFieldBegin('mask', TType.MAP, 1)
-            oprot.writeMapBegin(TType.STRUCT, TType.DOUBLE, len(self.mask))
+            oprot.writeMapBegin(TType.I32, TType.DOUBLE, len(self.mask))
             for kiter189, viter190 in self.mask.items():
-                kiter189.write(oprot)
+                oprot.writeI32(kiter189)
                 oprot.writeDouble(viter190)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
@@ -271,7 +270,7 @@ class SetBlendingMask_args(object):
 all_structs.append(SetBlendingMask_args)
 SetBlendingMask_args.thrift_spec = (
     None,  # 0
-    (1, TType.MAP, 'mask', (TType.STRUCT, [MMIStandard.math.ttypes.MTransform, None], TType.DOUBLE, None, False), None, ),  # 1
+    (1, TType.MAP, 'mask', (TType.I32, None, TType.DOUBLE, None, False), None, ),  # 1
     (2, TType.STRING, 'avatarID', 'UTF8', None, ),  # 2
 )
 

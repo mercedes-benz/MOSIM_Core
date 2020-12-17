@@ -20,7 +20,7 @@ class MBlendingServiceHandler : virtual public MBlendingServiceIf {
     // Your initialization goes here
   }
 
-  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MTransform, double> & mask, const std::string& avatarID) {
+  void SetBlendingMask( ::MMIStandard::MBoolResponse& _return, const std::map< ::MMIStandard::MJointType::type, double> & mask, const std::string& avatarID) {
     // Your implementation goes here
     printf("SetBlendingMask\n");
   }

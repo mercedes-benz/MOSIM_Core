@@ -38,14 +38,14 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_args::read(::apache::thr
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->sceneObjects.clear();
-            uint32_t _size358;
-            ::apache::thrift::protocol::TType _etype361;
-            xfer += iprot->readListBegin(_etype361, _size358);
-            this->sceneObjects.resize(_size358);
-            uint32_t _i362;
-            for (_i362 = 0; _i362 < _size358; ++_i362)
+            uint32_t _size346;
+            ::apache::thrift::protocol::TType _etype349;
+            xfer += iprot->readListBegin(_etype349, _size346);
+            this->sceneObjects.resize(_size346);
+            uint32_t _i350;
+            for (_i350 = 0; _i350 < _size346; ++_i350)
             {
-              xfer += this->sceneObjects[_i362].read(iprot);
+              xfer += this->sceneObjects[_i350].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -74,17 +74,17 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_args::read(::apache::thr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
-            uint32_t _size363;
-            ::apache::thrift::protocol::TType _ktype364;
-            ::apache::thrift::protocol::TType _vtype365;
-            xfer += iprot->readMapBegin(_ktype364, _vtype365, _size363);
-            uint32_t _i367;
-            for (_i367 = 0; _i367 < _size363; ++_i367)
+            uint32_t _size351;
+            ::apache::thrift::protocol::TType _ktype352;
+            ::apache::thrift::protocol::TType _vtype353;
+            xfer += iprot->readMapBegin(_ktype352, _vtype353, _size351);
+            uint32_t _i355;
+            for (_i355 = 0; _i355 < _size351; ++_i355)
             {
-              std::string _key368;
-              xfer += iprot->readString(_key368);
-              std::string& _val369 = this->properties[_key368];
-              xfer += iprot->readString(_val369);
+              std::string _key356;
+              xfer += iprot->readString(_key356);
+              std::string& _val357 = this->properties[_key356];
+              xfer += iprot->readString(_val357);
             }
             xfer += iprot->readMapEnd();
           }
@@ -113,10 +113,10 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_args::write(::apache::th
   xfer += oprot->writeFieldBegin("sceneObjects", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->sceneObjects.size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter370;
-    for (_iter370 = this->sceneObjects.begin(); _iter370 != this->sceneObjects.end(); ++_iter370)
+    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter358;
+    for (_iter358 = this->sceneObjects.begin(); _iter358 != this->sceneObjects.end(); ++_iter358)
     {
-      xfer += (*_iter370).write(oprot);
+      xfer += (*_iter358).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -133,11 +133,11 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_args::write(::apache::th
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter371;
-    for (_iter371 = this->properties.begin(); _iter371 != this->properties.end(); ++_iter371)
+    std::map<std::string, std::string> ::const_iterator _iter359;
+    for (_iter359 = this->properties.begin(); _iter359 != this->properties.end(); ++_iter359)
     {
-      xfer += oprot->writeString(_iter371->first);
-      xfer += oprot->writeString(_iter371->second);
+      xfer += oprot->writeString(_iter359->first);
+      xfer += oprot->writeString(_iter359->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -161,10 +161,10 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_pargs::write(::apache::t
   xfer += oprot->writeFieldBegin("sceneObjects", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->sceneObjects)).size()));
-    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter372;
-    for (_iter372 = (*(this->sceneObjects)).begin(); _iter372 != (*(this->sceneObjects)).end(); ++_iter372)
+    std::vector< ::MMIStandard::MSceneObject> ::const_iterator _iter360;
+    for (_iter360 = (*(this->sceneObjects)).begin(); _iter360 != (*(this->sceneObjects)).end(); ++_iter360)
     {
-      xfer += (*_iter372).write(oprot);
+      xfer += (*_iter360).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -181,11 +181,11 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_pargs::write(::apache::t
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 4);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter373;
-    for (_iter373 = (*(this->properties)).begin(); _iter373 != (*(this->properties)).end(); ++_iter373)
+    std::map<std::string, std::string> ::const_iterator _iter361;
+    for (_iter361 = (*(this->properties)).begin(); _iter361 != (*(this->properties)).end(); ++_iter361)
     {
-      xfer += oprot->writeString(_iter373->first);
-      xfer += oprot->writeString(_iter373->second);
+      xfer += oprot->writeString(_iter361->first);
+      xfer += oprot->writeString(_iter361->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -226,14 +226,14 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_result::read(::apache::t
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->success.clear();
-            uint32_t _size374;
-            ::apache::thrift::protocol::TType _etype377;
-            xfer += iprot->readListBegin(_etype377, _size374);
-            this->success.resize(_size374);
-            uint32_t _i378;
-            for (_i378 = 0; _i378 < _size374; ++_i378)
+            uint32_t _size362;
+            ::apache::thrift::protocol::TType _etype365;
+            xfer += iprot->readListBegin(_etype365, _size362);
+            this->success.resize(_size362);
+            uint32_t _i366;
+            for (_i366 = 0; _i366 < _size362; ++_i366)
             {
-              xfer += this->success[_i378].read(iprot);
+              xfer += this->success[_i366].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -264,10 +264,10 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_result::write(::apache::
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->success.size()));
-      std::vector<MWalkPoint> ::const_iterator _iter379;
-      for (_iter379 = this->success.begin(); _iter379 != this->success.end(); ++_iter379)
+      std::vector<MWalkPoint> ::const_iterator _iter367;
+      for (_iter367 = this->success.begin(); _iter367 != this->success.end(); ++_iter367)
       {
-        xfer += (*_iter379).write(oprot);
+        xfer += (*_iter367).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -308,14 +308,14 @@ uint32_t MWalkPointEstimationService_EstimateWalkPoints_presult::read(::apache::
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             (*(this->success)).clear();
-            uint32_t _size380;
-            ::apache::thrift::protocol::TType _etype383;
-            xfer += iprot->readListBegin(_etype383, _size380);
-            (*(this->success)).resize(_size380);
-            uint32_t _i384;
-            for (_i384 = 0; _i384 < _size380; ++_i384)
+            uint32_t _size368;
+            ::apache::thrift::protocol::TType _etype371;
+            xfer += iprot->readListBegin(_etype371, _size368);
+            (*(this->success)).resize(_size368);
+            uint32_t _i372;
+            for (_i372 = 0; _i372 < _size368; ++_i372)
             {
-              xfer += (*(this->success))[_i384].read(iprot);
+              xfer += (*(this->success))[_i372].read(iprot);
             }
             xfer += iprot->readListEnd();
           }

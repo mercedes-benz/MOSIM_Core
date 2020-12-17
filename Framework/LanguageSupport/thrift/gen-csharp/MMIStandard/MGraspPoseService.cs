@@ -19,12 +19,12 @@ namespace MMIStandard
 {
   public partial class MGraspPoseService {
     public interface ISync : MMIServiceBase.ISync {
-      List<MMIStandard.MGeometryConstraint> GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand);
+      List<MMIStandard.MGeometryConstraint> GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand);
     }
 
     public interface Iface : ISync {
       #if SILVERLIGHT
-      IAsyncResult Begin_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand);
+      IAsyncResult Begin_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand);
       List<MMIStandard.MGeometryConstraint> End_GetGraspPoses(IAsyncResult asyncResult);
       #endif
     }
@@ -41,7 +41,7 @@ namespace MMIStandard
       
       #if SILVERLIGHT
       
-      public IAsyncResult Begin_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
+      public IAsyncResult Begin_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
       {
         return send_GetGraspPoses(callback, state, posture, handType, sceneObject, repositionHand);
       }
@@ -54,7 +54,7 @@ namespace MMIStandard
 
       #endif
 
-      public List<MMIStandard.MGeometryConstraint> GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
+      public List<MMIStandard.MGeometryConstraint> GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
       {
         #if SILVERLIGHT
         var asyncResult = Begin_GetGraspPoses(null, null, posture, handType, sceneObject, repositionHand);
@@ -67,7 +67,7 @@ namespace MMIStandard
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
+      public IAsyncResult send_GetGraspPoses(AsyncCallback callback, object state, MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
       {
         oprot_.WriteMessageBegin(new TMessage("GetGraspPoses", TMessageType.Call, seqid_));
         GetGraspPoses_args args = new GetGraspPoses_args();
@@ -82,7 +82,7 @@ namespace MMIStandard
 
       #else
 
-      public void send_GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MTransform handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
+      public void send_GetGraspPoses(MMIStandard.MAvatarPostureValues posture, MMIStandard.MJointType handType, MMIStandard.MSceneObject sceneObject, bool repositionHand)
       {
         oprot_.WriteMessageBegin(new TMessage("GetGraspPoses", TMessageType.Call, seqid_));
         GetGraspPoses_args args = new GetGraspPoses_args();
@@ -186,7 +186,7 @@ namespace MMIStandard
     public partial class GetGraspPoses_args : TBase
     {
       private MMIStandard.MAvatarPostureValues _posture;
-      private MMIStandard.MTransform _handType;
+      private MMIStandard.MJointType _handType;
       private MMIStandard.MSceneObject _sceneObject;
       private bool _repositionHand;
 
@@ -203,7 +203,11 @@ namespace MMIStandard
         }
       }
 
-      public MMIStandard.MTransform HandType
+      /// <summary>
+      /// 
+      /// <seealso cref="MMIStandard.MJointType"/>
+      /// </summary>
+      public MMIStandard.MJointType HandType
       {
         get
         {
@@ -281,9 +285,8 @@ namespace MMIStandard
                 }
                 break;
               case 2:
-                if (field.Type == TType.Struct) {
-                  HandType = new MMIStandard.MTransform();
-                  HandType.Read(iprot);
+                if (field.Type == TType.I32) {
+                  HandType = (MMIStandard.MJointType)iprot.ReadI32();
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -332,12 +335,12 @@ namespace MMIStandard
             Posture.Write(oprot);
             oprot.WriteFieldEnd();
           }
-          if (HandType != null && __isset.handType) {
+          if (__isset.handType) {
             field.Name = "handType";
-            field.Type = TType.Struct;
+            field.Type = TType.I32;
             field.ID = 2;
             oprot.WriteFieldBegin(field);
-            HandType.Write(oprot);
+            oprot.WriteI32((int)HandType);
             oprot.WriteFieldEnd();
           }
           if (SceneObject != null && __isset.sceneObject) {
@@ -374,11 +377,11 @@ namespace MMIStandard
           __sb.Append("Posture: ");
           __sb.Append(Posture== null ? "<null>" : Posture.ToString());
         }
-        if (HandType != null && __isset.handType) {
+        if (__isset.handType) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
           __sb.Append("HandType: ");
-          __sb.Append(HandType== null ? "<null>" : HandType.ToString());
+          __sb.Append(HandType);
         }
         if (SceneObject != null && __isset.sceneObject) {
           if(!__first) { __sb.Append(", "); }
@@ -450,13 +453,13 @@ namespace MMIStandard
                 if (field.Type == TType.List) {
                   {
                     Success = new List<MMIStandard.MGeometryConstraint>();
-                    TList _list154 = iprot.ReadListBegin();
-                    for( int _i155 = 0; _i155 < _list154.Count; ++_i155)
+                    TList _list145 = iprot.ReadListBegin();
+                    for( int _i146 = 0; _i146 < _list145.Count; ++_i146)
                     {
-                      MMIStandard.MGeometryConstraint _elem156;
-                      _elem156 = new MMIStandard.MGeometryConstraint();
-                      _elem156.Read(iprot);
-                      Success.Add(_elem156);
+                      MMIStandard.MGeometryConstraint _elem147;
+                      _elem147 = new MMIStandard.MGeometryConstraint();
+                      _elem147.Read(iprot);
+                      Success.Add(_elem147);
                     }
                     iprot.ReadListEnd();
                   }
@@ -494,9 +497,9 @@ namespace MMIStandard
               oprot.WriteFieldBegin(field);
               {
                 oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (MMIStandard.MGeometryConstraint _iter157 in Success)
+                foreach (MMIStandard.MGeometryConstraint _iter148 in Success)
                 {
-                  _iter157.Write(oprot);
+                  _iter148.Write(oprot);
                 }
                 oprot.WriteListEnd();
               }

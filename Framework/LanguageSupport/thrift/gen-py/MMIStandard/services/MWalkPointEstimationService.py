@@ -156,11 +156,11 @@ class EstimateWalkPoints_args(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.sceneObjects = []
-                    (_etype283, _size280) = iprot.readListBegin()
-                    for _i284 in range(_size280):
-                        _elem285 = MMIStandard.scene.ttypes.MSceneObject()
-                        _elem285.read(iprot)
-                        self.sceneObjects.append(_elem285)
+                    (_etype267, _size264) = iprot.readListBegin()
+                    for _i268 in range(_size264):
+                        _elem269 = MMIStandard.scene.ttypes.MSceneObject()
+                        _elem269.read(iprot)
+                        self.sceneObjects.append(_elem269)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -178,11 +178,11 @@ class EstimateWalkPoints_args(object):
             elif fid == 4:
                 if ftype == TType.MAP:
                     self.properties = {}
-                    (_ktype287, _vtype288, _size286) = iprot.readMapBegin()
-                    for _i290 in range(_size286):
-                        _key291 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        _val292 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.properties[_key291] = _val292
+                    (_ktype271, _vtype272, _size270) = iprot.readMapBegin()
+                    for _i274 in range(_size270):
+                        _key275 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        _val276 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.properties[_key275] = _val276
                     iprot.readMapEnd()
                 else:
                     iprot.skip(ftype)
@@ -199,8 +199,8 @@ class EstimateWalkPoints_args(object):
         if self.sceneObjects is not None:
             oprot.writeFieldBegin('sceneObjects', TType.LIST, 1)
             oprot.writeListBegin(TType.STRUCT, len(self.sceneObjects))
-            for iter293 in self.sceneObjects:
-                iter293.write(oprot)
+            for iter277 in self.sceneObjects:
+                iter277.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.target is not None:
@@ -214,9 +214,9 @@ class EstimateWalkPoints_args(object):
         if self.properties is not None:
             oprot.writeFieldBegin('properties', TType.MAP, 4)
             oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.properties))
-            for kiter294, viter295 in self.properties.items():
-                oprot.writeString(kiter294.encode('utf-8') if sys.version_info[0] == 2 else kiter294)
-                oprot.writeString(viter295.encode('utf-8') if sys.version_info[0] == 2 else viter295)
+            for kiter278, viter279 in self.properties.items():
+                oprot.writeString(kiter278.encode('utf-8') if sys.version_info[0] == 2 else kiter278)
+                oprot.writeString(viter279.encode('utf-8') if sys.version_info[0] == 2 else viter279)
             oprot.writeMapEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -268,11 +268,11 @@ class EstimateWalkPoints_result(object):
             if fid == 0:
                 if ftype == TType.LIST:
                     self.success = []
-                    (_etype299, _size296) = iprot.readListBegin()
-                    for _i300 in range(_size296):
-                        _elem301 = MWalkPoint()
-                        _elem301.read(iprot)
-                        self.success.append(_elem301)
+                    (_etype283, _size280) = iprot.readListBegin()
+                    for _i284 in range(_size280):
+                        _elem285 = MWalkPoint()
+                        _elem285.read(iprot)
+                        self.success.append(_elem285)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -289,8 +289,8 @@ class EstimateWalkPoints_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.STRUCT, len(self.success))
-            for iter302 in self.success:
-                iter302.write(oprot)
+            for iter286 in self.success:
+                iter286.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
