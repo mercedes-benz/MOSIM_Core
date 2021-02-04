@@ -120,5 +120,10 @@ namespace MMIUnity.TargetEngine
             return this.remoteCoSimulationMMU.RestoreCheckpoint(data);
         }
 
+        public override Dictionary<string, string> ExecuteFunction(string name, Dictionary<string, string> parameters)
+        {
+            return this.remoteCoSimulationMMU.ExecuteFunction(name, parameters);
+        }
+
     }
 }

@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
 
-#include "src/MMIAdapter.h"
+#include "gen-cpp/MMIAdapter.h"
 
 using namespace MMIStandard;
 namespace MMIStandard {
@@ -65,7 +69,7 @@ namespace MMIStandard {
 		void GetSceneChanges(::MMIStandard::MSceneUpdate& _return, const std::string& sessionID);
 
 		//	Method loads MMUs for the specific session
-		void LoadMMUs(::MMIStandard::MBoolResponse& _return, const std::vector<std::string> & mmus, const std::string& sessionID);
+		void LoadMMUs(std::map<std::string, std::string>& _return, const std::vector<std::string> & mmus, const std::string& sessionID);
 
 		//	Method creates checkpoint of the given MMU
 		void CreateCheckpoint(std::string& _return, const std::string& mmuID, const std::string& sessionID);

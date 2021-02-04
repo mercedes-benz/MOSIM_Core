@@ -1,4 +1,13 @@
 MMI Framework:5
+Core/Launcher: 5.1.3
+
+ - Task editor connection can be picked from a list of MMU libraries added to Launcher
+ - Fixed crush issue when clicking MMULibrary -> browse and no task editor details are provided
+ - Fixed issue with removing MMU libraries
+ - If Launcher is in one of the subfolders among MMUs, Services and Adapters, then this is recognized on first startup and no folder selection dialog is shown to the user.
+ - Updated connection testing to task editor button in main menu
+
+MMI Framework:5
 Core/Launcher: 5.1.2
 
  - Added MMU adding to local library from zip files

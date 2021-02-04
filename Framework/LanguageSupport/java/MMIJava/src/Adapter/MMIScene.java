@@ -1,9 +1,22 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
+
 package Adapter;
 
 import Extensions.MQuaternionExtensions;
 import Extensions.MVector3Extensions;
-import MMIStandard.*;
+import de.mosim.mmi.avatar.MAvatar;
+import de.mosim.mmi.avatar.MAvatarDescription;
+import de.mosim.mmi.core.MBoolResponse;
+import de.mosim.mmi.core.MServiceDescription;
+import de.mosim.mmi.math.*;
+import de.mosim.mmi.scene.*;
+import de.mosim.mmi.services.MSceneAccess;
+import org.apache.thrift.TException;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,6 +24,12 @@ public class MMIScene implements MSceneAccess.Iface {
     /*
             Class represents a (hypothetical) scene which can be specifically set up by the developer
     */
+
+
+    ///The current simulation time
+    public double SimulationTime = 0;
+
+
     //	Map containing all scene objects structured by the specific id
     private final Map<String, MSceneObject> sceneObjectsByID = new HashMap<>();
     //	Map containing all avatars structured by the specific id
@@ -144,7 +163,7 @@ public class MMIScene implements MSceneAccess.Iface {
 
     @Override
     public double GetSimulationTime() {
-        return 0;
+        return this.SimulationTime;
     }
 
     // Returns the changes from the previous frame
@@ -167,6 +186,90 @@ public class MMIScene implements MSceneAccess.Iface {
     public MNavigationMesh GetNavigationMesh() {
 
         return null;
+    }
+
+    @Override
+    public ByteBuffer GetData(String fileFormat, String selection) throws TException {
+        return null;
+    }
+
+    @Override
+    public List<MAttachment> GetAttachments() throws TException
+    {
+        List<MAttachment> attachments = new LinkedList<MAttachment>();
+
+        for(MSceneObject sceneObject : this.GetSceneObjects())
+        {
+            attachments.addAll(sceneObject.Attachments);
+        }
+
+        return attachments;
+    }
+
+    @Override
+    public List<MAttachment> GetAttachmentsByID(String id) throws TException
+    {
+        if (this.sceneObjectsByID.containsKey(id))
+            return this.GetSceneObjectByID(id).Attachments;
+
+        return new LinkedList<MAttachment>();
+    }
+
+    @Override
+    public List<MAttachment> GetAttachmentsByName(String name) throws TException
+    {
+        if (this.nameIdMappingSceneObjects.containsKey(name))
+            return this.GetSceneObjectByName(name).Attachments;
+
+        return new LinkedList<MAttachment>();
+    }
+
+    @Override
+    public List<MAttachment> GetAttachmentsChildrenRecursive(String id) throws TException
+    {
+        if (!this.sceneObjectsByID.containsKey(id))
+            return new LinkedList<MAttachment>();
+
+        List<MAttachment> attachments = new LinkedList<MAttachment>();
+
+
+        MSceneObject current = this.GetSceneObjectByID(id);
+
+
+        while (current != null)
+        {
+            if (current.Attachments != null && current.Attachments.size() > 0)
+            {
+                attachments.addAll(current.Attachments);
+            }
+
+            current = this.GetChild(current);
+        }
+
+        return attachments;
+    }
+
+    @Override
+    public List<MAttachment> GetAttachmentsParentsRecursive(String id) throws TException
+    {
+        if (!this.sceneObjectsByID.containsKey(id))
+            return new LinkedList<MAttachment>();
+
+        List<MAttachment> attachments = new LinkedList<MAttachment>();
+
+        MSceneObject current = this.GetSceneObjectByID(id);
+
+        while(current.Transform.Parent != null && current.Transform.Parent != " ")
+        {
+            if(current.Attachments!=null && current.Attachments.size() > 0)
+            {
+                attachments.addAll(current.Attachments);
+            }
+
+            current = this.GetSceneObjectByID(current.Transform.Parent);
+        }
+
+        return attachments;
     }
 
     //Applies the scene manipulation on the scene
@@ -210,6 +313,25 @@ public class MMIScene implements MSceneAccess.Iface {
             this.RemoveSceneObjects(result, sceneUpdate.RemovedSceneObjects);
         return result;
     }
+
+    /// <summary>
+    /// Returns the child of the scene object (if available=
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    private MSceneObject GetChild(MSceneObject sceneObject)
+    {
+
+        //Search for the child and return the first
+        Optional<MSceneObject> result =  this.GetSceneObjects().stream().filter(s -> s.Transform != null && s.Transform.Parent == sceneObject.ID).findFirst();
+
+        if(result.isPresent())
+            return result.get();
+
+        return null;
+
+    }
+
 
     //	Removes all scene objects from the scene
     //	<param name="sceneObjectIDs">The IDs of the scene objects which should be removed</param>
@@ -346,5 +468,45 @@ public class MMIScene implements MSceneAccess.Iface {
                 this.nameIdMappingSceneObjects.get(avatar.Name).add(avatar.ID);
             }
         }
+    }
+
+    @Override
+    public Map<String, String> GetStatus() throws TException
+    {
+        Map<String,String> statusMap = new HashMap<String,String>();
+
+        statusMap.put("Running","true");
+
+        return statusMap;
+    }
+
+    @Override
+    public MServiceDescription GetDescription() throws TException
+    {
+        MServiceDescription desc = new MServiceDescription();
+        desc.setID("SceneService");
+        desc.setName("MMISceneAccess");
+        return desc;
+    }
+
+    @Override
+    public MBoolResponse Setup(MAvatarDescription avatar, Map<String, String> properties) throws TException
+    {
+        return new MBoolResponse(true);
+    }
+
+    @Override
+    public Map<String, String> Consume(Map<String, String> properties) throws TException {
+        return null;
+    }
+
+    @Override
+    public MBoolResponse Dispose(Map<String, String> properties) throws TException {
+        return new MBoolResponse(true);
+    }
+
+    @Override
+    public MBoolResponse Restart(Map<String, String> properties) throws TException {
+        return null;
     }
 }

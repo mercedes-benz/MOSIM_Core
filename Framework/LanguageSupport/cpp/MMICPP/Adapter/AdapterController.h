@@ -1,10 +1,15 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
-#include "src/core_types.h"
-#include<string>
+#include "gen-cpp/core_types.h"
+#include <string>
+#include <vector>
 #include "FileWatcher.h"
 #include "Adapter/CPPMMUInstantiator.h"
-#include "src/mmu_types.h"
 #include "Utils/Logger.h"
+#include "gen-cpp/register_types.h"  // added, sadam
 
 using namespace MMIStandard;
 using namespace std;
@@ -59,11 +64,10 @@ namespace MMIStandard {
 		//	<param name="languages">the languages the adapter should support </param>
 		//	<param name="adapterDescription">the description of the adapter</param>
 		//	<param name="logLevel">the log level for the logger, default = L_Debug</param>
-		AdapterController(const MIPAddress & aAddress, const MIPAddress &rAddress, const string &mmuPath, int workerCount, const CPPMMUInstantiator &instantiator, const std::vector<std::string> & languages, const MAdapterDescription &adapterDescription);
-		//returns a const reference of the instantiator
+		AdapterController(const MIPAddress & aAddress, const MIPAddress &rAddress, const string &mmuPath, int workerCount, const CPPMMUInstantiator &instantiator, const vector<string> &languages, const MAdapterDescription &adapterDescription);		//returns a const reference of the instantiator
 
 		static const CPPMMUInstantiator & GetMMUInstantiator();
-		//	Basic descructor
+		//	Basic destructor
 		//	unregisters the adapter at the MMIRegister
 		~AdapterController();
 

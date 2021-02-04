@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  string CreateAgent(string name, string template, MRDFGraph knowledge)')
+    print('  string CreateAgent(string name, string templateAgent, MRDFGraph knowledge)')
     print('  bool DeleteAgent(string agentName)')
     print('  string ExecuteAgent(string agentName, string endpoint, MRDFGraph content)')
     print('  void ReceiveAsync(string actionID, i32 answer)')

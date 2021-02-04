@@ -13,7 +13,7 @@ namespace ReachMMU
     /// <summary>
     /// Implementation of a simple reach MMU
     /// </summary>
-    [MMUDescriptionAttribute("Janis Sprenger", "1.0", "DefaultLocomotion", "locomotion","", "A fallback locomotion MMU.", "A fallback MMU allowing arbritrary global repositioning in space without animations.")]
+    [MMUDescriptionAttribute("Janis Sprenger", "1.0", "DefaultLocomotion", "Locomotion","", "A fallback locomotion MMU.", "A fallback MMU allowing arbritrary global repositioning in space without animations.")]
     public class DefaultLocomotionImpl:MMUBase
     {
         #region private fields

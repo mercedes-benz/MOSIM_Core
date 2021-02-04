@@ -8,10 +8,20 @@ using MMILauncher.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using MMIULibrary;
 
 namespace MMILauncher
 {
@@ -30,6 +40,16 @@ namespace MMILauncher
             InitializeComponent();
             this.mainWindow = mainWindow;
             this.portInput.Text = RuntimeData.MMIRegisterAddress.Port.ToString();
+            this.taskEditorCombo.Items.Clear();
+            for (int i = 0; i < mainWindow.mmus.Remotes.Count; i++)
+            {
+                this.taskEditorCombo.Items.Add(mainWindow.mmus.Remotes[i]);
+                if ((mainWindow.mmus.Remotes[i].URL == mainWindow.settings.TaskEditorApiUrl) &&
+                    (mainWindow.mmus.Remotes[i].Token == mainWindow.settings.TaskEditorToken))
+                    this.taskEditorCombo.SelectedIndex = i;
+            }
+            this.taskEditorCombo.DisplayMemberPath = "Name";
+            this.taskEditorCombo.Items.Add(new RemoteLibrary("","","<New connection>"));
             this.taskEditorUrlInput.Text = mainWindow.settings.TaskEditorApiUrl;
             this.taskEditorTokenInput.Text = mainWindow.settings.TaskEditorToken;
             this.portMinInput.Text = mainWindow.settings.MinPort.ToString();
@@ -41,6 +61,8 @@ namespace MMILauncher
             this.ServiceSaved.Visibility = Visibility.Hidden;
             this.TaskEditorSaved.Visibility = Visibility.Hidden;
             this.ProxySaved.Visibility = Visibility.Hidden;
+            this.MMULibSaved.Visibility = Visibility.Hidden;
+            MMULibraryNameInput.Text = mainWindow.MMULibraryName;
             ProxyEnable.IsChecked=mainWindow.settings.ProxyEnable;
             ProxyHTTPSEnable.IsChecked=mainWindow.settings.ProxyUseHTTPS;
             proxyHostInput.Text = mainWindow.settings.ProxyHost;
@@ -71,6 +93,16 @@ namespace MMILauncher
             if (RegisterSaved!=null)
             RegisterSaved.Visibility = Visibility.Hidden;
             PortValue_Change(sender, e);
+        }
+
+        private void Project_Change(object sender, RoutedEventArgs e)
+        {
+            if (taskEditorCombo == null)
+                return;
+            if (taskEditorCombo.SelectedIndex == -1)
+                return;
+            taskEditorUrlInput.Text = (taskEditorCombo.SelectedItem as RemoteLibrary).URL;
+            taskEditorTokenInput.Text = (taskEditorCombo.SelectedItem as RemoteLibrary).Token;
         }
 
         private void Url_Change(object sender, RoutedEventArgs e)
@@ -330,23 +362,27 @@ namespace MMILauncher
             }
         }
 
-        [Serializable]
+        [Serializable] //this is also used in main window so it should be moved to a separate task editor function library
         public class TaskEditorTestResponse {
             public int projectid;
+            public string projectName;
             public TaskEditorTestResponse()
             {
                 this.projectid = 0;
+                this.projectName = "";
             }
         }
 
         private void TestAndSaveButton_Click(object sender, RoutedEventArgs e)
         {
-
             string url = this.taskEditorUrlInput.Text.Trim();
-            if (url == "")
+            if (url == "") //Disable task editor connection by using empty url
             {
-                this.taskEditorUrlOK.Content = "ERR";
-                this.taskEditorTokenOK.Content = "-";
+                this.mainWindow.settings.TaskEditorApiUrl = "";
+                this.mainWindow.settings.TaskEditorToken = "";
+                this.mainWindow.SaveSettings();
+                this.TaskEditorSaved.Visibility = Visibility.Visible;
+                this.mainWindow.LoadMMULibraries();
                 return;
             }
             if (url.IndexOf("api.php") == -1)
@@ -383,13 +419,55 @@ namespace MMILauncher
                     this.taskEditorTokenOK.Content = "ERR";
                 else
                 {
-                    this.taskEditorTokenOK.Content = "OK";
                     this.mainWindow.settings.TaskEditorApiUrl = this.taskEditorUrlInput.Text;
                     this.mainWindow.settings.TaskEditorToken = this.taskEditorTokenInput.Text;
                     this.mainWindow.SaveSettings();
+                    LibraryLink LL = new LibraryLink();
+                    LL.url = this.taskEditorUrlInput.Text;
+                    LL.token = this.taskEditorTokenInput.Text;
+                    LL.name=reply.projectName==""?"<no name>":reply.projectName;
+                    
+                    int found = -1;
+                    for (int i = 0; i < taskEditorCombo.Items.Count; i++)
+                        if ((LL.url == (taskEditorCombo.Items[i] as RemoteLibrary).URL) && (LL.token == (taskEditorCombo.Items[i] as RemoteLibrary).Token))
+                            found = i;
+                    if (found == -1)
+                    {
+                        this.mainWindow.AddMMULibrary(LL);
+                        this.taskEditorCombo.Items.Insert(taskEditorCombo.Items.Count - 1, new RemoteLibrary(LL));
+                        taskEditorCombo.SelectedIndex = taskEditorCombo.Items.Count - 1;
+                    }
+                    else
+                        if (LL.name != (taskEditorCombo.Items[found] as RemoteLibrary).Name)
+                        {
+                            (this.taskEditorCombo.Items[found] as RemoteLibrary).Name = LL.name;
+                            //if (this.taskEditorCombo.SelectedIndex != found)
+                            this.taskEditorCombo.Items.Refresh();
+                            this.taskEditorCombo.UpdateLayout();
+                            this.taskEditorCombo.Text = LL.name;
+                            this.taskEditorCombo.SelectedIndex=- 1;
+                            this.taskEditorCombo.SelectedIndex = found;
+                            this.mainWindow.UpdateMMULibrary(LL);
+                        }
+                    this.taskEditorUrlOK.Content = "OK";
+                    this.taskEditorTokenOK.Content = "OK";
                     this.TaskEditorSaved.Visibility = Visibility.Visible;
                 }
             }
+        }
+
+        private void SaveMMULibButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.MMULibraryName = MMULibraryNameInput.Text;
+            if (mainWindow.RegisterAppInstance(true))
+                MMULibSaved.Visibility = Visibility.Visible;
+            else
+                System.Windows.MessageBox.Show("Name " + MMULibraryNameInput.Text + " is already taken, use another name.", "MMU library name change", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void MMULibraryNameInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MMULibSaved.Visibility = Visibility.Hidden;
         }
     }
 }

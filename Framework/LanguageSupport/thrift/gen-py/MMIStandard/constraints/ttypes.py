@@ -33,170 +33,6 @@ class MTranslationConstraintType(object):
     }
 
 
-class MConstraint(object):
-    """
-    Attributes:
-     - ID
-     - GeometryConstraint
-     - VelocityConstraint
-     - AccelerationConstraint
-     - PathConstraint
-     - JointPathConstraint
-     - PostureConstraint
-     - JointConstraint
-     - Properties
-
-    """
-
-
-    def __init__(self, ID=None, GeometryConstraint=None, VelocityConstraint=None, AccelerationConstraint=None, PathConstraint=None, JointPathConstraint=None, PostureConstraint=None, JointConstraint=None, Properties=None,):
-        self.ID = ID
-        self.GeometryConstraint = GeometryConstraint
-        self.VelocityConstraint = VelocityConstraint
-        self.AccelerationConstraint = AccelerationConstraint
-        self.PathConstraint = PathConstraint
-        self.JointPathConstraint = JointPathConstraint
-        self.PostureConstraint = PostureConstraint
-        self.JointConstraint = JointConstraint
-        self.Properties = Properties
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.STRING:
-                    self.ID = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.GeometryConstraint = MGeometryConstraint()
-                    self.GeometryConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 3:
-                if ftype == TType.STRUCT:
-                    self.VelocityConstraint = MVelocityConstraint()
-                    self.VelocityConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 4:
-                if ftype == TType.STRUCT:
-                    self.AccelerationConstraint = MAccelerationConstraint()
-                    self.AccelerationConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 5:
-                if ftype == TType.STRUCT:
-                    self.PathConstraint = MPathConstraint()
-                    self.PathConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 6:
-                if ftype == TType.STRUCT:
-                    self.JointPathConstraint = MJointPathConstraint()
-                    self.JointPathConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 7:
-                if ftype == TType.STRUCT:
-                    self.PostureConstraint = MPostureConstraint()
-                    self.PostureConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 8:
-                if ftype == TType.STRUCT:
-                    self.JointConstraint = MJointConstraint()
-                    self.JointConstraint.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            elif fid == 9:
-                if ftype == TType.MAP:
-                    self.Properties = {}
-                    (_ktype1, _vtype2, _size0) = iprot.readMapBegin()
-                    for _i4 in range(_size0):
-                        _key5 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        _val6 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.Properties[_key5] = _val6
-                    iprot.readMapEnd()
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('MConstraint')
-        if self.ID is not None:
-            oprot.writeFieldBegin('ID', TType.STRING, 1)
-            oprot.writeString(self.ID.encode('utf-8') if sys.version_info[0] == 2 else self.ID)
-            oprot.writeFieldEnd()
-        if self.GeometryConstraint is not None:
-            oprot.writeFieldBegin('GeometryConstraint', TType.STRUCT, 2)
-            self.GeometryConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.VelocityConstraint is not None:
-            oprot.writeFieldBegin('VelocityConstraint', TType.STRUCT, 3)
-            self.VelocityConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.AccelerationConstraint is not None:
-            oprot.writeFieldBegin('AccelerationConstraint', TType.STRUCT, 4)
-            self.AccelerationConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.PathConstraint is not None:
-            oprot.writeFieldBegin('PathConstraint', TType.STRUCT, 5)
-            self.PathConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.JointPathConstraint is not None:
-            oprot.writeFieldBegin('JointPathConstraint', TType.STRUCT, 6)
-            self.JointPathConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.PostureConstraint is not None:
-            oprot.writeFieldBegin('PostureConstraint', TType.STRUCT, 7)
-            self.PostureConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.JointConstraint is not None:
-            oprot.writeFieldBegin('JointConstraint', TType.STRUCT, 8)
-            self.JointConstraint.write(oprot)
-            oprot.writeFieldEnd()
-        if self.Properties is not None:
-            oprot.writeFieldBegin('Properties', TType.MAP, 9)
-            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.Properties))
-            for kiter7, viter8 in self.Properties.items():
-                oprot.writeString(kiter7.encode('utf-8') if sys.version_info[0] == 2 else kiter7)
-                oprot.writeString(viter8.encode('utf-8') if sys.version_info[0] == 2 else viter8)
-            oprot.writeMapEnd()
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        if self.ID is None:
-            raise TProtocolException(message='Required field ID is unset!')
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-
-
 class MInterval(object):
     """
     Attributes:
@@ -833,11 +669,11 @@ class MPathConstraint(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.PolygonPoints = []
-                    (_etype12, _size9) = iprot.readListBegin()
-                    for _i13 in range(_size9):
-                        _elem14 = MGeometryConstraint()
-                        _elem14.read(iprot)
-                        self.PolygonPoints.append(_elem14)
+                    (_etype3, _size0) = iprot.readListBegin()
+                    for _i4 in range(_size0):
+                        _elem5 = MGeometryConstraint()
+                        _elem5.read(iprot)
+                        self.PolygonPoints.append(_elem5)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -859,8 +695,8 @@ class MPathConstraint(object):
         if self.PolygonPoints is not None:
             oprot.writeFieldBegin('PolygonPoints', TType.LIST, 1)
             oprot.writeListBegin(TType.STRUCT, len(self.PolygonPoints))
-            for iter15 in self.PolygonPoints:
-                iter15.write(oprot)
+            for iter6 in self.PolygonPoints:
+                iter6.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.WeightingFactor is not None:
@@ -1086,11 +922,11 @@ class MPostureConstraint(object):
             elif fid == 2:
                 if ftype == TType.LIST:
                     self.JointConstraints = []
-                    (_etype19, _size16) = iprot.readListBegin()
-                    for _i20 in range(_size16):
-                        _elem21 = MJointConstraint()
-                        _elem21.read(iprot)
-                        self.JointConstraints.append(_elem21)
+                    (_etype10, _size7) = iprot.readListBegin()
+                    for _i11 in range(_size7):
+                        _elem12 = MJointConstraint()
+                        _elem12.read(iprot)
+                        self.JointConstraints.append(_elem12)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -1111,8 +947,8 @@ class MPostureConstraint(object):
         if self.JointConstraints is not None:
             oprot.writeFieldBegin('JointConstraints', TType.LIST, 2)
             oprot.writeListBegin(TType.STRUCT, len(self.JointConstraints))
-            for iter22 in self.JointConstraints:
-                iter22.write(oprot)
+            for iter13 in self.JointConstraints:
+                iter13.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
@@ -1133,19 +969,170 @@ class MPostureConstraint(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(MConstraint)
-MConstraint.thrift_spec = (
-    None,  # 0
-    (1, TType.STRING, 'ID', 'UTF8', None, ),  # 1
-    (2, TType.STRUCT, 'GeometryConstraint', [MGeometryConstraint, None], None, ),  # 2
-    (3, TType.STRUCT, 'VelocityConstraint', [MVelocityConstraint, None], None, ),  # 3
-    (4, TType.STRUCT, 'AccelerationConstraint', [MAccelerationConstraint, None], None, ),  # 4
-    (5, TType.STRUCT, 'PathConstraint', [MPathConstraint, None], None, ),  # 5
-    (6, TType.STRUCT, 'JointPathConstraint', [MJointPathConstraint, None], None, ),  # 6
-    (7, TType.STRUCT, 'PostureConstraint', [MPostureConstraint, None], None, ),  # 7
-    (8, TType.STRUCT, 'JointConstraint', [MJointConstraint, None], None, ),  # 8
-    (9, TType.MAP, 'Properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 9
-)
+
+
+class MConstraint(object):
+    """
+    Attributes:
+     - ID
+     - GeometryConstraint
+     - VelocityConstraint
+     - AccelerationConstraint
+     - PathConstraint
+     - JointPathConstraint
+     - PostureConstraint
+     - JointConstraint
+     - Properties
+
+    """
+
+
+    def __init__(self, ID=None, GeometryConstraint=None, VelocityConstraint=None, AccelerationConstraint=None, PathConstraint=None, JointPathConstraint=None, PostureConstraint=None, JointConstraint=None, Properties=None,):
+        self.ID = ID
+        self.GeometryConstraint = GeometryConstraint
+        self.VelocityConstraint = VelocityConstraint
+        self.AccelerationConstraint = AccelerationConstraint
+        self.PathConstraint = PathConstraint
+        self.JointPathConstraint = JointPathConstraint
+        self.PostureConstraint = PostureConstraint
+        self.JointConstraint = JointConstraint
+        self.Properties = Properties
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.ID = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRUCT:
+                    self.GeometryConstraint = MGeometryConstraint()
+                    self.GeometryConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.STRUCT:
+                    self.VelocityConstraint = MVelocityConstraint()
+                    self.VelocityConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.STRUCT:
+                    self.AccelerationConstraint = MAccelerationConstraint()
+                    self.AccelerationConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.STRUCT:
+                    self.PathConstraint = MPathConstraint()
+                    self.PathConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.STRUCT:
+                    self.JointPathConstraint = MJointPathConstraint()
+                    self.JointPathConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.STRUCT:
+                    self.PostureConstraint = MPostureConstraint()
+                    self.PostureConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.STRUCT:
+                    self.JointConstraint = MJointConstraint()
+                    self.JointConstraint.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.MAP:
+                    self.Properties = {}
+                    (_ktype15, _vtype16, _size14) = iprot.readMapBegin()
+                    for _i18 in range(_size14):
+                        _key19 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        _val20 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.Properties[_key19] = _val20
+                    iprot.readMapEnd()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('MConstraint')
+        if self.ID is not None:
+            oprot.writeFieldBegin('ID', TType.STRING, 1)
+            oprot.writeString(self.ID.encode('utf-8') if sys.version_info[0] == 2 else self.ID)
+            oprot.writeFieldEnd()
+        if self.GeometryConstraint is not None:
+            oprot.writeFieldBegin('GeometryConstraint', TType.STRUCT, 2)
+            self.GeometryConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.VelocityConstraint is not None:
+            oprot.writeFieldBegin('VelocityConstraint', TType.STRUCT, 3)
+            self.VelocityConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.AccelerationConstraint is not None:
+            oprot.writeFieldBegin('AccelerationConstraint', TType.STRUCT, 4)
+            self.AccelerationConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.PathConstraint is not None:
+            oprot.writeFieldBegin('PathConstraint', TType.STRUCT, 5)
+            self.PathConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.JointPathConstraint is not None:
+            oprot.writeFieldBegin('JointPathConstraint', TType.STRUCT, 6)
+            self.JointPathConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.PostureConstraint is not None:
+            oprot.writeFieldBegin('PostureConstraint', TType.STRUCT, 7)
+            self.PostureConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.JointConstraint is not None:
+            oprot.writeFieldBegin('JointConstraint', TType.STRUCT, 8)
+            self.JointConstraint.write(oprot)
+            oprot.writeFieldEnd()
+        if self.Properties is not None:
+            oprot.writeFieldBegin('Properties', TType.MAP, 9)
+            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.Properties))
+            for kiter21, viter22 in self.Properties.items():
+                oprot.writeString(kiter21.encode('utf-8') if sys.version_info[0] == 2 else kiter21)
+                oprot.writeString(viter22.encode('utf-8') if sys.version_info[0] == 2 else viter22)
+            oprot.writeMapEnd()
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.ID is None:
+            raise TProtocolException(message='Required field ID is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
 all_structs.append(MInterval)
 MInterval.thrift_spec = (
     None,  # 0
@@ -1223,6 +1210,19 @@ MPostureConstraint.thrift_spec = (
     None,  # 0
     (1, TType.STRUCT, 'posture', [MMIStandard.avatar.ttypes.MAvatarPostureValues, None], None, ),  # 1
     (2, TType.LIST, 'JointConstraints', (TType.STRUCT, [MJointConstraint, None], False), None, ),  # 2
+)
+all_structs.append(MConstraint)
+MConstraint.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'ID', 'UTF8', None, ),  # 1
+    (2, TType.STRUCT, 'GeometryConstraint', [MGeometryConstraint, None], None, ),  # 2
+    (3, TType.STRUCT, 'VelocityConstraint', [MVelocityConstraint, None], None, ),  # 3
+    (4, TType.STRUCT, 'AccelerationConstraint', [MAccelerationConstraint, None], None, ),  # 4
+    (5, TType.STRUCT, 'PathConstraint', [MPathConstraint, None], None, ),  # 5
+    (6, TType.STRUCT, 'JointPathConstraint', [MJointPathConstraint, None], None, ),  # 6
+    (7, TType.STRUCT, 'PostureConstraint', [MPostureConstraint, None], None, ),  # 7
+    (8, TType.STRUCT, 'JointConstraint', [MJointConstraint, None], None, ),  # 8
+    (9, TType.MAP, 'Properties', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 9
 )
 fix_spec(all_structs)
 del all_structs

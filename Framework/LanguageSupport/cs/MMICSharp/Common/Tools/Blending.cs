@@ -73,35 +73,40 @@ namespace MMICSharp.Common.Tools
             List<MQuaternion> toRot = skeleton.GetLocalJointRotations(to.AvatarID);
 
 
+            //Blend the rotation of each joint
             for (int i = 0; i < zero.Joints.Count; i++)
             {
-                //By default belnd both position and rotation
-                MJointType joint = zero.Joints[i].Type;
-
-                //Perform a linear interpolation of the position
-                // Does not correspond to intermediate skeleton representation. 
-                // result.Joints[i].Position = result.Joints[i].Position.Lerp(to.Joints[i].Position, weight * blendProperty.PositionWeight);
-
                 //Perform a slerp of the rotation
-                skeleton.SetLocalJointRotation(to.AvatarID, joint, fromRot[i].Slerp(toRot[i], weight));
+                skeleton.SetLocalJointRotation(to.AvatarID, zero.Joints[i].Type, fromRot[i].Slerp(toRot[i], weight));
             }
 
-            return skeleton.RecomputeCurrentPostureValues(to.AvatarID);            
-            /*
-            MAvatarPosture result = from.Clone();
 
-            for (int i = 0; i < result.Joints.Count; i++)
+
+            //Recompute the result posture values
+            MAvatarPostureValues result = skeleton.RecomputeCurrentPostureValues(to.AvatarID);
+
+
+            //Blend the root transform if specified
+            if (rootTransform)
             {
-                //Skip if root transform should be ignored
-                if (i == 0 && rootTransform)
-                    result.Joints[i].Position = result.Joints[i].Position.Lerp(to.Joints[i].Position, weight);
+                if (from.PostureData.Count >= 3 || to.PostureData.Count >= 3)
+                {
+                    //Gather the root position of the from posture values
+                    MVector3 rootPosFrom = new MVector3(from.PostureData[0], from.PostureData[1], from.PostureData[2]);
 
-                //Perform a slerp of the rotation
-                result.Joints[i].Rotation = result.Joints[i].Rotation.Slerp(to.Joints[i].Rotation, weight);
+                    //Gather the root position of the to posture values
+                    MVector3 rootPosTo = new MVector3(to.PostureData[0], to.PostureData[1], to.PostureData[2]);
+
+                    //Perform an interpolation to determine new blended position
+                    MVector3 newGlobalPosition = MVector3Extensions.Lerp(rootPosFrom, rootPosTo, weight);
+
+                    result.PostureData[0] = newGlobalPosition.X;
+                    result.PostureData[1] = newGlobalPosition.Y;
+                    result.PostureData[2] = newGlobalPosition.Z;
+                }
             }
 
             return result;
-            */
         }
     }
 

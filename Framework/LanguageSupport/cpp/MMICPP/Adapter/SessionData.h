@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
-#include "src/mmu_types.h"
-#include "src/MMIAdapter.h"
+#include "gen-cpp/mmu_types.h"
+#include "gen-cpp/MMIAdapter.h"
 #include <concurrent_unordered_map.h>
 #include "SessionContent.h"
 
@@ -19,6 +23,7 @@ namespace MMIStandard {
 		friend class ThriftAdapterImplementation;
 		friend class FileWatcher;
 		friend class SessionHandling;
+		friend class SessionCleaner;
 	private:
 
 		//	The description of the adapter
@@ -33,7 +38,7 @@ namespace MMIStandard {
 		//	The time when the adapter was started
 		static time_t startTime;
 
-		//	Descriptions of the loadalbe MMUs
+		//	Descriptions of the loadable MMUs
 		static std::vector<MMUDescription> mmuDescriptions;
 
 		//	The paths to the Assemblies

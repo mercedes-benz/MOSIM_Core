@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace MoveMMUConcurrent
 {
-    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "MoveMMUConcurrent", "move", "moveConcurrent", "A move MMU which allows concurrent instructions.", "A move MMU realized using inverse kinematics which allows concurrent instruction handling.")]
+    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "MoveMMUConcurrent", "Object/Move", "moveConcurrent", "A move MMU which allows concurrent instructions.", "A move MMU realized using inverse kinematics which allows concurrent instruction handling.")]
     public class MoveMMUConcurrentImpl : MMUBase
     {
         /// <summary>

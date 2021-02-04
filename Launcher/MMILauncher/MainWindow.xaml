@@ -22,6 +22,17 @@
     </ResourceDictionary>
   </Window.Resources>-->
 
+    <Window.Resources>
+        <Storyboard x:Key="clearText" RepeatBehavior="1x">
+            <DoubleAnimation Storyboard.TargetName="ActionLabel" 
+          Storyboard.TargetProperty="Opacity" From="1" To="1" 
+          Duration="0:0:10" BeginTime="0:0:0"/>
+            <DoubleAnimation Storyboard.TargetName="ActionLabel" 
+          Storyboard.TargetProperty="Opacity" From="1" To="0" 
+          Duration="0:0:3" BeginTime="0:0:10"/>
+        </Storyboard>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -43,11 +54,15 @@
                     <MenuItem Header="_Arrange Windows"  Click="ArrangeWindows_Click" />
                 </MenuItem>
                 <MenuItem Header="_MMU library">
-                    <MenuItem Header="Browse" Click="MMULibraryBrowse_Click" />
-                    <MenuItem Header="Add MMU" Click="MMULibraryAdd_Click" />
-                    <MenuItem Header="_Download from server" Click="MMULibrarySyncDown_Click" />
-                    <MenuItem Header="_Upload to server" Click="MMULibrarySyncUp_Click" />
-                    <MenuItem Header="_Synchronize" Click="MMULibrarySync_Click" />
+                    <MenuItem Header="Browse and manage" Click="MMULibraryBrowse_Click" />
+                    <Separator />
+                    <MenuItem Header="Add local MMU" Click="MMULibraryAdd_Click" />
+                    <Separator />
+                    <MenuItem Header="_Download from all remote servers" Click="MMULibrarySyncDown_Click" />
+                    <MenuItem Header="_Upload to project remote server" Click="MMULibrarySyncUp_Click" />
+                    <MenuItem Header="_Synchronize all with project remote server" Click="MMULibrarySync_Click" />
+                    <Separator />
+                    <MenuItem Header="Register URL handler" Click="RegisterURLHandler_Click" Visibility="Hidden"/>
                 </MenuItem>
 
             </Menu>
@@ -150,17 +165,21 @@
         <Grid Grid.Row="2">
             <Grid Margin="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <ProgressBar Grid.Column="0" Name="CpuProgessBar" Margin="5,0,1,1"></ProgressBar>
                 <Label Grid.Column="0" FontSize="8"  HorizontalAlignment="Center" >CPU</Label>
 
-
-                <ProgressBar Grid.Column="3" Name="RamProgessBar" Margin="1,0,5,1" Minimum="0" Maximum="1"></ProgressBar>
-                <Label Grid.Column="3" FontSize="8" Name="RamLabel"  HorizontalAlignment="Center">Ram</Label>
+                <Label Grid.Column="2" FontSize="8" Name="ActionLabel" HorizontalAlignment="Right" ></Label>
+                <ProgressBar Grid.Column="3" Name="ActionProgressBar" Margin="5,0,1,1" Visibility="Hidden"></ProgressBar>
+                
+                <ProgressBar Grid.Column="5" Name="RamProgessBar" Margin="1,0,5,1" Minimum="0" Maximum="1"></ProgressBar>
+                <Label Grid.Column="5" FontSize="8" Name="RamLabel"  HorizontalAlignment="Center">Ram</Label>
 
 
             </Grid>

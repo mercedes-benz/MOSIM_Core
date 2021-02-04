@@ -1,9 +1,13 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #include "ThriftAdapterImplementation.h"
 #include "SessionData.h"
 #include "SessionTools.h"
 #include "SessionContent.h"
 #include "SessionHandling.h"
-#include "src/MotionModelUnit.h"
+#include "gen-cpp/MotionModelUnit.h"
 #include "AdapterController.h"
 #include "CPPMMUInstantiator.h"
 #include "boost/exception/diagnostic_information.hpp"
@@ -150,7 +154,7 @@ void ThriftAdapterImplementation::GetStatus(std::map<std::string, std::string>& 
 {
 	_return["Version"] = "0.1";
 	_return["Running since"] = strtok(ctime(&SessionData::startTime), "\n");
-	_return["Total Sessions"] = to_string(SessionData::SessionContents.size()); ;
+	_return["Total Sessions"] = std::to_string(SessionData::SessionContents.size()); ;
 	
 	if (SessionData::lastAccess == 0)
 	{
@@ -160,7 +164,7 @@ void ThriftAdapterImplementation::GetStatus(std::map<std::string, std::string>& 
 	{
 		_return["Last Access"] = strtok(ctime(&SessionData::lastAccess), "\n");
 	}
-	_return["Loadable MMMUs"] = to_string(SessionData::mmuDescriptions.size());	
+	_return["Loadable MMMUs"] = std::to_string(SessionData::mmuDescriptions.size());
 }
 
 void ThriftAdapterImplementation::GetAdapterDescription(MAdapterDescription & _return)
@@ -292,17 +296,18 @@ void ThriftAdapterImplementation::GetSceneChanges(::MMIStandard::MSceneUpdate & 
 }
 
 //TODO failure handling
-void ThriftAdapterImplementation::LoadMMUs(::MMIStandard::MBoolResponse & _return, const std::vector<std::string>& mmus, const std::string & sessionID)
+void ThriftAdapterImplementation::LoadMMUs(std::map<std::string, std::string>& _return, const std::vector<std::string>& mmus, const std::string & sessionID)
 {
 	Logger::printLog(L_DEBUG, "LoadMMUs");
-	_return.__set_Successful(true);
 	try
 	{
 		std::vector<string> splittedIds = SessionTools::GetSplittedIds(sessionID);
 		std::string sceneId = splittedIds[0];
 		std::string avatarId = splittedIds[1];
-		const SessionContent  *sessionContent = &SessionHandling::GetSessionContentBySceneID(sceneId);
+		const SessionContent *sessionContent = &SessionHandling::GetSessionContentBySceneID(sceneId);
 		SessionData::lastAccess = std::time(0);
+		// save the session content of the id 
+		//MBoolResponse SessionResults = SessionData::GetSessionContent(sessionID, out sessionContent);
 
 		for (const std::string &mmuId : mmus)
 		{
@@ -319,7 +324,9 @@ void ThriftAdapterImplementation::LoadMMUs(::MMIStandard::MBoolResponse & _retur
 				mmu->sceneAccess = &sessionContent->GetScene();
 
 				Logger::printLog(L_INFO, "Loaded MMU : " + mmu->name + " for session: "+ sessionID );
-			
+
+				// insert values into map 
+				_return.insert(std::pair<std::string, std::string>(mmuId, sessionID));  // added, sadam
 				
 				auto it = sessionContent->avatarContent.find(avatarId);
 				if (it == sessionContent->avatarContent.end())
@@ -336,7 +343,7 @@ void ThriftAdapterImplementation::LoadMMUs(::MMIStandard::MBoolResponse & _retur
 	{
 		string message = boost::current_exception_diagnostic_information();
 		Logger::printLog(L_ERROR, message);
-		MBoolResponseExtensions::Update(_return, message, false);
+		//MBoolResponseExtensions::Update(_return, message, false);
 	}
 
 }

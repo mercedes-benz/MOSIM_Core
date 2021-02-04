@@ -1,12 +1,17 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Adapter;
 
-import MMIStandard.MAdapterDescription;
-import MMIStandard.MIPAddress;
-import MMIStandard.MMIAdapter;
+import de.mosim.mmi.*;
 import ThriftClients.MMIRegisterServiceClient;
 import ThriftServer.AdapterServer;
 import Utils.LogLevel;
 import Utils.Logger;
+import de.mosim.mmi.core.MIPAddress;
+import de.mosim.mmi.register.MAdapterDescription;
+import de.mosim.mmi.register.MMIAdapter;
 import org.apache.thrift.TException;
 
 import java.io.IOException;
@@ -30,7 +35,7 @@ public class AdapterController implements AutoCloseable {
     //	The helper class which instantiates the MMUs from file
     private static IMMUInstantiation MMUInstantiator;
     //	The address of the AdapterServer
-    private final MMIStandard.MIPAddress adapterAddress;
+    private final MIPAddress adapterAddress;
     //	The address of the MMiRegister
     private final MIPAddress registerAddress;
     //	The supported languages

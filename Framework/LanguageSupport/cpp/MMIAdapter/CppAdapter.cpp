@@ -1,24 +1,18 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 // CppAdapter.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#pragma once
-#include "Adapter/AdapterController.h"
-#include "Adapter/FileWatcher.h"
-#include "boost/program_options.hpp"
-#include "boost/algorithm/string.hpp"
-#include <iostream>
-#include "Adapter/SessionTools.h"
-#include "Access/ServiceAccess.h"
-#include "Utils/Logger.h"
-#include "boost/exception/diagnostic_information.hpp"
-#include "src/mmu_types.h"
-#include "Adapter/CPPMMUInstantiator.h"
-
-using namespace MMIStandard;
-namespace po = boost::program_options;
-using namespace std;
+#include "CppAdapter.h"
 
 int main(int ac, char* av[])
 {
+	//create a logger instance
+	Logger LoggerInst;
+	//log everything
+	LoggerInst.logLevel = L_DEBUG;
+
 	std::cout << R"(
    ______              ___       __            __           
   / ____/__    __     /   | ____/ /___ _____  / /____  _____
@@ -60,7 +54,7 @@ int main(int ac, char* av[])
 		return 0;
 	}
 
-	switch (logLevel) {
+	/*switch (logLevel) {
 		case 0: Logger::logLevel = L_SILENT;
 			break;
 		case 1: Logger::logLevel = L_ERROR;
@@ -69,7 +63,7 @@ int main(int ac, char* av[])
 			break;
 		case 3: Logger::logLevel = L_DEBUG;
 			break;
-	}
+	}*/
 	
 	vector<string> adapterAddressSplit;
 	vector<string> registerAddressSplit;
@@ -96,8 +90,15 @@ int main(int ac, char* av[])
 	adapterDescription.__set_ID("7999d37f-1337-45da-9015-f4adde70a44d");
 	adapterDescription.__set_Language("C++");
 	adapterDescription.__set_Addresses(vector<MIPAddress>{adapterMIPAddress});
+	map<string, string> propertiesMap;
+	adapterDescription.__set_Properties(propertiesMap);
+
+	SessionData SessionDataInst = SessionData{};
+
+	
 	//start the adapter controller
-	AdapterController adapterController{ adapterMIPAddress,registerMIPAddress,mmuPath, workerCount,CPPMMUInstantiator{}, vector<string>{"C++"}, adapterDescription};
+	CPPMMUInstantiator Instantiator = CPPMMUInstantiator{};
+	AdapterController adapterController{ adapterMIPAddress,registerMIPAddress,mmuPath, workerCount,Instantiator, vector<string>{"C++"}, adapterDescription};
 	adapterController.Start();
 
 	return 0;

@@ -245,14 +245,14 @@ namespace MMIStandard
               if (field.Type == TType.Map) {
                 {
                   Properties = new Dictionary<string, string>();
-                  TMap _map0 = iprot.ReadMapBegin();
-                  for( int _i1 = 0; _i1 < _map0.Count; ++_i1)
+                  TMap _map8 = iprot.ReadMapBegin();
+                  for( int _i9 = 0; _i9 < _map8.Count; ++_i9)
                   {
-                    string _key2;
-                    string _val3;
-                    _key2 = iprot.ReadString();
-                    _val3 = iprot.ReadString();
-                    Properties[_key2] = _val3;
+                    string _key10;
+                    string _val11;
+                    _key10 = iprot.ReadString();
+                    _val11 = iprot.ReadString();
+                    Properties[_key10] = _val11;
                   }
                   iprot.ReadMapEnd();
                 }
@@ -354,10 +354,10 @@ namespace MMIStandard
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteMapBegin(new TMap(TType.String, TType.String, Properties.Count));
-            foreach (string _iter4 in Properties.Keys)
+            foreach (string _iter12 in Properties.Keys)
             {
-              oprot.WriteString(_iter4);
-              oprot.WriteString(Properties[_iter4]);
+              oprot.WriteString(_iter12);
+              oprot.WriteString(Properties[_iter12]);
             }
             oprot.WriteMapEnd();
           }
@@ -378,31 +378,31 @@ namespace MMIStandard
       __sb.Append(ID);
       if (GeometryConstraint != null && __isset.GeometryConstraint) {
         __sb.Append(", GeometryConstraint: ");
-        __sb.Append(GeometryConstraint);
+        __sb.Append(GeometryConstraint== null ? "<null>" : GeometryConstraint.ToString());
       }
       if (VelocityConstraint != null && __isset.VelocityConstraint) {
         __sb.Append(", VelocityConstraint: ");
-        __sb.Append(VelocityConstraint);
+        __sb.Append(VelocityConstraint== null ? "<null>" : VelocityConstraint.ToString());
       }
       if (AccelerationConstraint != null && __isset.AccelerationConstraint) {
         __sb.Append(", AccelerationConstraint: ");
-        __sb.Append(AccelerationConstraint);
+        __sb.Append(AccelerationConstraint== null ? "<null>" : AccelerationConstraint.ToString());
       }
       if (PathConstraint != null && __isset.PathConstraint) {
         __sb.Append(", PathConstraint: ");
-        __sb.Append(PathConstraint);
+        __sb.Append(PathConstraint== null ? "<null>" : PathConstraint.ToString());
       }
       if (JointPathConstraint != null && __isset.JointPathConstraint) {
         __sb.Append(", JointPathConstraint: ");
-        __sb.Append(JointPathConstraint);
+        __sb.Append(JointPathConstraint== null ? "<null>" : JointPathConstraint.ToString());
       }
       if (PostureConstraint != null && __isset.PostureConstraint) {
         __sb.Append(", PostureConstraint: ");
-        __sb.Append(PostureConstraint);
+        __sb.Append(PostureConstraint== null ? "<null>" : PostureConstraint.ToString());
       }
       if (JointConstraint != null && __isset.JointConstraint) {
         __sb.Append(", JointConstraint: ");
-        __sb.Append(JointConstraint);
+        __sb.Append(JointConstraint== null ? "<null>" : JointConstraint.ToString());
       }
       if (Properties != null && __isset.Properties) {
         __sb.Append(", Properties: ");

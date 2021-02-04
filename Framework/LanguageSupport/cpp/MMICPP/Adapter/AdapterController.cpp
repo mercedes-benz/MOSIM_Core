@@ -1,17 +1,21 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #include "AdapterController.h"
 #include <filesystem>
 #include <thread> 
 #include "SessionData.h"
 #include "boost/exception/diagnostic_information.hpp"
 #include "ThriftClient/ThriftClient.cpp"
-#include "src/MMIRegisterService.h"
+#include "gen-cpp/MMIRegisterService.h"
 #include "Utils/Logger.h"
 #include "ThriftServer/ThriftNonBlockingServer.h"
 #include "ThriftServer/ThriftServer.h"
 
 CPPMMUInstantiator AdapterController::instantiator;
 
-AdapterController::AdapterController(const MIPAddress & aAddress, const MIPAddress &rAddress, const string &mmuPath, int workerCount, const CPPMMUInstantiator &instantiator, const std::vector<std::string> & languages, const MAdapterDescription &adapterDescription) :adapterAddress(aAddress), registerAddress(rAddress), mmuPath(mmuPath), workerCount{ workerCount }, languages{ languages }
+AdapterController::AdapterController(const MIPAddress & aAddress, const MIPAddress &rAddress, const string &mmuPath, int workerCount, const CPPMMUInstantiator &instantiator, const vector<string> & languages, const MAdapterDescription &adapterDescription) :adapterAddress(aAddress), registerAddress(rAddress), mmuPath(mmuPath), workerCount{ workerCount }, languages{ languages }
 {
 	this->isRegistered = false;
 	AdapterController::instantiator = instantiator;
@@ -44,6 +48,7 @@ void AdapterController::Start()
 
 	//new thread for checking for loadable MMUs
 	FileWatcher watcher{mmuPath,languages };
+
 	thread fileWatcherThread(&FileWatcher::Start, watcher);
 
 	////new thread for adapter server
@@ -81,7 +86,7 @@ void AdapterController::StartAdapterServer()
 {
 	//ThriftNonBlockingServer server {};
 	ThriftServer server{};
-	Logger::printLog(L_INFO, "Starting adapter server at: " + this->adapterAddress.Address + ":" + to_string (this->adapterAddress.Port));
+	Logger::printLog(L_INFO, "Starting adapter server at: " + this->adapterAddress.Address + ":" + std::to_string (this->adapterAddress.Port));
 	try 
 	{
 		server.Start(this->adapterAddress.Port,this->workerCount);

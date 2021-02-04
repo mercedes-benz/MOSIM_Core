@@ -88,14 +88,14 @@ class MPostureConstraint
                 case 2:
                     if ($ftype == TType::LST) {
                         $this->JointConstraints = array();
-                        $_size16 = 0;
-                        $_etype19 = 0;
-                        $xfer += $input->readListBegin($_etype19, $_size16);
-                        for ($_i20 = 0; $_i20 < $_size16; ++$_i20) {
-                            $elem21 = null;
-                            $elem21 = new \MJointConstraint();
-                            $xfer += $elem21->read($input);
-                            $this->JointConstraints []= $elem21;
+                        $_size7 = 0;
+                        $_etype10 = 0;
+                        $xfer += $input->readListBegin($_etype10, $_size7);
+                        for ($_i11 = 0; $_i11 < $_size7; ++$_i11) {
+                            $elem12 = null;
+                            $elem12 = new \MJointConstraint();
+                            $xfer += $elem12->read($input);
+                            $this->JointConstraints []= $elem12;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -130,8 +130,8 @@ class MPostureConstraint
             }
             $xfer += $output->writeFieldBegin('JointConstraints', TType::LST, 2);
             $output->writeListBegin(TType::STRUCT, count($this->JointConstraints));
-            foreach ($this->JointConstraints as $iter22) {
-                $xfer += $iter22->write($output);
+            foreach ($this->JointConstraints as $iter13) {
+                $xfer += $iter13->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

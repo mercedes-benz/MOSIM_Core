@@ -4,7 +4,9 @@
 cmake_minimum_required (VERSION 3.8)
 
 project ("MMICPP")
-if(NOT "${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
+if("${CMAKE_GENERATOR}" MATCHES "Ninja")
+	set(platform "x64")
+elseif("${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
     set(platform "x64")
 else()
 	set(platform "x86")
@@ -28,7 +30,8 @@ target_link_libraries(MMICPP PUBLIC STATIC MMIStandard)
 
 target_include_directories(MMICPP PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../MMIStandard>
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../thrift>
 )
 
 set_property(TARGET MMICPP PROPERTY CXX_STANDARD 17)
+##

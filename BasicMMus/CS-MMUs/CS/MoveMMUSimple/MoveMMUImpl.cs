@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace MoveMMU
 {
-    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "MoveMMU", "move","moveOnHanded", "A move MMU", "A move MMU realized using inverse kinematics.")]
+    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "MoveMMUSimple", "Object/Move","moveOnHanded", "A move MMU", "A move MMU realized using inverse kinematics.")]
     public class MoveMMUSimpleImpl:MMUBase
     {
         #region private fields

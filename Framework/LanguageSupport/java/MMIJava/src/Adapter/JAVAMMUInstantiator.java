@@ -1,8 +1,12 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Adapter;
 
-import MMIStandard.MMUDescription;
 import Utils.LogLevel;
 import Utils.Logger;
+import de.mosim.mmi.mmu.MMUDescription;
 
 import java.io.BufferedInputStream;
 import java.io.File;

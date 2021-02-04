@@ -9,7 +9,12 @@ find_package(Thrift REQUIRED)
 find_path(CPPREST_INCLUDE_DIR "thrift/thrift.h")
 include_directories(${CPPREST_INCLUDE_DIR})
 # Add source to this project's executable.
-FILE(GLOB srcT src/*.cpp)
-add_library (MMIStandard ${srcT})
+FILE(GLOB hT "../../thrift/gen-cpp/*.h")
+FILE(GLOB srcT "../../thrift/gen-cpp/*.cpp")
+# remove server skeleton files, as they do not compile
+list(FILTER srcT EXCLUDE REGEX ".*server.skeleton.cpp$")
+add_library(MMIStandard STATIC ${hT} ${srcT})
 target_link_libraries(MMIStandard STATIC thrift thriftz thriftnb)
+
+
 

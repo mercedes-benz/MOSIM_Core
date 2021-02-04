@@ -1,9 +1,15 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Access.Abstraction;
 
-import MMIStandard.*;
 import ThriftClients.*;
 import Utils.LogLevel;
 import Utils.Logger;
+import de.mosim.mmi.core.MIPAddress;
+import de.mosim.mmi.core.MServiceDescription;
+import de.mosim.mmi.services.*;
 import org.apache.thrift.TException;
 
 import java.util.HashMap;
@@ -27,6 +33,7 @@ public class ServiceAccess implements IServiceAccess {
     private BlendingServiceClient blendingServiceClient;
     private CollisionDetectionServiceClient collisionDetectionService;
     private GraspPoseServiceClient graspPoseService;
+    private WalkPointEstimationServiceClient walkPointEstimationService;
 
 
     /// <summary>
@@ -38,6 +45,7 @@ public class ServiceAccess implements IServiceAccess {
         this.registerAddress = registerAddress;
         this.sessionID = sessionID;
     }
+
 
     private void initialize() {
         Logger.printLog(LogLevel.L_INFO, "Trying to fetch the services from register: " + this.registerAddress.getAddress() + ":" + this.registerAddress.getPort());
@@ -137,6 +145,18 @@ public class ServiceAccess implements IServiceAccess {
     }
 
     @Override
+    public WalkPointEstimationServiceClient getWalkPointEstimationThriftClient() {
+        MServiceDescription serviceDescription = this.getServiceDescription("walkPointEstimationService");
+        if (serviceDescription == null)
+            throw new RuntimeException("graspPose-Service not found");
+
+        if (this.walkPointEstimationService == null) {
+            this.walkPointEstimationService = new WalkPointEstimationServiceClient(serviceDescription.Addresses.get(0).getAddress(), serviceDescription.Addresses.get(0).getPort());
+        }
+        this.walkPointEstimationService.start();
+        return this.walkPointEstimationService;    }
+
+    @Override
     public MInverseKinematicsService.Client getIkService() {
         return this.getIkThriftClient().Access;
     }
@@ -164,6 +184,11 @@ public class ServiceAccess implements IServiceAccess {
     @Override
     public MGraspPoseService.Client getGraspPoseService() {
         return this.getGraspPoseThriftClient().Access;
+    }
+
+    @Override
+    public MWalkPointEstimationService.Client getWalkPointEstimationService() {
+        return this.getWalkPointEstimationThriftClient().Access;
     }
 
 

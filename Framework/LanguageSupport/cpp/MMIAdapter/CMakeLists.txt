@@ -4,7 +4,9 @@
 cmake_minimum_required (VERSION 3.8)
 
 project ("MMIAdapter")
-if(NOT "${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
+if("${CMAKE_GENERATOR}" MATCHES "Ninja")
+	set(platform "x64")
+elseif("${CMAKE_GENERATOR}" MATCHES "(Win64|IA64)")
     set(platform "x64")
 else()
 	set(platform "x86")
@@ -36,8 +38,9 @@ link_directories(${rootFolder}/MMICPP/build/${buildtype}/ ${rootFolder}/MMIStand
 add_executable(MMIAdapter ${srcT})
 
 target_include_directories(MMIAdapter PUBLIC
-   $<BUILD_INTERFACE:${rootFolder}/MMIStandard>
-    $<BUILD_INTERFACE:${rootFolder}/MMICPP>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+   $<BUILD_INTERFACE:${rootFolder}/MMICPP>
+    $<BUILD_INTERFACE:${rootFolder}/../thrift>
 )
 
 set_property(TARGET MMIAdapter PROPERTY CXX_STANDARD 17)

@@ -236,16 +236,16 @@ class MConstraint
                 case 9:
                     if ($ftype == TType::MAP) {
                         $this->Properties = array();
-                        $_size0 = 0;
-                        $_ktype1 = 0;
-                        $_vtype2 = 0;
-                        $xfer += $input->readMapBegin($_ktype1, $_vtype2, $_size0);
-                        for ($_i4 = 0; $_i4 < $_size0; ++$_i4) {
-                            $key5 = '';
-                            $val6 = '';
-                            $xfer += $input->readString($key5);
-                            $xfer += $input->readString($val6);
-                            $this->Properties[$key5] = $val6;
+                        $_size14 = 0;
+                        $_ktype15 = 0;
+                        $_vtype16 = 0;
+                        $xfer += $input->readMapBegin($_ktype15, $_vtype16, $_size14);
+                        for ($_i18 = 0; $_i18 < $_size14; ++$_i18) {
+                            $key19 = '';
+                            $val20 = '';
+                            $xfer += $input->readString($key19);
+                            $xfer += $input->readString($val20);
+                            $this->Properties[$key19] = $val20;
                         }
                         $xfer += $input->readMapEnd();
                     } else {
@@ -333,9 +333,9 @@ class MConstraint
             }
             $xfer += $output->writeFieldBegin('Properties', TType::MAP, 9);
             $output->writeMapBegin(TType::STRING, TType::STRING, count($this->Properties));
-            foreach ($this->Properties as $kiter7 => $viter8) {
-                $xfer += $output->writeString($kiter7);
-                $xfer += $output->writeString($viter8);
+            foreach ($this->Properties as $kiter21 => $viter22) {
+                $xfer += $output->writeString($kiter21);
+                $xfer += $output->writeString($viter22);
             }
             $output->writeMapEnd();
             $xfer += $output->writeFieldEnd();

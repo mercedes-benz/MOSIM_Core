@@ -8,6 +8,7 @@ using MMICSharp.Common.Tools;
 using MMIStandard;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarryMMU
 {
@@ -444,21 +445,21 @@ namespace CarryMMU
         /// <returns></returns>
         public override MBoolResponse Abort(string instructionID)
         {
-            //To do -> identify the correct hand which should be aborted
+            //Get the hands that should be aborted given the id
+            List<HandContainer> hands = this.ActiveHands.FindAll(s => s.Instruction.ID == instructionID);
 
-            HandContainer hand = this.ActiveHands.Find(s => s.Instruction.ID == instructionID);
+            //Remove each individual hand
+            for (int i = hands.Count - 1; i >= 0; i--)
+                this.ActiveHands.Remove(hands[i]);
 
-            if (hand != null)
-            {
-                this.ActiveHands.Remove(hand);
-            }
-
-            else
-            {
-                Console.WriteLine("Carry aborted");
+            //By default clear all hands if no match
+            if(hands.Count == 0)
                 this.ActiveHands.Clear();
-            }
+            
+            //Provide debug output
+            MMICSharp.Adapter.Logger.Log(MMICSharp.Adapter.Log_level.L_INFO,"Carry aborted");
 
+            //Return true
             return new MBoolResponse(true);
         }
 

@@ -123,7 +123,7 @@ namespace MMICSharp.Common
                 {
                     bool setRot = false;
                     bool setPos = false;
-                    Console.WriteLine("no jointtype " + outJ.ID);
+
                     if(i == 0)
                     {
                         // find first joint that is mapped
@@ -215,7 +215,6 @@ namespace MMICSharp.Common
 
         public MAvatarDescription SetupRetargeting(MAvatarPosture globalTarget)
         {
-            Console.WriteLine("\nSetting up retargeting");
             string id = globalTarget.AvatarID;
             Dictionary<MJointType, string> joint_map = new Dictionary<MJointType, string>();
             Dictionary<string, string> _children = new Dictionary<string, string>();
@@ -256,15 +255,11 @@ namespace MMICSharp.Common
             MAvatarDescription desc = IntermediateSkeleton.GenerateFromDescriptionFile(id);
             this.skeleton.InitializeAnthropometry(desc);
 
-            Console.WriteLine("Scaling Skeleton");
             ((RJoint)this.skeleton.GetRoot(id)).ScaleSkeleton(globalTarget, joint_map);
-            Console.WriteLine("Initializing Zero Posture");
+
             this.skeleton.GetRoot(id).SetAvatarPostureValues(null);
-            Console.WriteLine("Setting Base Reference");
+
             ((RJoint)this.skeleton.GetRoot(id)).SetBaseReference(globalTarget);
-
-
-            Console.WriteLine("Retargeting Successfully set up");
 
             return desc;
         }

@@ -19,7 +19,7 @@ namespace MMIStandard
 {
   public partial class MAJANService {
     public interface ISync {
-      string CreateAgent(string name, string template, MRDFGraph knowledge);
+      string CreateAgent(string name, string templateAgent, MRDFGraph knowledge);
       bool DeleteAgent(string agentName);
       string ExecuteAgent(string agentName, string endpoint, MRDFGraph content);
       void ReceiveAsync(string actionID, int answer);
@@ -27,7 +27,7 @@ namespace MMIStandard
 
     public interface Iface : ISync {
       #if SILVERLIGHT
-      IAsyncResult Begin_CreateAgent(AsyncCallback callback, object state, string name, string template, MRDFGraph knowledge);
+      IAsyncResult Begin_CreateAgent(AsyncCallback callback, object state, string name, string templateAgent, MRDFGraph knowledge);
       string End_CreateAgent(IAsyncResult asyncResult);
       #endif
       #if SILVERLIGHT
@@ -103,9 +103,9 @@ namespace MMIStandard
       
       #if SILVERLIGHT
       
-      public IAsyncResult Begin_CreateAgent(AsyncCallback callback, object state, string name, string template, MRDFGraph knowledge)
+      public IAsyncResult Begin_CreateAgent(AsyncCallback callback, object state, string name, string templateAgent, MRDFGraph knowledge)
       {
-        return send_CreateAgent(callback, state, name, template, knowledge);
+        return send_CreateAgent(callback, state, name, templateAgent, knowledge);
       }
 
       public string End_CreateAgent(IAsyncResult asyncResult)
@@ -116,25 +116,25 @@ namespace MMIStandard
 
       #endif
 
-      public string CreateAgent(string name, string template, MRDFGraph knowledge)
+      public string CreateAgent(string name, string templateAgent, MRDFGraph knowledge)
       {
         #if SILVERLIGHT
-        var asyncResult = Begin_CreateAgent(null, null, name, template, knowledge);
+        var asyncResult = Begin_CreateAgent(null, null, name, templateAgent, knowledge);
         return End_CreateAgent(asyncResult);
 
         #else
-        send_CreateAgent(name, template, knowledge);
+        send_CreateAgent(name, templateAgent, knowledge);
         return recv_CreateAgent();
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_CreateAgent(AsyncCallback callback, object state, string name, string template, MRDFGraph knowledge)
+      public IAsyncResult send_CreateAgent(AsyncCallback callback, object state, string name, string templateAgent, MRDFGraph knowledge)
       {
         oprot_.WriteMessageBegin(new TMessage("CreateAgent", TMessageType.Call, seqid_));
         CreateAgent_args args = new CreateAgent_args();
         args.Name = name;
-        args.Template = template;
+        args.TemplateAgent = templateAgent;
         args.Knowledge = knowledge;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -143,12 +143,12 @@ namespace MMIStandard
 
       #else
 
-      public void send_CreateAgent(string name, string template, MRDFGraph knowledge)
+      public void send_CreateAgent(string name, string templateAgent, MRDFGraph knowledge)
       {
         oprot_.WriteMessageBegin(new TMessage("CreateAgent", TMessageType.Call, seqid_));
         CreateAgent_args args = new CreateAgent_args();
         args.Name = name;
-        args.Template = template;
+        args.TemplateAgent = templateAgent;
         args.Knowledge = knowledge;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -432,7 +432,7 @@ namespace MMIStandard
         CreateAgent_result result = new CreateAgent_result();
         try
         {
-          result.Success = iface_.CreateAgent(args.Name, args.Template, args.Knowledge);
+          result.Success = iface_.CreateAgent(args.Name, args.TemplateAgent, args.Knowledge);
           oprot.WriteMessageBegin(new TMessage("CreateAgent", TMessageType.Reply, seqid)); 
           result.Write(oprot);
         }
@@ -545,7 +545,7 @@ namespace MMIStandard
     public partial class CreateAgent_args : TBase
     {
       private string _name;
-      private string _template;
+      private string _templateAgent;
       private MRDFGraph _knowledge;
 
       public string Name
@@ -561,16 +561,16 @@ namespace MMIStandard
         }
       }
 
-      public string Template
+      public string TemplateAgent
       {
         get
         {
-          return _template;
+          return _templateAgent;
         }
         set
         {
-          __isset.template = true;
-          this._template = value;
+          __isset.templateAgent = true;
+          this._templateAgent = value;
         }
       }
 
@@ -594,7 +594,7 @@ namespace MMIStandard
       #endif
       public struct Isset {
         public bool name;
-        public bool template;
+        public bool templateAgent;
         public bool knowledge;
       }
 
@@ -625,7 +625,7 @@ namespace MMIStandard
                 break;
               case 2:
                 if (field.Type == TType.String) {
-                  Template = iprot.ReadString();
+                  TemplateAgent = iprot.ReadString();
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -667,12 +667,12 @@ namespace MMIStandard
             oprot.WriteString(Name);
             oprot.WriteFieldEnd();
           }
-          if (Template != null && __isset.template) {
-            field.Name = "template";
+          if (TemplateAgent != null && __isset.templateAgent) {
+            field.Name = "templateAgent";
             field.Type = TType.String;
             field.ID = 2;
             oprot.WriteFieldBegin(field);
-            oprot.WriteString(Template);
+            oprot.WriteString(TemplateAgent);
             oprot.WriteFieldEnd();
           }
           if (Knowledge != null && __isset.knowledge) {
@@ -701,11 +701,11 @@ namespace MMIStandard
           __sb.Append("Name: ");
           __sb.Append(Name);
         }
-        if (Template != null && __isset.template) {
+        if (TemplateAgent != null && __isset.templateAgent) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("Template: ");
-          __sb.Append(Template);
+          __sb.Append("TemplateAgent: ");
+          __sb.Append(TemplateAgent);
         }
         if (Knowledge != null && __isset.knowledge) {
           if(!__first) { __sb.Append(", "); }

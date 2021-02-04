@@ -1,4 +1,8 @@
-#pragma once#
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
+#pragma once
 #include "MMIScene.h"
 #include "Access/ServiceAccess.h"
 #include <concurrent_unordered_map.h>
@@ -11,7 +15,7 @@ namespace MMIStandard {
 	class SessionContent
 	{
 		/*
-			Class which contains the content whisch is related to the specific session
+			Class which contains the content which is related to the specific session
 		*/
 	public:
 		//	The corresponding scene access

@@ -48,7 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="description.json" />
+    <Content Include="description.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="idlemmu">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

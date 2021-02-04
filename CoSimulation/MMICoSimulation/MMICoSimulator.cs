@@ -1515,7 +1515,7 @@ namespace MMICoSimulation
         /// <param name="task"></param>
         protected virtual void HandleStartActions(MotionTask task)
         {
-            String actionString = null;
+            List<String> actionStrings = new List<String>();
 
             //Utilize the action field of the instruction
             //To do provide multiple actions in future
@@ -1534,16 +1534,20 @@ namespace MMICoSimulation
                     //Create the body of the subactions
                     string[] body = subAction.Split(new string[] { "->" },StringSplitOptions.RemoveEmptyEntries);
 
-
-                    if(body.Length >= 2)
+                    foreach(string b in body)
                     {
-                        //OnStart
-                        string coSimTopic = body[0];
+                        Console.WriteLine("Body: " + b);
+                    }
+
+                    if (body.Length >= 2)
+                    {
+                        //OnStart -> Remove whitespaces
+                        string coSimTopic = body[0].Replace(" ", String.Empty);
 
                         if(coSimTopic == CoSimTopic.OnStart)
                         {
-                            //8315395235:StartInstruction
-                            actionString = body[1];
+                            //8315395235:StartInstruction -> Remove whitespaces
+                            actionStrings.Add(body[1].Replace(" ", String.Empty));
                         }
                     }
                 }
@@ -1552,39 +1556,11 @@ namespace MMICoSimulation
 
             //Check if instruction has a start action
             if (task.Instruction.Properties != null && task.Instruction.Properties.ContainsKey(CoSimTopic.OnStart))
-            {
-                actionString = task.Instruction.Properties[CoSimTopic.OnStart];
-#if !UNITY_EDITOR
-            try
-            {
-#endif
-                string[] split = actionString.Split(':');
+                actionStrings.Add(task.Instruction.Properties[CoSimTopic.OnStart]);
 
-                string id = split[0];
-                string action = split[1];
 
-                //Perform action with specified id 
-                //Action can be either start or end
-                if (action == CoSimAction.StartInstruction)
-                {
-                    //Start the instruction
-                    toStart.Add(id);
-                }
-
-                if (action == CoSimAction.EndInstruction)
-                {
-                    //Abort the instruction 
-                    this.toAbort.Add(id);
-                }
-#if !UNITY_EDITOR
-            }
-            catch (Exception)
-            {
-                Console.WriteLine($"Cannot split on Start string of instruction {task.Instruction.Name} {task.Instruction.ID}");
-            }
-#endif
-            }
-            
+            //Parse and schedule the actions
+            this.ParseAndScheduleActions(actionStrings);   
         }
 
 
@@ -1594,7 +1570,7 @@ namespace MMICoSimulation
         /// <param name="task"></param>
         protected virtual void HandleEndActions(MotionTask task)
         {
-            String actionString = null;
+            List<String> actionStrings = new List<String>();
 
             //Utilize the action field of the instruction
             //To do provide multiple actions in future
@@ -1610,19 +1586,19 @@ namespace MMICoSimulation
                 {
                     //Example: OnStart->8315395235:StartInstruction
 
-                    //Create the body of the subactions
+                    //Create the body of the subactions 
                     string[] body = subAction.Split(new string[] { "->" }, StringSplitOptions.RemoveEmptyEntries);
 
 
                     if (body.Length >= 2)
                     {
-                        //OnStart
-                        string coSimTopic = body[0];
+                        //OnStart -> Remove whitespaces
+                        string coSimTopic = body[0].Replace(" ", String.Empty);
 
                         if (coSimTopic == CoSimTopic.OnEnd)
                         {
-                            //8315395235:StartInstruction
-                            actionString = body[1];
+                            //8315395235:StartInstruction -> Remove whitespaces
+                            actionStrings.Add(body[1].Replace(" ", String.Empty));
                         }
                     }
                 }
@@ -1631,39 +1607,58 @@ namespace MMICoSimulation
 
             //Check if instruction has a start action
             if (task.Instruction.Properties != null && task.Instruction.Properties.ContainsKey(CoSimTopic.OnEnd))
-                actionString = task.Instruction.Properties[CoSimTopic.OnEnd];
-#if !UNITY_EDITOR
-            try
-            {
-#endif
-                string[] split = actionString.Split(':');
+                actionStrings.Add(task.Instruction.Properties[CoSimTopic.OnEnd]);
 
-                string id = split[0];
-                string action = split[1];
 
-                //Perform action with specified id 
-                //Action can be either start or end
-                if (action == CoSimAction.StartInstruction)
-                {
-                    //Start the instruction
-                    toStart.Add(id);
-                }
 
-                if (action == CoSimAction.EndInstruction)
-                {
-                    //Abort the instruction 
-                    this.toAbort.Add(id);
-                }
-#if !UNITY_EDITOR
-            }
-            catch (Exception)
-            {
-                Console.WriteLine($"Cannot split on Start string of instruction {task.Instruction.Name} {task.Instruction.ID}");
-            }
-#endif
-            
+            //Parse and schedule the actions
+            this.ParseAndScheduleActions(actionStrings);         
         }
 
+
+        /// <summary>
+        /// Method parses and consecutively schedules the actions
+        /// </summary>
+        /// <param name="actionStrings"></param>
+        protected virtual void ParseAndScheduleActions(List<String> actionStrings)
+        {
+            //Handle each individual action
+            foreach (string actionString in actionStrings)
+            {
+                //Split the action into insruction id and the respectic CoSimAction
+                string[] split = actionString.Split(':');
+
+                //Check if the string can be split
+                if (split.Length >= 2)
+                {
+                    //Extract the id 
+                    string id = split[0];
+
+                    //Extract the respective action
+                    string action = split[1];
+
+                    //Perform action with specified id 
+                    switch (action)
+                    {
+                        case CoSimAction.StartInstruction:
+                            //Start the instruction
+                            toStart.Add(id);
+                            break;
+
+                        case CoSimAction.EndInstruction:
+                            //Abort the instruction 
+                            this.toAbort.Add(id);
+                            break;
+                    }
+
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Problem parsing action");
+                }
+
+            }
+        }
 
         /// <summary>
         /// Evaluates the given string expression based on a lookup function.

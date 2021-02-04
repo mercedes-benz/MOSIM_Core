@@ -4,32 +4,65 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityIdleMMU", "UnityIdleMMU\UnityIdleMMU.csproj", "{BC0D5089-B7FC-4DE3-91C5-8F5425C2F2E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseMMU", "ReleaseMMU\ReleaseMMU.csproj", "{80F4405C-EE6A-44D2-BAEB-EC027B560036}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReachMMU", "ReachMMU\ReachMMU.csproj", "{4A59F8B8-8382-419E-9581-41E19C820ED8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMUDescriptionAutoGenerator", "MMUDescriptionAutoGenerator\MMUDescriptionAutoGenerator.csproj", "{DF41E7D7-FA74-4F8F-A0F2-9475618BD110}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultMMU", "DefaultMMU\DefaultMMU.csproj", "{61491F0C-F248-422C-B4D2-9378B7154D02}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugAdapter", "DebugAdapter\DebugAdapter.csproj", "{73A116CC-9AA5-4F32-903B-D73A651141EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarryMMUSimple", "CarryMMUSimple\CarryMMUSimple.csproj", "{F043123A-D755-4B41-8223-877946C0BD2E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarryMMUNested", "CarryMMUNested\CarryMMUNested.csproj", "{27C79308-7AD9-4D0B-86BD-26CFAE34DDC1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalReferences", "ExternalReferences", "{7808C238-AC38-4CCF-88F5-AB75F5E7DD43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReachMMUConcurrent", "ReachMMUConcurrent\ReachMMUConcurrent.csproj", "{9D7FF5E6-34BC-4C62-811E-07FAC72C1062}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoveMMUConcurrent", "MoveMMUConcurrent\MoveMMUConcurrent.csproj", "{104E21E0-67D0-412A-8E91-8C28ABBBADF9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarryMMUConcurrent", "CarryMMUConcurrent\CarryMMUConcurrent.csproj", "{D52663F0-B48A-43B4-BFE5-CBBBBBA22B88}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReleaseMMUConcurrent", "ReleaseMMUConcurrent\ReleaseMMUConcurrent.csproj", "{B72A8EC8-A8A2-4A08-988E-7ED2F98552C5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarryMMU", "CarryMMU\CarryMMU.csproj", "{676FFD57-B1A3-4F50-A8DD-66BEE0F30D69}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{CD8AB581-F979-443B-A563-F42CAEC38ECB}"
 EndProject
@@ -38,26 +71,50 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimpleMMUs", "SimpleMMUs", "{BB74210F-A5A6-423F-A41E-D99B5B95A111}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoveMMUSimple", "MoveMMUSimple\MoveMMUSimple.csproj", "{96FB4A95-30FA-49C0-B429-206FB1219D80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoveMMU", "MoveMMU\MoveMMU.csproj", "{BC6AA3CF-C097-480B-9563-A5A3F6D6AEE4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasicMMUs", "BasicMMUs", "{E913804E-D668-4C80-9638-06614AF9F259}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityLocomotionMMU", "UnityLocomotionMMU\UnityLocomotionMMU.csproj", "{DCEFD47B-E94B-4D89-9431-575813D8BF48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultLocomotion", "DefaultLocomotion\DefaultLocomotion.csproj", "{F5A08479-E1EE-4C4D-BD68-E2AED43AA11D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnMMU", "TurnMMU\TurnMMU.csproj", "{9A7AA20F-17F6-4E47-8400-446F58BFCE68}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoveFingersMMU", "MoveFingersMMU\MoveFingersMMU.csproj", "{E8A94B2C-23D2-4863-B079-923FCA0862A0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimental", "{B58632D3-CEA9-4B6A-B9E5-0EF3A47AD0DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKTestMMU", "IKTestMMU\IKTestMMU.csproj", "{755E26E6-BA64-45EB-8877-0890800B66E0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Advanced", "Advanced", "{419539A2-B78D-4B31-9F1A-7371344B7877}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GazeMMU", "GazeMMU\GazeMMU.csproj", "{0C5F1438-7F61-47F8-8637-657C1D02D9A5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMIStandard", "..\..\..\Framework\LanguageSupport\cs\MMIStandard\MMIStandard.csproj", "{1623AE27-6A5B-4465-9B11-4A0F34EBC67D}"
 EndProject
@@ -66,6 +123,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMIUnity", "..\..\..\Framework\EngineSupport\Unity\MMIUnity\MMIUnity.csproj", "{95B77B64-CC96-4718-B525-C3FD5C04320C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendMMU", "BlendMMU\BlendMMU.csproj", "{A90490A5-77DE-40E5-A37B-F701E134821E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlignBodyMMU", "AlignBodyMMU\AlignBodyMMU.csproj", "{E08905FE-2C43-4254-A657-F7516508596F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraspMMUSimple", "GraspMMUSimple\GraspMMUSimple.csproj", "{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF41E7D7-FA74-4F8F-A0F2-9475618BD110} = {DF41E7D7-FA74-4F8F-A0F2-9475618BD110}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,6 +243,14 @@ Global
 		{A90490A5-77DE-40E5-A37B-F701E134821E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A90490A5-77DE-40E5-A37B-F701E134821E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A90490A5-77DE-40E5-A37B-F701E134821E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E08905FE-2C43-4254-A657-F7516508596F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08905FE-2C43-4254-A657-F7516508596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08905FE-2C43-4254-A657-F7516508596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08905FE-2C43-4254-A657-F7516508596F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +282,8 @@ Global
 		{DE1D9A38-8343-4F73-A411-40B14D5271CB} = {7808C238-AC38-4CCF-88F5-AB75F5E7DD43}
 		{95B77B64-CC96-4718-B525-C3FD5C04320C} = {7808C238-AC38-4CCF-88F5-AB75F5E7DD43}
 		{A90490A5-77DE-40E5-A37B-F701E134821E} = {B58632D3-CEA9-4B6A-B9E5-0EF3A47AD0DD}
+		{E08905FE-2C43-4254-A657-F7516508596F} = {B58632D3-CEA9-4B6A-B9E5-0EF3A47AD0DD}
+		{F0F0F500-7EE0-44C9-BA33-4DDC49E3E7CC} = {B58632D3-CEA9-4B6A-B9E5-0EF3A47AD0DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D4F8B88-108E-4797-B299-974E13792952}

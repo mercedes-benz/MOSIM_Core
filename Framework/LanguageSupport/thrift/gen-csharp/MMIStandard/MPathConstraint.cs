@@ -76,13 +76,13 @@ namespace MMIStandard
               if (field.Type == TType.List) {
                 {
                   PolygonPoints = new List<MGeometryConstraint>();
-                  TList _list5 = iprot.ReadListBegin();
-                  for( int _i6 = 0; _i6 < _list5.Count; ++_i6)
+                  TList _list0 = iprot.ReadListBegin();
+                  for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
                   {
-                    MGeometryConstraint _elem7;
-                    _elem7 = new MGeometryConstraint();
-                    _elem7.Read(iprot);
-                    PolygonPoints.Add(_elem7);
+                    MGeometryConstraint _elem2;
+                    _elem2 = new MGeometryConstraint();
+                    _elem2.Read(iprot);
+                    PolygonPoints.Add(_elem2);
                   }
                   iprot.ReadListEnd();
                 }
@@ -129,9 +129,9 @@ namespace MMIStandard
         oprot.WriteFieldBegin(field);
         {
           oprot.WriteListBegin(new TList(TType.Struct, PolygonPoints.Count));
-          foreach (MGeometryConstraint _iter8 in PolygonPoints)
+          foreach (MGeometryConstraint _iter3 in PolygonPoints)
           {
-            _iter8.Write(oprot);
+            _iter3.Write(oprot);
           }
           oprot.WriteListEnd();
         }

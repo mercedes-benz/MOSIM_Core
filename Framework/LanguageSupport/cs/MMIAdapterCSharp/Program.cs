@@ -29,7 +29,7 @@ namespace MMIAdapterCSharp
         private static MIPAddress address = new MIPAddress("127.0.0.1", 8900);
 
         ///The address of the register
-        private static MIPAddress mmiRegisterAddress = new MIPAddress("127.0.0.1", 8900);
+        private static MIPAddress mmiRegisterAddress = new MIPAddress("127.0.0.1", 9009);
 
         /// The path of the mmus
         private static string mmuPath = "";
@@ -174,7 +174,9 @@ namespace MMIAdapterCSharp
 
             try
             {
-                p.Parse(args);
+                p.Parse(args); //Fixing end of the path, if it ends with a slash or backslash the adapter won't run
+                if (mmuPath.EndsWith("\\") || mmuPath.EndsWith("/"))
+                    mmuPath = mmuPath.Substring(0, mmuPath.Length - 1);
                 return true;
             }
             catch (Exception)

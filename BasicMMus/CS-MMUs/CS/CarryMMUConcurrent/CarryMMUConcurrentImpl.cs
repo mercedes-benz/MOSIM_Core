@@ -71,7 +71,7 @@ namespace CarryMMUConcurrent
     }
 
 
-    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUConcurrent", "carry", "carryConcurrent", "A carry MMU", "A single handed carry MMU.")]
+    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUConcurrent", "Object/Carry", "carryConcurrent", "A carry MMU", "A single handed carry MMU.")]
     public class CarryMMUConcurrentImpl:MMUBase
     {
         /// <summary>

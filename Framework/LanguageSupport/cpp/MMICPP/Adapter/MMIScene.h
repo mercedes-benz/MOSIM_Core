@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
-#include "src/MSceneAccess.h"
-#include "src/scene_types.h"
+#include "gen-cpp/MSceneAccess.h"
+#include "gen-cpp/scene_types.h"
 #include <unordered_map>
 
 using namespace MMIStandard;
@@ -138,7 +142,8 @@ namespace MMIStandard {
 		shared_ptr<vector<MAvatar>> GetAvatarsInRange(const::MMIStandard::MVector3 & position, const double distance);
 
 
-		virtual double GetSimulationTime() override;
+		//virtual double GetSimulationTime() override;
+		double GetSimulationTime();   // deleted keyword "virtual", sadam
 
 		// Returns the changes from the privious frame
 		virtual void GetSceneChanges(MSceneUpdate & _return) override;
@@ -151,5 +156,31 @@ namespace MMIStandard {
 
 		virtual void GetNavigationMesh(MNavigationMesh & _return) override;
 		shared_ptr<MNavigationMesh> GetNavigationMesh();
+
+		// new functions in MSceneAccessIf, sadam
+		void GetData(std::string& _return, const std::string& fileFormat, const std::string& selection);
+		
+		void GetAttachments(std::vector< ::MMIStandard::MAttachment> & _return);
+		
+		void GetAttachmentsByID(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id);
+
+		void GetAttachmentsByName(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& name);
+
+		void GetAttachmentsChildrenRecursive(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id);
+
+		void GetAttachmentsParentsRecursive(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id);
+
+		// inherited virtual functions from MMIServiceBaseIf, sadam
+		void GetStatus(std::map<std::string, std::string> & _return);
+		
+		void GetDescription(::MMIStandard::MServiceDescription& _return);
+		
+		void Setup(::MMIStandard::MBoolResponse& _return, const  ::MMIStandard::MAvatarDescription& avatar, const std::map<std::string, std::string> & properties);
+		
+		void Consume(std::map<std::string, std::string> & _return, const std::map<std::string, std::string> & properties);
+		
+		void Dispose(::MMIStandard::MBoolResponse& _return, const std::map<std::string, std::string> & properties);
+		
+		void Restart(::MMIStandard::MBoolResponse& _return, const std::map<std::string, std::string> & properties);
 	};
 }

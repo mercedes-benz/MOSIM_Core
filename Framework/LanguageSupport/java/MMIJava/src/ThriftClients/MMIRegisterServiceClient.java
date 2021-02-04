@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser
+
 package ThriftClients;
 
-import MMIStandard.MMIRegisterService;
+import de.mosim.mmi.register.MMIRegisterService;
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;

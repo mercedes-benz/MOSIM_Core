@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Include">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MMIJava/src/Include/slf4j-nop-1.7.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MMIJava/src/Include/slf4j-api-1.7.26.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MMIJava/src/Include/javax.annotation-api-1.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/MMIJava/src/Include/libthrift-0.12.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

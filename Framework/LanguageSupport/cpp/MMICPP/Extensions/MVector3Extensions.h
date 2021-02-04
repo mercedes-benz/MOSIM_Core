@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
 #include <vector>
-#include "src/scene_types.h"
+#include "gen-cpp/scene_types.h"
 
 using namespace std;
 using namespace MMIStandard;

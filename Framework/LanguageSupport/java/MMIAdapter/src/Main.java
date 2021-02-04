@@ -1,10 +1,15 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
+
 import Adapter.AdapterController;
 import Adapter.JAVAMMUInstantiator;
-import MMIStandard.MAdapterDescription;
-import MMIStandard.MIPAddress;
 import Utils.LogLevel;
 import Utils.Logger;
 import com.beust.jcommander.JCommander;
+import de.mosim.mmi.core.MIPAddress;
+import de.mosim.mmi.register.MAdapterDescription;
 
 import java.util.List;
 
@@ -65,8 +70,8 @@ public class Main {
 
         //print connection info
         System.out.println("______________________________________________________________");
-        System.out.println("Adapter is reachable at: " + adapterAddress.getAddress() + ":" + adapterAddress.getPort());
-        System.out.println("Register is reachable at: " + registerAddress.getAddress() + ":" + registerAddress.getPort());
+        System.out.println("Adapter is reachable at: " + adapterAddress.Address + ":" + adapterAddress.Port);
+        System.out.println("Register is reachable at: " + registerAddress.Address + ":" + registerAddress.Port);
         System.out.println("MMUs will be loaded from:  " + mmuPath);
         System.out.println("______________________________________________________________");
 

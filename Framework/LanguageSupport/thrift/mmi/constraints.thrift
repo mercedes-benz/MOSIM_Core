@@ -7,26 +7,11 @@ include "math.thrift"
 include "avatar.thrift"
 
 
+
 //Constraints
 //dependencies from math.thrift
 //dependencies from scene.thrift order here is important
 //-------------------------------------------------------------------------------------------------------------------------------------
-
-
-//Format to represent a constraint
-struct MConstraint
-{
-	//The unique id of the constraint
-	1: required string ID;
-	2: optional MGeometryConstraint GeometryConstraint;
-	3: optional MVelocityConstraint VelocityConstraint;
-	4: optional MAccelerationConstraint AccelerationConstraint;
-	5: optional MPathConstraint PathConstraint;
-	6: optional MJointPathConstraint JointPathConstraint;
-	7: optional MPostureConstraint PostureConstraint;
-	8: optional MJointConstraint JointConstraint;
-	9: optional map<string,string> Properties;
-}
 
 
 
@@ -116,4 +101,20 @@ struct MPostureConstraint
     1: required avatar.MAvatarPostureValues posture;
     2: optional list<MJointConstraint> JointConstraints;
 }
+
+//Format to represent a constraint
+struct MConstraint
+{
+	//The unique id of the constraint
+	1: required string ID;
+	2: optional MGeometryConstraint GeometryConstraint;
+	3: optional MVelocityConstraint VelocityConstraint;
+	4: optional MAccelerationConstraint AccelerationConstraint;
+	5: optional MPathConstraint PathConstraint;
+	6: optional MJointPathConstraint JointPathConstraint;
+	7: optional MPostureConstraint PostureConstraint;
+	8: optional MJointConstraint JointConstraint;
+	9: optional map<string,string> Properties;
+}
+
 

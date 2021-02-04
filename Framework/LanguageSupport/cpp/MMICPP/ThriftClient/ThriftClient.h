@@ -1,3 +1,11 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
+/*
+	Template class which represents a thrift client
+*/
+
 #pragma once
 #include <thrift/transport/TTransportUtils.h>
 
@@ -9,11 +17,6 @@ namespace MMIStandard {
 	template <class T>
 	class ThriftClient
 	{
-
-		/*
-			Template class which represents a thrift client
-		*/
-
 	public:
 
 		//	The access of the client

@@ -159,10 +159,10 @@ namespace MMICSharp.Access
         #region connecting
 
         /// <summary>
-        /// Connects to the given adapters
+        /// Connects to the given adapter. This method can be used for testing purposes or if the adapter adress is already known.
         /// </summary>
-        /// <param name="adapterEndpoint"></param>
-        /// <param name="allowRemoteConnections"></param>
+        /// <param name="adapterEndpoint">The desired adapter endpoint.</param>
+        /// <param name="allowRemoteConnections">Specifies whether a remote connection should be established.</param>
         public bool Connect(AdapterEndpoint adapterEndpoint, string AvatarID, bool allowRemoteConnections = true)
         {
             //Create a list for the adapter descriptions
@@ -227,17 +227,15 @@ namespace MMICSharp.Access
 
 
         /// <summary>
-        /// Connects to the given adapters
+        /// Connects to the central MMIRegister (launcher) and furthermore queries all adapters and creates a session.
         /// </summary>
-        /// <param name="adapterAddresses"></param>
-        /// <param name="timeout">The timout in milliseconds</param>
+        /// <param name="mmiRegisterAddress">The address of the central MMIRegister (launcher)</param>
+        /// <param name="timeout">The timout</param>
+        /// <param name="AvatarID">The id of the avatar that is used.</param>
         public bool Connect(MIPAddress mmiRegisterAddress, TimeSpan timeout, string AvatarID)
         {
             //Create a list representing the adapter descriptions
             List<MAdapterDescription> adapterDescriptions = new List<MAdapterDescription>();
-
-            //Create a concurrent dictionary for storing the createad MMUAccesses
-            ConcurrentDictionary<IAdapter, List<MotionModelUnitAccess>> adapterMMUAccesses = new ConcurrentDictionary<IAdapter, List<MotionModelUnitAccess>>();
 
             //Get all registered adapters -> Execute this task in background with the imposed timeout
             bool adapterDescriptionReceived = Threading.ExecuteTask((CancellationTokenSource cls) =>
@@ -319,7 +317,7 @@ namespace MMICSharp.Access
         /// <summary>
         /// Connects to the given adapters
         /// </summary>
-        /// <param name="adapterAddresses"></param>
+        /// <param name="mmiRegisterAddress">The address of the central MMIRegister (launcher)</param>
         /// <param name="timeout">The timout in milliseconds</param>
         public async Task<bool> ConnectAsync(MIPAddress mmiRegisterAddress, TimeSpan timeout, Action<bool> callback, string AvatarID)
         {

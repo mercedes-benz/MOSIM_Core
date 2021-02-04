@@ -1448,14 +1448,14 @@ public class MSynchronizableScene {
             case 1: // SCENE_MANIPULATIONS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list396 = iprot.readListBegin();
-                  struct.sceneManipulations = new java.util.ArrayList<de.mosim.mmi.scene.MSceneManipulation>(_list396.size);
-                  @org.apache.thrift.annotation.Nullable de.mosim.mmi.scene.MSceneManipulation _elem397;
-                  for (int _i398 = 0; _i398 < _list396.size; ++_i398)
+                  org.apache.thrift.protocol.TList _list414 = iprot.readListBegin();
+                  struct.sceneManipulations = new java.util.ArrayList<de.mosim.mmi.scene.MSceneManipulation>(_list414.size);
+                  @org.apache.thrift.annotation.Nullable de.mosim.mmi.scene.MSceneManipulation _elem415;
+                  for (int _i416 = 0; _i416 < _list414.size; ++_i416)
                   {
-                    _elem397 = new de.mosim.mmi.scene.MSceneManipulation();
-                    _elem397.read(iprot);
-                    struct.sceneManipulations.add(_elem397);
+                    _elem415 = new de.mosim.mmi.scene.MSceneManipulation();
+                    _elem415.read(iprot);
+                    struct.sceneManipulations.add(_elem415);
                   }
                   iprot.readListEnd();
                 }
@@ -1483,9 +1483,9 @@ public class MSynchronizableScene {
           oprot.writeFieldBegin(SCENE_MANIPULATIONS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.sceneManipulations.size()));
-            for (de.mosim.mmi.scene.MSceneManipulation _iter399 : struct.sceneManipulations)
+            for (de.mosim.mmi.scene.MSceneManipulation _iter417 : struct.sceneManipulations)
             {
-              _iter399.write(oprot);
+              _iter417.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -1516,9 +1516,9 @@ public class MSynchronizableScene {
         if (struct.isSetSceneManipulations()) {
           {
             oprot.writeI32(struct.sceneManipulations.size());
-            for (de.mosim.mmi.scene.MSceneManipulation _iter400 : struct.sceneManipulations)
+            for (de.mosim.mmi.scene.MSceneManipulation _iter418 : struct.sceneManipulations)
             {
-              _iter400.write(oprot);
+              _iter418.write(oprot);
             }
           }
         }
@@ -1530,14 +1530,14 @@ public class MSynchronizableScene {
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TList _list401 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.sceneManipulations = new java.util.ArrayList<de.mosim.mmi.scene.MSceneManipulation>(_list401.size);
-            @org.apache.thrift.annotation.Nullable de.mosim.mmi.scene.MSceneManipulation _elem402;
-            for (int _i403 = 0; _i403 < _list401.size; ++_i403)
+            org.apache.thrift.protocol.TList _list419 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.sceneManipulations = new java.util.ArrayList<de.mosim.mmi.scene.MSceneManipulation>(_list419.size);
+            @org.apache.thrift.annotation.Nullable de.mosim.mmi.scene.MSceneManipulation _elem420;
+            for (int _i421 = 0; _i421 < _list419.size; ++_i421)
             {
-              _elem402 = new de.mosim.mmi.scene.MSceneManipulation();
-              _elem402.read(iprot);
-              struct.sceneManipulations.add(_elem402);
+              _elem420 = new de.mosim.mmi.scene.MSceneManipulation();
+              _elem420.read(iprot);
+              struct.sceneManipulations.add(_elem420);
             }
           }
           struct.setSceneManipulationsIsSet(true);

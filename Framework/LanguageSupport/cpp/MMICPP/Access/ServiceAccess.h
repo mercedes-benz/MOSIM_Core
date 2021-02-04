@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
 #include "ServiceAccesIf.h"
-#include "src/core_types.h"
+#include "gen-cpp/core_types.h"
 #include <unordered_map>
 namespace MMIStandard {
 	class ServiceAccess : public ServiceAccessIf
@@ -36,7 +40,7 @@ namespace MMIStandard {
 		virtual ThriftClient<MRetargetingServiceClient>& getRetargetingThriftClient() override;
 		virtual ThriftClient<MBlendingServiceClient>& getBlendingThriftClient() override;
 		virtual ThriftClient<MCollisionDetectionServiceClient>& getCollisionDetectionThriftClient() override;
-		virtual ThriftClient<MGraspPoseServiceClient>& getGraspPoseThfriftClient() override;
+		virtual ThriftClient<MGraspPoseServiceClient>& getGraspPoseThriftClient() override;
 		virtual MInverseKinematicsServiceClient & getIkService() override;
 		virtual MPathPlanningServiceClient & getPathPlanningService() override;
 		virtual MRetargetingServiceClient & getRetargetingService() override;

@@ -1,4 +1,7 @@
-REM @echo off
+@echo off
+REM SPDX-License-Identifier: MIT
+REM The content of this file has been developed in the context of the MOSIM research project.
+REM Original author(s): Janis Sprenger
 
 SET MOSIMPIP=pip
 if "%~1"=="" (

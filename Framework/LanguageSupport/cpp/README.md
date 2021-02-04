@@ -1,4 +1,7 @@
 # Cpp
+To build the code Visual Studio 2017 or newer is required. CMAKE as a stand alone software is also required
+
+To automatically build the repo run deploy.bat
 
 Repository containing the Adapter, MMI and MMU implementation for c++\
 Packages\
@@ -10,7 +13,7 @@ cd vcpkg\
 .\bootstrap-vcpkg.bat\
 .\vcpkg install thrift:x64-windows\
 \
-The auto generated code of the thrift files of the MMI Standard are included as submodule in MMIStandard/src.
+The auto generated code of the thrift files of the MMI Standard are included in ../thrift/gen-cpp.
 
 
 

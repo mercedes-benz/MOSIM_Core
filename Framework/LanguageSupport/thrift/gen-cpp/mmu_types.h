@@ -570,7 +570,12 @@ class MMUDescription : public virtual ::apache::thrift::TBase {
     return !(*this == rhs);
   }
 
-  bool operator < (const MMUDescription & ) const;
+  bool operator < (const MMUDescription &MMUDesc) const {				// added function body, sadam
+	int inID = stoi(MMUDesc.ID);
+	int thisID = stoi(this->ID);
+	if (inID < thisID)
+	  return true;	
+  }
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;

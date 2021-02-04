@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jcommander-1.72">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MMIAdapter/src/Include/jcommander-1.72.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,14 +1,18 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
-#include "src/scene_types.h"
-#include "src/services_types.h"
+#include "gen-cpp/scene_types.h"
+#include "gen-cpp/services_types.h"
 #include "ThriftClient/ThriftClient.h"
-#include "src/MInverseKinematicsService.h"
-#include "src/MPathPlanningService.h"
-#include "src/MGraspPoseService.h"
-#include "src/MRetargetingService.h"
-#include "src/MBlendingService.h"
-#include "src/MCollisionDetectionService.h"
-#include "src/MGraspPoseService.h"
+#include "gen-cpp/MInverseKinematicsService.h"
+#include "gen-cpp/MPathPlanningService.h"
+#include "gen-cpp/MGraspPoseService.h"
+#include "gen-cpp/MRetargetingService.h"
+#include "gen-cpp/MBlendingService.h"
+#include "gen-cpp/MCollisionDetectionService.h"
+#include "gen-cpp/MGraspPoseService.h"
 
 using namespace MMIStandard;
 using namespace std;
@@ -33,7 +37,7 @@ namespace MMIStandard {
 		virtual const ThriftClient<MRetargetingServiceClient> & getRetargetingThriftClient() = 0;
 		virtual const ThriftClient<MBlendingServiceClient> & getBlendingThriftClient() = 0;
 		virtual const ThriftClient<MCollisionDetectionServiceClient> & getCollisionDetectionThriftClient() = 0;
-		virtual const ThriftClient<MGraspPoseServiceClient> & getGraspPoseThfriftClient() = 0;
+		virtual const ThriftClient<MGraspPoseServiceClient> & getGraspPoseThriftClient() = 0;
 
 		virtual MInverseKinematicsServiceClient & getIkService() = 0;
 		virtual MPathPlanningServiceClient & getPathPlanningService() = 0;

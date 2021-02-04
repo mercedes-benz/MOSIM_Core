@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #include "MMIScene.h"
 #include "Extensions/MVector3Extensions.h"
 #include "Extensions/MQuaternionExtensions.h"
@@ -523,4 +527,66 @@ void MMIScene::RemoveSceneObjects(MBoolResponse & _return, const vector<string>&
 			MBoolResponseExtensions::Update(_return, message, false);
 		}
 	}
+}
+
+
+// new functions in MSceneAccessIf, sadam
+void MMIScene::GetData(std::string& _return, const std::string& fileFormat, const std::string& selection)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetAttachments(std::vector< ::MMIStandard::MAttachment> & _return)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetAttachmentsByID(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetAttachmentsByName(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& name)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetAttachmentsChildrenRecursive(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetAttachmentsParentsRecursive(std::vector< ::MMIStandard::MAttachment> & _return, const std::string& id)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetStatus(std::map<std::string, std::string> & _return)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::GetDescription(::MMIStandard::MServiceDescription& _return)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::Setup(::MMIStandard::MBoolResponse& _return, const  ::MMIStandard::MAvatarDescription& avatar, const std::map<std::string, std::string> & properties)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::Consume(std::map<std::string, std::string> & _return, const std::map<std::string, std::string> & properties)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::Dispose(::MMIStandard::MBoolResponse& _return, const std::map<std::string, std::string> & properties)
+{
+	throw std::runtime_error("Function not implemented yet");
+}
+
+void MMIScene::Restart(::MMIStandard::MBoolResponse& _return, const std::map<std::string, std::string> & properties)
+{
+	throw std::runtime_error("Function not implemented yet");
 }

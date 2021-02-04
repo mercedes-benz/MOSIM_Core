@@ -85,13 +85,13 @@ namespace MMIStandard
               if (field.Type == TType.List) {
                 {
                   JointConstraints = new List<MJointConstraint>();
-                  TList _list9 = iprot.ReadListBegin();
-                  for( int _i10 = 0; _i10 < _list9.Count; ++_i10)
+                  TList _list4 = iprot.ReadListBegin();
+                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
                   {
-                    MJointConstraint _elem11;
-                    _elem11 = new MJointConstraint();
-                    _elem11.Read(iprot);
-                    JointConstraints.Add(_elem11);
+                    MJointConstraint _elem6;
+                    _elem6 = new MJointConstraint();
+                    _elem6.Read(iprot);
+                    JointConstraints.Add(_elem6);
                   }
                   iprot.ReadListEnd();
                 }
@@ -137,9 +137,9 @@ namespace MMIStandard
           oprot.WriteFieldBegin(field);
           {
             oprot.WriteListBegin(new TList(TType.Struct, JointConstraints.Count));
-            foreach (MJointConstraint _iter12 in JointConstraints)
+            foreach (MJointConstraint _iter7 in JointConstraints)
             {
-              _iter12.Write(oprot);
+              _iter7.Write(oprot);
             }
             oprot.WriteListEnd();
           }

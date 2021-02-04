@@ -26,10 +26,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
   private static final org.apache.thrift.protocol.TField SHORT_DESCRIPTION_FIELD_DESC = new org.apache.thrift.protocol.TField("ShortDescription", org.apache.thrift.protocol.TType.STRING, (short)15);
   private static final org.apache.thrift.protocol.TField PARAMETERS_FIELD_DESC = new org.apache.thrift.protocol.TField("Parameters", org.apache.thrift.protocol.TType.LIST, (short)16);
   private static final org.apache.thrift.protocol.TField SCENE_PARAMETERS_FIELD_DESC = new org.apache.thrift.protocol.TField("SceneParameters", org.apache.thrift.protocol.TType.LIST, (short)17);
-  private static final org.apache.thrift.protocol.TField VENDOR_FIELD_DESC = new org.apache.thrift.protocol.TField("Vendor", org.apache.thrift.protocol.TType.STRING, (short)18);
-  private static final org.apache.thrift.protocol.TField VENDOR_DOMAIN_FIELD_DESC = new org.apache.thrift.protocol.TField("VendorDomain", org.apache.thrift.protocol.TType.STRING, (short)19);
-  private static final org.apache.thrift.protocol.TField MMU_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("MmuUrl", org.apache.thrift.protocol.TType.STRING, (short)20);
-  private static final org.apache.thrift.protocol.TField UPDATE_URL_FIELD_DESC = new org.apache.thrift.protocol.TField("UpdateUrl", org.apache.thrift.protocol.TType.STRING, (short)21);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new MMUDescriptionStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new MMUDescriptionTupleSchemeFactory();
@@ -49,10 +45,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
   public @org.apache.thrift.annotation.Nullable java.lang.String ShortDescription; // optional
   public @org.apache.thrift.annotation.Nullable java.util.List<de.mosim.mmi.core.MParameter> Parameters; // optional
   public @org.apache.thrift.annotation.Nullable java.util.List<de.mosim.mmi.core.MParameter> SceneParameters; // optional
-  public @org.apache.thrift.annotation.Nullable java.lang.String Vendor; // optional
-  public @org.apache.thrift.annotation.Nullable java.lang.String VendorDomain; // optional
-  public @org.apache.thrift.annotation.Nullable java.lang.String MmuUrl; // optional
-  public @org.apache.thrift.annotation.Nullable java.lang.String UpdateUrl; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -70,11 +62,7 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     LONG_DESCRIPTION((short)14, "LongDescription"),
     SHORT_DESCRIPTION((short)15, "ShortDescription"),
     PARAMETERS((short)16, "Parameters"),
-    SCENE_PARAMETERS((short)17, "SceneParameters"),
-    VENDOR((short)18, "Vendor"),
-    VENDOR_DOMAIN((short)19, "VendorDomain"),
-    MMU_URL((short)20, "MmuUrl"),
-    UPDATE_URL((short)21, "UpdateUrl");
+    SCENE_PARAMETERS((short)17, "SceneParameters");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -120,14 +108,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
           return PARAMETERS;
         case 17: // SCENE_PARAMETERS
           return SCENE_PARAMETERS;
-        case 18: // VENDOR
-          return VENDOR;
-        case 19: // VENDOR_DOMAIN
-          return VENDOR_DOMAIN;
-        case 20: // MMU_URL
-          return MMU_URL;
-        case 21: // UPDATE_URL
-          return UPDATE_URL;
         default:
           return null;
       }
@@ -169,7 +149,7 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
   }
 
   // isset id assignments
-  private static final _Fields optionals[] = {_Fields.PREREQUISITES,_Fields.PROPERTIES,_Fields.DEPENDENCIES,_Fields.EVENTS,_Fields.LONG_DESCRIPTION,_Fields.SHORT_DESCRIPTION,_Fields.PARAMETERS,_Fields.SCENE_PARAMETERS,_Fields.VENDOR,_Fields.VENDOR_DOMAIN,_Fields.MMU_URL,_Fields.UPDATE_URL};
+  private static final _Fields optionals[] = {_Fields.PREREQUISITES,_Fields.PROPERTIES,_Fields.DEPENDENCIES,_Fields.EVENTS,_Fields.LONG_DESCRIPTION,_Fields.SHORT_DESCRIPTION,_Fields.PARAMETERS,_Fields.SCENE_PARAMETERS};
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -210,14 +190,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     tmpMap.put(_Fields.SCENE_PARAMETERS, new org.apache.thrift.meta_data.FieldMetaData("SceneParameters", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
             new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, de.mosim.mmi.core.MParameter.class))));
-    tmpMap.put(_Fields.VENDOR, new org.apache.thrift.meta_data.FieldMetaData("Vendor", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.VENDOR_DOMAIN, new org.apache.thrift.meta_data.FieldMetaData("VendorDomain", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.MMU_URL, new org.apache.thrift.meta_data.FieldMetaData("MmuUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.UPDATE_URL, new org.apache.thrift.meta_data.FieldMetaData("UpdateUrl", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(MMUDescription.class, metaDataMap);
   }
@@ -311,18 +283,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
       }
       this.SceneParameters = __this__SceneParameters;
     }
-    if (other.isSetVendor()) {
-      this.Vendor = other.Vendor;
-    }
-    if (other.isSetVendorDomain()) {
-      this.VendorDomain = other.VendorDomain;
-    }
-    if (other.isSetMmuUrl()) {
-      this.MmuUrl = other.MmuUrl;
-    }
-    if (other.isSetUpdateUrl()) {
-      this.UpdateUrl = other.UpdateUrl;
-    }
   }
 
   public MMUDescription deepCopy() {
@@ -346,10 +306,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     this.ShortDescription = null;
     this.Parameters = null;
     this.SceneParameters = null;
-    this.Vendor = null;
-    this.VendorDomain = null;
-    this.MmuUrl = null;
-    this.UpdateUrl = null;
   }
 
   @org.apache.thrift.annotation.Nullable
@@ -818,106 +774,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     }
   }
 
-  @org.apache.thrift.annotation.Nullable
-  public java.lang.String getVendor() {
-    return this.Vendor;
-  }
-
-  public MMUDescription setVendor(@org.apache.thrift.annotation.Nullable java.lang.String Vendor) {
-    this.Vendor = Vendor;
-    return this;
-  }
-
-  public void unsetVendor() {
-    this.Vendor = null;
-  }
-
-  /** Returns true if field Vendor is set (has been assigned a value) and false otherwise */
-  public boolean isSetVendor() {
-    return this.Vendor != null;
-  }
-
-  public void setVendorIsSet(boolean value) {
-    if (!value) {
-      this.Vendor = null;
-    }
-  }
-
-  @org.apache.thrift.annotation.Nullable
-  public java.lang.String getVendorDomain() {
-    return this.VendorDomain;
-  }
-
-  public MMUDescription setVendorDomain(@org.apache.thrift.annotation.Nullable java.lang.String VendorDomain) {
-    this.VendorDomain = VendorDomain;
-    return this;
-  }
-
-  public void unsetVendorDomain() {
-    this.VendorDomain = null;
-  }
-
-  /** Returns true if field VendorDomain is set (has been assigned a value) and false otherwise */
-  public boolean isSetVendorDomain() {
-    return this.VendorDomain != null;
-  }
-
-  public void setVendorDomainIsSet(boolean value) {
-    if (!value) {
-      this.VendorDomain = null;
-    }
-  }
-
-  @org.apache.thrift.annotation.Nullable
-  public java.lang.String getMmuUrl() {
-    return this.MmuUrl;
-  }
-
-  public MMUDescription setMmuUrl(@org.apache.thrift.annotation.Nullable java.lang.String MmuUrl) {
-    this.MmuUrl = MmuUrl;
-    return this;
-  }
-
-  public void unsetMmuUrl() {
-    this.MmuUrl = null;
-  }
-
-  /** Returns true if field MmuUrl is set (has been assigned a value) and false otherwise */
-  public boolean isSetMmuUrl() {
-    return this.MmuUrl != null;
-  }
-
-  public void setMmuUrlIsSet(boolean value) {
-    if (!value) {
-      this.MmuUrl = null;
-    }
-  }
-
-  @org.apache.thrift.annotation.Nullable
-  public java.lang.String getUpdateUrl() {
-    return this.UpdateUrl;
-  }
-
-  public MMUDescription setUpdateUrl(@org.apache.thrift.annotation.Nullable java.lang.String UpdateUrl) {
-    this.UpdateUrl = UpdateUrl;
-    return this;
-  }
-
-  public void unsetUpdateUrl() {
-    this.UpdateUrl = null;
-  }
-
-  /** Returns true if field UpdateUrl is set (has been assigned a value) and false otherwise */
-  public boolean isSetUpdateUrl() {
-    return this.UpdateUrl != null;
-  }
-
-  public void setUpdateUrlIsSet(boolean value) {
-    if (!value) {
-      this.UpdateUrl = null;
-    }
-  }
-
   public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
     switch (field) {
     case NAME:
@@ -1040,38 +896,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
       }
       break;
 
-    case VENDOR:
-      if (value == null) {
-        unsetVendor();
-      } else {
-        setVendor((java.lang.String)value);
-      }
-      break;
-
-    case VENDOR_DOMAIN:
-      if (value == null) {
-        unsetVendorDomain();
-      } else {
-        setVendorDomain((java.lang.String)value);
-      }
-      break;
-
-    case MMU_URL:
-      if (value == null) {
-        unsetMmuUrl();
-      } else {
-        setMmuUrl((java.lang.String)value);
-      }
-      break;
-
-    case UPDATE_URL:
-      if (value == null) {
-        unsetUpdateUrl();
-      } else {
-        setUpdateUrl((java.lang.String)value);
-      }
-      break;
-
     }
   }
 
@@ -1123,18 +947,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     case SCENE_PARAMETERS:
       return getSceneParameters();
 
-    case VENDOR:
-      return getVendor();
-
-    case VENDOR_DOMAIN:
-      return getVendorDomain();
-
-    case MMU_URL:
-      return getMmuUrl();
-
-    case UPDATE_URL:
-      return getUpdateUrl();
-
     }
     throw new java.lang.IllegalStateException();
   }
@@ -1176,14 +988,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
       return isSetParameters();
     case SCENE_PARAMETERS:
       return isSetSceneParameters();
-    case VENDOR:
-      return isSetVendor();
-    case VENDOR_DOMAIN:
-      return isSetVendorDomain();
-    case MMU_URL:
-      return isSetMmuUrl();
-    case UPDATE_URL:
-      return isSetUpdateUrl();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -1338,42 +1142,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
         return false;
     }
 
-    boolean this_present_Vendor = true && this.isSetVendor();
-    boolean that_present_Vendor = true && that.isSetVendor();
-    if (this_present_Vendor || that_present_Vendor) {
-      if (!(this_present_Vendor && that_present_Vendor))
-        return false;
-      if (!this.Vendor.equals(that.Vendor))
-        return false;
-    }
-
-    boolean this_present_VendorDomain = true && this.isSetVendorDomain();
-    boolean that_present_VendorDomain = true && that.isSetVendorDomain();
-    if (this_present_VendorDomain || that_present_VendorDomain) {
-      if (!(this_present_VendorDomain && that_present_VendorDomain))
-        return false;
-      if (!this.VendorDomain.equals(that.VendorDomain))
-        return false;
-    }
-
-    boolean this_present_MmuUrl = true && this.isSetMmuUrl();
-    boolean that_present_MmuUrl = true && that.isSetMmuUrl();
-    if (this_present_MmuUrl || that_present_MmuUrl) {
-      if (!(this_present_MmuUrl && that_present_MmuUrl))
-        return false;
-      if (!this.MmuUrl.equals(that.MmuUrl))
-        return false;
-    }
-
-    boolean this_present_UpdateUrl = true && this.isSetUpdateUrl();
-    boolean that_present_UpdateUrl = true && that.isSetUpdateUrl();
-    if (this_present_UpdateUrl || that_present_UpdateUrl) {
-      if (!(this_present_UpdateUrl && that_present_UpdateUrl))
-        return false;
-      if (!this.UpdateUrl.equals(that.UpdateUrl))
-        return false;
-    }
-
     return true;
   }
 
@@ -1440,22 +1208,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
     hashCode = hashCode * 8191 + ((isSetSceneParameters()) ? 131071 : 524287);
     if (isSetSceneParameters())
       hashCode = hashCode * 8191 + SceneParameters.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetVendor()) ? 131071 : 524287);
-    if (isSetVendor())
-      hashCode = hashCode * 8191 + Vendor.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetVendorDomain()) ? 131071 : 524287);
-    if (isSetVendorDomain())
-      hashCode = hashCode * 8191 + VendorDomain.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetMmuUrl()) ? 131071 : 524287);
-    if (isSetMmuUrl())
-      hashCode = hashCode * 8191 + MmuUrl.hashCode();
-
-    hashCode = hashCode * 8191 + ((isSetUpdateUrl()) ? 131071 : 524287);
-    if (isSetUpdateUrl())
-      hashCode = hashCode * 8191 + UpdateUrl.hashCode();
 
     return hashCode;
   }
@@ -1618,46 +1370,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
         return lastComparison;
       }
     }
-    lastComparison = java.lang.Boolean.valueOf(isSetVendor()).compareTo(other.isSetVendor());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetVendor()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.Vendor, other.Vendor);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetVendorDomain()).compareTo(other.isSetVendorDomain());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetVendorDomain()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.VendorDomain, other.VendorDomain);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetMmuUrl()).compareTo(other.isSetMmuUrl());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetMmuUrl()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.MmuUrl, other.MmuUrl);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
-    lastComparison = java.lang.Boolean.valueOf(isSetUpdateUrl()).compareTo(other.isSetUpdateUrl());
-    if (lastComparison != 0) {
-      return lastComparison;
-    }
-    if (isSetUpdateUrl()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.UpdateUrl, other.UpdateUrl);
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-    }
     return 0;
   }
 
@@ -1811,46 +1523,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
         sb.append("null");
       } else {
         sb.append(this.SceneParameters);
-      }
-      first = false;
-    }
-    if (isSetVendor()) {
-      if (!first) sb.append(", ");
-      sb.append("Vendor:");
-      if (this.Vendor == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.Vendor);
-      }
-      first = false;
-    }
-    if (isSetVendorDomain()) {
-      if (!first) sb.append(", ");
-      sb.append("VendorDomain:");
-      if (this.VendorDomain == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.VendorDomain);
-      }
-      first = false;
-    }
-    if (isSetMmuUrl()) {
-      if (!first) sb.append(", ");
-      sb.append("MmuUrl:");
-      if (this.MmuUrl == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.MmuUrl);
-      }
-      first = false;
-    }
-    if (isSetUpdateUrl()) {
-      if (!first) sb.append(", ");
-      sb.append("UpdateUrl:");
-      if (this.UpdateUrl == null) {
-        sb.append("null");
-      } else {
-        sb.append(this.UpdateUrl);
       }
       first = false;
     }
@@ -2104,38 +1776,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 18: // VENDOR
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.Vendor = iprot.readString();
-              struct.setVendorIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 19: // VENDOR_DOMAIN
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.VendorDomain = iprot.readString();
-              struct.setVendorDomainIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 20: // MMU_URL
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.MmuUrl = iprot.readString();
-              struct.setMmuUrlIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 21: // UPDATE_URL
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.UpdateUrl = iprot.readString();
-              struct.setUpdateUrlIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -2285,34 +1925,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
           oprot.writeFieldEnd();
         }
       }
-      if (struct.Vendor != null) {
-        if (struct.isSetVendor()) {
-          oprot.writeFieldBegin(VENDOR_FIELD_DESC);
-          oprot.writeString(struct.Vendor);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.VendorDomain != null) {
-        if (struct.isSetVendorDomain()) {
-          oprot.writeFieldBegin(VENDOR_DOMAIN_FIELD_DESC);
-          oprot.writeString(struct.VendorDomain);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.MmuUrl != null) {
-        if (struct.isSetMmuUrl()) {
-          oprot.writeFieldBegin(MMU_URL_FIELD_DESC);
-          oprot.writeString(struct.MmuUrl);
-          oprot.writeFieldEnd();
-        }
-      }
-      if (struct.UpdateUrl != null) {
-        if (struct.isSetUpdateUrl()) {
-          oprot.writeFieldBegin(UPDATE_URL_FIELD_DESC);
-          oprot.writeString(struct.UpdateUrl);
-          oprot.writeFieldEnd();
-        }
-      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -2362,19 +1974,7 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
       if (struct.isSetSceneParameters()) {
         optionals.set(7);
       }
-      if (struct.isSetVendor()) {
-        optionals.set(8);
-      }
-      if (struct.isSetVendorDomain()) {
-        optionals.set(9);
-      }
-      if (struct.isSetMmuUrl()) {
-        optionals.set(10);
-      }
-      if (struct.isSetUpdateUrl()) {
-        optionals.set(11);
-      }
-      oprot.writeBitSet(optionals, 12);
+      oprot.writeBitSet(optionals, 8);
       if (struct.isSetPrerequisites()) {
         {
           oprot.writeI32(struct.Prerequisites.size());
@@ -2436,18 +2036,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
           }
         }
       }
-      if (struct.isSetVendor()) {
-        oprot.writeString(struct.Vendor);
-      }
-      if (struct.isSetVendorDomain()) {
-        oprot.writeString(struct.VendorDomain);
-      }
-      if (struct.isSetMmuUrl()) {
-        oprot.writeString(struct.MmuUrl);
-      }
-      if (struct.isSetUpdateUrl()) {
-        oprot.writeString(struct.UpdateUrl);
-      }
     }
 
     @Override
@@ -2467,7 +2055,7 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
       struct.setAuthorIsSet(true);
       struct.Version = iprot.readString();
       struct.setVersionIsSet(true);
-      java.util.BitSet incoming = iprot.readBitSet(12);
+      java.util.BitSet incoming = iprot.readBitSet(8);
       if (incoming.get(0)) {
         {
           org.apache.thrift.protocol.TList _list113 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
@@ -2559,22 +2147,6 @@ public class MMUDescription implements org.apache.thrift.TBase<MMUDescription, M
           }
         }
         struct.setSceneParametersIsSet(true);
-      }
-      if (incoming.get(8)) {
-        struct.Vendor = iprot.readString();
-        struct.setVendorIsSet(true);
-      }
-      if (incoming.get(9)) {
-        struct.VendorDomain = iprot.readString();
-        struct.setVendorDomainIsSet(true);
-      }
-      if (incoming.get(10)) {
-        struct.MmuUrl = iprot.readString();
-        struct.setMmuUrlIsSet(true);
-      }
-      if (incoming.get(11)) {
-        struct.UpdateUrl = iprot.readString();
-        struct.setUpdateUrlIsSet(true);
       }
     }
   }

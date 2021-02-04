@@ -12,13 +12,13 @@ public class MGraspPoseService {
 
   public interface Iface extends MMIServiceBase.Iface {
 
-    public java.util.List<de.mosim.mmi.constraints.MGeometryConstraint> GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException;
+    public java.util.List<de.mosim.mmi.constraints.MGeometryConstraint> GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException;
 
   }
 
   public interface AsyncIface extends MMIServiceBase .AsyncIface {
 
-    public void GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler) throws org.apache.thrift.TException;
+    public void GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -42,13 +42,13 @@ public class MGraspPoseService {
       super(iprot, oprot);
     }
 
-    public java.util.List<de.mosim.mmi.constraints.MGeometryConstraint> GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException
+    public java.util.List<de.mosim.mmi.constraints.MGeometryConstraint> GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException
     {
       send_GetGraspPoses(posture, handType, sceneObject, repositionHand);
       return recv_GetGraspPoses();
     }
 
-    public void send_GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException
+    public void send_GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand) throws org.apache.thrift.TException
     {
       GetGraspPoses_args args = new GetGraspPoses_args();
       args.setPosture(posture);
@@ -86,7 +86,7 @@ public class MGraspPoseService {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler) throws org.apache.thrift.TException {
+    public void GetGraspPoses(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler) throws org.apache.thrift.TException {
       checkReady();
       GetGraspPoses_call method_call = new GetGraspPoses_call(posture, handType, sceneObject, repositionHand, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
@@ -95,10 +95,10 @@ public class MGraspPoseService {
 
     public static class GetGraspPoses_call extends org.apache.thrift.async.TAsyncMethodCall<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> {
       private de.mosim.mmi.avatar.MAvatarPostureValues posture;
-      private de.mosim.mmi.avatar.MJointType handType;
+      private de.mosim.mmi.math.MTransform handType;
       private de.mosim.mmi.scene.MSceneObject sceneObject;
       private boolean repositionHand;
-      public GetGraspPoses_call(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.avatar.MJointType handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public GetGraspPoses_call(de.mosim.mmi.avatar.MAvatarPostureValues posture, de.mosim.mmi.math.MTransform handType, de.mosim.mmi.scene.MSceneObject sceneObject, boolean repositionHand, org.apache.thrift.async.AsyncMethodCallback<java.util.List<de.mosim.mmi.constraints.MGeometryConstraint>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.posture = posture;
         this.handType = handType;
@@ -253,7 +253,7 @@ public class MGraspPoseService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("GetGraspPoses_args");
 
     private static final org.apache.thrift.protocol.TField POSTURE_FIELD_DESC = new org.apache.thrift.protocol.TField("posture", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-    private static final org.apache.thrift.protocol.TField HAND_TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("handType", org.apache.thrift.protocol.TType.I32, (short)2);
+    private static final org.apache.thrift.protocol.TField HAND_TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("handType", org.apache.thrift.protocol.TType.STRUCT, (short)2);
     private static final org.apache.thrift.protocol.TField SCENE_OBJECT_FIELD_DESC = new org.apache.thrift.protocol.TField("sceneObject", org.apache.thrift.protocol.TType.STRUCT, (short)3);
     private static final org.apache.thrift.protocol.TField REPOSITION_HAND_FIELD_DESC = new org.apache.thrift.protocol.TField("repositionHand", org.apache.thrift.protocol.TType.BOOL, (short)4);
 
@@ -261,21 +261,13 @@ public class MGraspPoseService {
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new GetGraspPoses_argsTupleSchemeFactory();
 
     public @org.apache.thrift.annotation.Nullable de.mosim.mmi.avatar.MAvatarPostureValues posture; // required
-    /**
-     * 
-     * @see de.mosim.mmi.avatar.MJointType
-     */
-    public @org.apache.thrift.annotation.Nullable de.mosim.mmi.avatar.MJointType handType; // required
+    public @org.apache.thrift.annotation.Nullable de.mosim.mmi.math.MTransform handType; // required
     public @org.apache.thrift.annotation.Nullable de.mosim.mmi.scene.MSceneObject sceneObject; // required
     public boolean repositionHand; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       POSTURE((short)1, "posture"),
-      /**
-       * 
-       * @see de.mosim.mmi.avatar.MJointType
-       */
       HAND_TYPE((short)2, "handType"),
       SCENE_OBJECT((short)3, "sceneObject"),
       REPOSITION_HAND((short)4, "repositionHand");
@@ -351,7 +343,7 @@ public class MGraspPoseService {
       tmpMap.put(_Fields.POSTURE, new org.apache.thrift.meta_data.FieldMetaData("posture", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, de.mosim.mmi.avatar.MAvatarPostureValues.class)));
       tmpMap.put(_Fields.HAND_TYPE, new org.apache.thrift.meta_data.FieldMetaData("handType", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.EnumMetaData(org.apache.thrift.protocol.TType.ENUM, de.mosim.mmi.avatar.MJointType.class)));
+          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, de.mosim.mmi.math.MTransform.class)));
       tmpMap.put(_Fields.SCENE_OBJECT, new org.apache.thrift.meta_data.FieldMetaData("sceneObject", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, de.mosim.mmi.scene.MSceneObject.class)));
       tmpMap.put(_Fields.REPOSITION_HAND, new org.apache.thrift.meta_data.FieldMetaData("repositionHand", org.apache.thrift.TFieldRequirementType.DEFAULT, 
@@ -365,7 +357,7 @@ public class MGraspPoseService {
 
     public GetGraspPoses_args(
       de.mosim.mmi.avatar.MAvatarPostureValues posture,
-      de.mosim.mmi.avatar.MJointType handType,
+      de.mosim.mmi.math.MTransform handType,
       de.mosim.mmi.scene.MSceneObject sceneObject,
       boolean repositionHand)
     {
@@ -386,7 +378,7 @@ public class MGraspPoseService {
         this.posture = new de.mosim.mmi.avatar.MAvatarPostureValues(other.posture);
       }
       if (other.isSetHandType()) {
-        this.handType = other.handType;
+        this.handType = new de.mosim.mmi.math.MTransform(other.handType);
       }
       if (other.isSetSceneObject()) {
         this.sceneObject = new de.mosim.mmi.scene.MSceneObject(other.sceneObject);
@@ -432,20 +424,12 @@ public class MGraspPoseService {
       }
     }
 
-    /**
-     * 
-     * @see de.mosim.mmi.avatar.MJointType
-     */
     @org.apache.thrift.annotation.Nullable
-    public de.mosim.mmi.avatar.MJointType getHandType() {
+    public de.mosim.mmi.math.MTransform getHandType() {
       return this.handType;
     }
 
-    /**
-     * 
-     * @see de.mosim.mmi.avatar.MJointType
-     */
-    public GetGraspPoses_args setHandType(@org.apache.thrift.annotation.Nullable de.mosim.mmi.avatar.MJointType handType) {
+    public GetGraspPoses_args setHandType(@org.apache.thrift.annotation.Nullable de.mosim.mmi.math.MTransform handType) {
       this.handType = handType;
       return this;
     }
@@ -527,7 +511,7 @@ public class MGraspPoseService {
         if (value == null) {
           unsetHandType();
         } else {
-          setHandType((de.mosim.mmi.avatar.MJointType)value);
+          setHandType((de.mosim.mmi.math.MTransform)value);
         }
         break;
 
@@ -652,7 +636,7 @@ public class MGraspPoseService {
 
       hashCode = hashCode * 8191 + ((isSetHandType()) ? 131071 : 524287);
       if (isSetHandType())
-        hashCode = hashCode * 8191 + handType.getValue();
+        hashCode = hashCode * 8191 + handType.hashCode();
 
       hashCode = hashCode * 8191 + ((isSetSceneObject()) ? 131071 : 524287);
       if (isSetSceneObject())
@@ -769,6 +753,9 @@ public class MGraspPoseService {
       if (posture != null) {
         posture.validate();
       }
+      if (handType != null) {
+        handType.validate();
+      }
       if (sceneObject != null) {
         sceneObject.validate();
       }
@@ -820,8 +807,9 @@ public class MGraspPoseService {
               }
               break;
             case 2: // HAND_TYPE
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.handType = de.mosim.mmi.avatar.MJointType.findByValue(iprot.readI32());
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+                struct.handType = new de.mosim.mmi.math.MTransform();
+                struct.handType.read(iprot);
                 struct.setHandTypeIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -866,7 +854,7 @@ public class MGraspPoseService {
         }
         if (struct.handType != null) {
           oprot.writeFieldBegin(HAND_TYPE_FIELD_DESC);
-          oprot.writeI32(struct.handType.getValue());
+          struct.handType.write(oprot);
           oprot.writeFieldEnd();
         }
         if (struct.sceneObject != null) {
@@ -912,7 +900,7 @@ public class MGraspPoseService {
           struct.posture.write(oprot);
         }
         if (struct.isSetHandType()) {
-          oprot.writeI32(struct.handType.getValue());
+          struct.handType.write(oprot);
         }
         if (struct.isSetSceneObject()) {
           struct.sceneObject.write(oprot);
@@ -932,7 +920,8 @@ public class MGraspPoseService {
           struct.setPostureIsSet(true);
         }
         if (incoming.get(1)) {
-          struct.handType = de.mosim.mmi.avatar.MJointType.findByValue(iprot.readI32());
+          struct.handType = new de.mosim.mmi.math.MTransform();
+          struct.handType.read(iprot);
           struct.setHandTypeIsSet(true);
         }
         if (incoming.get(2)) {
@@ -1272,14 +1261,14 @@ public class MGraspPoseService {
             case 0: // SUCCESS
               if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
                 {
-                  org.apache.thrift.protocol.TList _list290 = iprot.readListBegin();
-                  struct.success = new java.util.ArrayList<de.mosim.mmi.constraints.MGeometryConstraint>(_list290.size);
-                  @org.apache.thrift.annotation.Nullable de.mosim.mmi.constraints.MGeometryConstraint _elem291;
-                  for (int _i292 = 0; _i292 < _list290.size; ++_i292)
+                  org.apache.thrift.protocol.TList _list308 = iprot.readListBegin();
+                  struct.success = new java.util.ArrayList<de.mosim.mmi.constraints.MGeometryConstraint>(_list308.size);
+                  @org.apache.thrift.annotation.Nullable de.mosim.mmi.constraints.MGeometryConstraint _elem309;
+                  for (int _i310 = 0; _i310 < _list308.size; ++_i310)
                   {
-                    _elem291 = new de.mosim.mmi.constraints.MGeometryConstraint();
-                    _elem291.read(iprot);
-                    struct.success.add(_elem291);
+                    _elem309 = new de.mosim.mmi.constraints.MGeometryConstraint();
+                    _elem309.read(iprot);
+                    struct.success.add(_elem309);
                   }
                   iprot.readListEnd();
                 }
@@ -1307,9 +1296,9 @@ public class MGraspPoseService {
           oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
           {
             oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
-            for (de.mosim.mmi.constraints.MGeometryConstraint _iter293 : struct.success)
+            for (de.mosim.mmi.constraints.MGeometryConstraint _iter311 : struct.success)
             {
-              _iter293.write(oprot);
+              _iter311.write(oprot);
             }
             oprot.writeListEnd();
           }
@@ -1340,9 +1329,9 @@ public class MGraspPoseService {
         if (struct.isSetSuccess()) {
           {
             oprot.writeI32(struct.success.size());
-            for (de.mosim.mmi.constraints.MGeometryConstraint _iter294 : struct.success)
+            for (de.mosim.mmi.constraints.MGeometryConstraint _iter312 : struct.success)
             {
-              _iter294.write(oprot);
+              _iter312.write(oprot);
             }
           }
         }
@@ -1354,14 +1343,14 @@ public class MGraspPoseService {
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           {
-            org.apache.thrift.protocol.TList _list295 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
-            struct.success = new java.util.ArrayList<de.mosim.mmi.constraints.MGeometryConstraint>(_list295.size);
-            @org.apache.thrift.annotation.Nullable de.mosim.mmi.constraints.MGeometryConstraint _elem296;
-            for (int _i297 = 0; _i297 < _list295.size; ++_i297)
+            org.apache.thrift.protocol.TList _list313 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new java.util.ArrayList<de.mosim.mmi.constraints.MGeometryConstraint>(_list313.size);
+            @org.apache.thrift.annotation.Nullable de.mosim.mmi.constraints.MGeometryConstraint _elem314;
+            for (int _i315 = 0; _i315 < _list313.size; ++_i315)
             {
-              _elem296 = new de.mosim.mmi.constraints.MGeometryConstraint();
-              _elem296.read(iprot);
-              struct.success.add(_elem296);
+              _elem314 = new de.mosim.mmi.constraints.MGeometryConstraint();
+              _elem314.read(iprot);
+              struct.success.add(_elem314);
             }
           }
           struct.setSuccessIsSet(true);

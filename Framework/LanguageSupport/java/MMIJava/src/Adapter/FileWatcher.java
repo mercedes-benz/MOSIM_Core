@@ -1,11 +1,15 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Adapter;
 
-import MMIStandard.MMUDescription;
 import Utils.LogLevel;
 import Utils.Logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import de.mosim.mmi.mmu.MMUDescription;
 
 import java.io.*;
 import java.nio.file.*;

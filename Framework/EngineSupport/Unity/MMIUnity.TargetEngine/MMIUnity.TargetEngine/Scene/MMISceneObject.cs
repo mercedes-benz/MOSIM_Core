@@ -456,9 +456,9 @@ namespace MMIUnity.TargetEngine.Scene
                         mCollider.BoxColliderProperties = new MBoxColliderProperties
                         {
                             //Calculate the size by consdering the scaling
-                            Size = new MVector3(boxCollider.size.x * this.transform.localScale.x, boxCollider.size.y * this.transform.localScale.y, boxCollider.size.z * this.transform.localScale.z)
+                            Size = new MVector3(boxCollider.size.x * this.transform.lossyScale.x, boxCollider.size.y * this.transform.lossyScale.y, boxCollider.size.z * this.transform.lossyScale.z)
                         };
-                        mCollider.PositionOffset = new MVector3(boxCollider.center.x * this.transform.localScale.x, boxCollider.center.y * this.transform.localScale.y, boxCollider.center.z * this.transform.localScale.z);
+                        mCollider.PositionOffset = new MVector3(boxCollider.center.x * this.transform.lossyScale.x, boxCollider.center.y * this.transform.lossyScale.y, boxCollider.center.z * this.transform.lossyScale.z);
                     }
 
                     //Check if collider is a sphere collider and create corresponding representation in MMI framework
@@ -470,9 +470,9 @@ namespace MMIUnity.TargetEngine.Scene
                         //Set the specific sphere collider properties
                         mCollider.SphereColliderProperties = new MSphereColliderProperties
                         {
-                            Radius = sphereCollider.radius * Mathf.Max(this.transform.localScale.x, this.transform.localScale.y, this.transform.localScale.z)
+                            Radius = sphereCollider.radius * Mathf.Max(this.transform.lossyScale.x, this.transform.lossyScale.y, this.transform.lossyScale.z)
                         };
-                        mCollider.PositionOffset = new MVector3(sphereCollider.center.x * this.transform.localScale.x, sphereCollider.center.y * this.transform.localScale.y, sphereCollider.center.z * this.transform.localScale.z);
+                        mCollider.PositionOffset = new MVector3(sphereCollider.center.x * this.transform.lossyScale.x, sphereCollider.center.y * this.transform.lossyScale.y, sphereCollider.center.z * this.transform.lossyScale.z);
 
                     }
 
@@ -486,12 +486,12 @@ namespace MMIUnity.TargetEngine.Scene
                         //Set the specific capsule collider properties
                         mCollider.CapsuleColliderProperties = new MCapsuleColliderProperties
                         {
-                            Radius = capsuleCollider.radius * Mathf.Max(this.transform.localScale.x, this.transform.localScale.z),
-                            Height = capsuleCollider.height * this.transform.localScale.y,
+                            Radius = capsuleCollider.radius * Mathf.Max(this.transform.localScale.x, this.transform.lossyScale.z),
+                            Height = capsuleCollider.height * this.transform.lossyScale.y,
                         };
 
                         //Set the position offset
-                        mCollider.PositionOffset = new MVector3(capsuleCollider.center.x * this.transform.localScale.x, capsuleCollider.center.y * this.transform.localScale.y, capsuleCollider.center.z * this.transform.localScale.z);
+                        mCollider.PositionOffset = new MVector3(capsuleCollider.center.x * this.transform.lossyScale.x, capsuleCollider.center.y * this.transform.lossyScale.y, capsuleCollider.center.z * this.transform.lossyScale.z);
                     }
 
                     //Check if collider is a mesh collider and create corresponding representation in MMI framework

@@ -1,9 +1,13 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #include "ServiceAccess.h"
-#include "src/MMIRegisterService.h"
-#include "src/MGraspPoseService.h"
-#include "src/MCollisionDetectionService.h"
-#include "src/MPathPlanningService.h"
-#include "src/MInverseKinematicsService.h"
+#include "gen-cpp/MMIRegisterService.h"
+#include "gen-cpp/MGraspPoseService.h"
+#include "gen-cpp/MCollisionDetectionService.h"
+#include "gen-cpp/MPathPlanningService.h"
+#include "gen-cpp/MInverseKinematicsService.h"
 #include "ThriftClient/ThriftClient.cpp"
 #include "Utils/Logger.h"
 
@@ -33,7 +37,7 @@ MServiceDescription* ServiceAccess::getServiceDescription(const string &serviceN
 
 void ServiceAccess::initialize()
 {
-	Logger::printLog(L_INFO, "Trying to fetch the services from register: " +  this->mmiRegisterAddress->Address + ":" +  to_string(this->mmiRegisterAddress->Port) );
+	Logger::printLog(L_INFO, "Trying to fetch the services from register: " +  this->mmiRegisterAddress->Address + ":" +  std::to_string(this->mmiRegisterAddress->Port) );
 
 	try
 	{
@@ -44,7 +48,7 @@ void ServiceAccess::initialize()
 	
 		for (MServiceDescription &serviceDescription : serviceDescriptions)
 		{
-			Logger::printLog(L_INFO, "found: " +serviceDescription.Name + " at " + serviceDescription.Addresses[0].Address + ":" + to_string(serviceDescription.Addresses[0].Port));
+			Logger::printLog(L_INFO, "found: " +serviceDescription.Name + " at " + serviceDescription.Addresses[0].Address + ":" + std::to_string(serviceDescription.Addresses[0].Port));
 			unordered_map<string, MServiceDescription>::iterator it = this->serviceDescriptions.find(serviceDescription.Name);
 			if (it == this->serviceDescriptions.end())
 			{
@@ -159,7 +163,7 @@ ThriftClient<MPathPlanningServiceClient>& ServiceAccess::getPathPlanningThriftCl
 	}
 }
 
-ThriftClient<MGraspPoseServiceClient>& ServiceAccess::getGraspPoseThfriftClient()
+ThriftClient<MGraspPoseServiceClient>& ServiceAccess::getGraspPoseThriftClient()
 {
 	MServiceDescription* serviceDescription = this->getServiceDescription("graspPoseService");
 
@@ -207,7 +211,7 @@ MCollisionDetectionServiceClient & ServiceAccess::getCollisionDetectionServicet(
 
 MGraspPoseServiceClient & ServiceAccess::getGraspPoseService()
 {
-	return *(this->getGraspPoseThfriftClient().access);
+	return *(this->getGraspPoseThriftClient().access);
 }
 
 

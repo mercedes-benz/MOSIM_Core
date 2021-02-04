@@ -1,12 +1,19 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Extensions;
 
-import MMIStandard.*;
+import de.mosim.mmi.avatar.*;
+import de.mosim.mmi.math.MQuaternion;
+import de.mosim.mmi.math.MVector3;
+import de.mosim.mmi.services.MIKProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static MMIStandard.MJointType.*;
+import static de.mosim.mmi.avatar.MJointType.*;
 
 public class MAvatarPostureExtensions {
     /// <summary>
@@ -226,79 +233,6 @@ public class MAvatarPostureExtensions {
     }
 
 
-    /// <summary>
-    /// Gets the hand pose of the MAvatarPosture
-    /// </summary>
-    /// <param name="avatarPosture"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public static MHandPose GetHandPose(MAvatarPosture avatarPosture, MJointType type) {
-        MHandPose handPose = new MHandPose();
-        handPose.Bones = new ArrayList<>();
-
-
-        switch (type) {
-            case LeftWrist:
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == LeftWrist).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftIndexCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftIndexCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftIndexMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftIndexMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftLittleCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftLittleCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftLittleMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftLittleMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftMiddleCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftMiddleCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftMiddleMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftMiddleMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftRingCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftRingCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftRingMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftRingMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftThumbCarpalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftThumbMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.LeftThumbMidcarpalJoint).findFirst().orElse(null));
-
-                break;
-
-            case RightWrist:
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == RightWrist).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightIndexCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightIndexCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightIndexMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightIndexMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightLittleCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightLittleCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightLittleMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightLittleMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightMiddleCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightMiddleCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightMiddleMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightMiddleMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightRingCarpalDistalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightRingCarpalProximalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightRingMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightRingMidCarpalJoint).findFirst().orElse(null));
-
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightThumbCarpalInterphalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightThumbMetacarpophalangealJoint).findFirst().orElse(null));
-                handPose.Bones.add(avatarPosture.Joints.stream().filter(s -> s.Type == MJointType.RightThumbMidcarpalJoint).findFirst().orElse(null));
-                break;
-        }
-
-        return handPose;
-    }
-
 
     /// <summary>
     /// Assigns a hand pose
@@ -307,7 +241,7 @@ public class MAvatarPostureExtensions {
     /// <param name="handPose"></param>
     /// <param name="ignoreWrist"></param>
     public static void AssignHandPose(MAvatarPosture avatarPosture, MHandPose handPose, boolean ignoreWrist) {
-        for (MJoint handBone : handPose.Bones) {
+        for (MJoint handBone : handPose.Joints) {
             if (ignoreWrist && handBone.Type == LeftWrist || handBone.Type == RightWrist)
                 continue;
             MJoint bone = MAvatarPostureExtensions.getJoint(avatarPosture, handBone.Type);

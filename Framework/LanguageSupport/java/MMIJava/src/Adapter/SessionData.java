@@ -1,8 +1,13 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser
+
 package Adapter;
 
-import MMIStandard.MAdapterDescription;
-import MMIStandard.MIPAddress;
-import MMIStandard.MMUDescription;
+
+import de.mosim.mmi.core.MIPAddress;
+import de.mosim.mmi.mmu.MMUDescription;
+import de.mosim.mmi.register.MAdapterDescription;
 
 import java.util.ArrayList;
 import java.util.HashMap;

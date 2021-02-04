@@ -79,14 +79,14 @@ class MPathConstraint
                 case 1:
                     if ($ftype == TType::LST) {
                         $this->PolygonPoints = array();
-                        $_size9 = 0;
-                        $_etype12 = 0;
-                        $xfer += $input->readListBegin($_etype12, $_size9);
-                        for ($_i13 = 0; $_i13 < $_size9; ++$_i13) {
-                            $elem14 = null;
-                            $elem14 = new \MGeometryConstraint();
-                            $xfer += $elem14->read($input);
-                            $this->PolygonPoints []= $elem14;
+                        $_size0 = 0;
+                        $_etype3 = 0;
+                        $xfer += $input->readListBegin($_etype3, $_size0);
+                        for ($_i4 = 0; $_i4 < $_size0; ++$_i4) {
+                            $elem5 = null;
+                            $elem5 = new \MGeometryConstraint();
+                            $xfer += $elem5->read($input);
+                            $this->PolygonPoints []= $elem5;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -120,8 +120,8 @@ class MPathConstraint
             }
             $xfer += $output->writeFieldBegin('PolygonPoints', TType::LST, 1);
             $output->writeListBegin(TType::STRUCT, count($this->PolygonPoints));
-            foreach ($this->PolygonPoints as $iter15) {
-                $xfer += $iter15->write($output);
+            foreach ($this->PolygonPoints as $iter6) {
+                $xfer += $iter6->write($output);
             }
             $output->writeListEnd();
             $xfer += $output->writeFieldEnd();

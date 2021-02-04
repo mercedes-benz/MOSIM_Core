@@ -43,301 +43,6 @@ std::string to_string(const MTranslationConstraintType::type& val) {
 }
 
 
-MConstraint::~MConstraint() noexcept {
-}
-
-
-void MConstraint::__set_ID(const std::string& val) {
-  this->ID = val;
-}
-
-void MConstraint::__set_GeometryConstraint(const MGeometryConstraint& val) {
-  this->GeometryConstraint = val;
-__isset.GeometryConstraint = true;
-}
-
-void MConstraint::__set_VelocityConstraint(const MVelocityConstraint& val) {
-  this->VelocityConstraint = val;
-__isset.VelocityConstraint = true;
-}
-
-void MConstraint::__set_AccelerationConstraint(const MAccelerationConstraint& val) {
-  this->AccelerationConstraint = val;
-__isset.AccelerationConstraint = true;
-}
-
-void MConstraint::__set_PathConstraint(const MPathConstraint& val) {
-  this->PathConstraint = val;
-__isset.PathConstraint = true;
-}
-
-void MConstraint::__set_JointPathConstraint(const MJointPathConstraint& val) {
-  this->JointPathConstraint = val;
-__isset.JointPathConstraint = true;
-}
-
-void MConstraint::__set_PostureConstraint(const MPostureConstraint& val) {
-  this->PostureConstraint = val;
-__isset.PostureConstraint = true;
-}
-
-void MConstraint::__set_JointConstraint(const MJointConstraint& val) {
-  this->JointConstraint = val;
-__isset.JointConstraint = true;
-}
-
-void MConstraint::__set_Properties(const std::map<std::string, std::string> & val) {
-  this->Properties = val;
-__isset.Properties = true;
-}
-std::ostream& operator<<(std::ostream& out, const MConstraint& obj)
-{
-  obj.printTo(out);
-  return out;
-}
-
-
-uint32_t MConstraint::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-  bool isset_ID = false;
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->ID);
-          isset_ID = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->GeometryConstraint.read(iprot);
-          this->__isset.GeometryConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->VelocityConstraint.read(iprot);
-          this->__isset.VelocityConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->AccelerationConstraint.read(iprot);
-          this->__isset.AccelerationConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 5:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->PathConstraint.read(iprot);
-          this->__isset.PathConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 6:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->JointPathConstraint.read(iprot);
-          this->__isset.JointPathConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 7:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->PostureConstraint.read(iprot);
-          this->__isset.PostureConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 8:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->JointConstraint.read(iprot);
-          this->__isset.JointConstraint = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 9:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->Properties.clear();
-            uint32_t _size0;
-            ::apache::thrift::protocol::TType _ktype1;
-            ::apache::thrift::protocol::TType _vtype2;
-            xfer += iprot->readMapBegin(_ktype1, _vtype2, _size0);
-            uint32_t _i4;
-            for (_i4 = 0; _i4 < _size0; ++_i4)
-            {
-              std::string _key5;
-              xfer += iprot->readString(_key5);
-              std::string& _val6 = this->Properties[_key5];
-              xfer += iprot->readString(_val6);
-            }
-            xfer += iprot->readMapEnd();
-          }
-          this->__isset.Properties = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  if (!isset_ID)
-    throw TProtocolException(TProtocolException::INVALID_DATA);
-  return xfer;
-}
-
-uint32_t MConstraint::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("MConstraint");
-
-  xfer += oprot->writeFieldBegin("ID", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->ID);
-  xfer += oprot->writeFieldEnd();
-
-  if (this->__isset.GeometryConstraint) {
-    xfer += oprot->writeFieldBegin("GeometryConstraint", ::apache::thrift::protocol::T_STRUCT, 2);
-    xfer += this->GeometryConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.VelocityConstraint) {
-    xfer += oprot->writeFieldBegin("VelocityConstraint", ::apache::thrift::protocol::T_STRUCT, 3);
-    xfer += this->VelocityConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.AccelerationConstraint) {
-    xfer += oprot->writeFieldBegin("AccelerationConstraint", ::apache::thrift::protocol::T_STRUCT, 4);
-    xfer += this->AccelerationConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.PathConstraint) {
-    xfer += oprot->writeFieldBegin("PathConstraint", ::apache::thrift::protocol::T_STRUCT, 5);
-    xfer += this->PathConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.JointPathConstraint) {
-    xfer += oprot->writeFieldBegin("JointPathConstraint", ::apache::thrift::protocol::T_STRUCT, 6);
-    xfer += this->JointPathConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.PostureConstraint) {
-    xfer += oprot->writeFieldBegin("PostureConstraint", ::apache::thrift::protocol::T_STRUCT, 7);
-    xfer += this->PostureConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.JointConstraint) {
-    xfer += oprot->writeFieldBegin("JointConstraint", ::apache::thrift::protocol::T_STRUCT, 8);
-    xfer += this->JointConstraint.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  if (this->__isset.Properties) {
-    xfer += oprot->writeFieldBegin("Properties", ::apache::thrift::protocol::T_MAP, 9);
-    {
-      xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->Properties.size()));
-      std::map<std::string, std::string> ::const_iterator _iter7;
-      for (_iter7 = this->Properties.begin(); _iter7 != this->Properties.end(); ++_iter7)
-      {
-        xfer += oprot->writeString(_iter7->first);
-        xfer += oprot->writeString(_iter7->second);
-      }
-      xfer += oprot->writeMapEnd();
-    }
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-void swap(MConstraint &a, MConstraint &b) {
-  using ::std::swap;
-  swap(a.ID, b.ID);
-  swap(a.GeometryConstraint, b.GeometryConstraint);
-  swap(a.VelocityConstraint, b.VelocityConstraint);
-  swap(a.AccelerationConstraint, b.AccelerationConstraint);
-  swap(a.PathConstraint, b.PathConstraint);
-  swap(a.JointPathConstraint, b.JointPathConstraint);
-  swap(a.PostureConstraint, b.PostureConstraint);
-  swap(a.JointConstraint, b.JointConstraint);
-  swap(a.Properties, b.Properties);
-  swap(a.__isset, b.__isset);
-}
-
-MConstraint::MConstraint(const MConstraint& other8) {
-  ID = other8.ID;
-  GeometryConstraint = other8.GeometryConstraint;
-  VelocityConstraint = other8.VelocityConstraint;
-  AccelerationConstraint = other8.AccelerationConstraint;
-  PathConstraint = other8.PathConstraint;
-  JointPathConstraint = other8.JointPathConstraint;
-  PostureConstraint = other8.PostureConstraint;
-  JointConstraint = other8.JointConstraint;
-  Properties = other8.Properties;
-  __isset = other8.__isset;
-}
-MConstraint& MConstraint::operator=(const MConstraint& other9) {
-  ID = other9.ID;
-  GeometryConstraint = other9.GeometryConstraint;
-  VelocityConstraint = other9.VelocityConstraint;
-  AccelerationConstraint = other9.AccelerationConstraint;
-  PathConstraint = other9.PathConstraint;
-  JointPathConstraint = other9.JointPathConstraint;
-  PostureConstraint = other9.PostureConstraint;
-  JointConstraint = other9.JointConstraint;
-  Properties = other9.Properties;
-  __isset = other9.__isset;
-  return *this;
-}
-void MConstraint::printTo(std::ostream& out) const {
-  using ::apache::thrift::to_string;
-  out << "MConstraint(";
-  out << "ID=" << to_string(ID);
-  out << ", " << "GeometryConstraint="; (__isset.GeometryConstraint ? (out << to_string(GeometryConstraint)) : (out << "<null>"));
-  out << ", " << "VelocityConstraint="; (__isset.VelocityConstraint ? (out << to_string(VelocityConstraint)) : (out << "<null>"));
-  out << ", " << "AccelerationConstraint="; (__isset.AccelerationConstraint ? (out << to_string(AccelerationConstraint)) : (out << "<null>"));
-  out << ", " << "PathConstraint="; (__isset.PathConstraint ? (out << to_string(PathConstraint)) : (out << "<null>"));
-  out << ", " << "JointPathConstraint="; (__isset.JointPathConstraint ? (out << to_string(JointPathConstraint)) : (out << "<null>"));
-  out << ", " << "PostureConstraint="; (__isset.PostureConstraint ? (out << to_string(PostureConstraint)) : (out << "<null>"));
-  out << ", " << "JointConstraint="; (__isset.JointConstraint ? (out << to_string(JointConstraint)) : (out << "<null>"));
-  out << ", " << "Properties="; (__isset.Properties ? (out << to_string(Properties)) : (out << "<null>"));
-  out << ")";
-}
-
-
 MInterval::~MInterval() noexcept {
 }
 
@@ -435,13 +140,13 @@ void swap(MInterval &a, MInterval &b) {
   swap(a.Max, b.Max);
 }
 
-MInterval::MInterval(const MInterval& other10) {
-  Min = other10.Min;
-  Max = other10.Max;
+MInterval::MInterval(const MInterval& other0) {
+  Min = other0.Min;
+  Max = other0.Max;
 }
-MInterval& MInterval::operator=(const MInterval& other11) {
-  Min = other11.Min;
-  Max = other11.Max;
+MInterval& MInterval::operator=(const MInterval& other1) {
+  Min = other1.Min;
+  Max = other1.Max;
   return *this;
 }
 void MInterval::printTo(std::ostream& out) const {
@@ -570,15 +275,15 @@ void swap(MInterval3 &a, MInterval3 &b) {
   swap(a.Z, b.Z);
 }
 
-MInterval3::MInterval3(const MInterval3& other12) {
-  X = other12.X;
-  Y = other12.Y;
-  Z = other12.Z;
+MInterval3::MInterval3(const MInterval3& other2) {
+  X = other2.X;
+  Y = other2.Y;
+  Z = other2.Z;
 }
-MInterval3& MInterval3::operator=(const MInterval3& other13) {
-  X = other13.X;
-  Y = other13.Y;
-  Z = other13.Z;
+MInterval3& MInterval3::operator=(const MInterval3& other3) {
+  X = other3.X;
+  Y = other3.Y;
+  Z = other3.Z;
   return *this;
 }
 void MInterval3::printTo(std::ostream& out) const {
@@ -634,9 +339,9 @@ uint32_t MTranslationConstraint::read(::apache::thrift::protocol::TProtocol* ipr
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast14;
-          xfer += iprot->readI32(ecast14);
-          this->Type = (MTranslationConstraintType::type)ecast14;
+          int32_t ecast4;
+          xfer += iprot->readI32(ecast4);
+          this->Type = (MTranslationConstraintType::type)ecast4;
           isset_Type = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -690,13 +395,13 @@ void swap(MTranslationConstraint &a, MTranslationConstraint &b) {
   swap(a.Limits, b.Limits);
 }
 
-MTranslationConstraint::MTranslationConstraint(const MTranslationConstraint& other15) {
-  Type = other15.Type;
-  Limits = other15.Limits;
+MTranslationConstraint::MTranslationConstraint(const MTranslationConstraint& other5) {
+  Type = other5.Type;
+  Limits = other5.Limits;
 }
-MTranslationConstraint& MTranslationConstraint::operator=(const MTranslationConstraint& other16) {
-  Type = other16.Type;
-  Limits = other16.Limits;
+MTranslationConstraint& MTranslationConstraint::operator=(const MTranslationConstraint& other6) {
+  Type = other6.Type;
+  Limits = other6.Limits;
   return *this;
 }
 void MTranslationConstraint::printTo(std::ostream& out) const {
@@ -785,11 +490,11 @@ void swap(MRotationConstraint &a, MRotationConstraint &b) {
   swap(a.Limits, b.Limits);
 }
 
-MRotationConstraint::MRotationConstraint(const MRotationConstraint& other17) {
-  Limits = other17.Limits;
+MRotationConstraint::MRotationConstraint(const MRotationConstraint& other7) {
+  Limits = other7.Limits;
 }
-MRotationConstraint& MRotationConstraint::operator=(const MRotationConstraint& other18) {
-  Limits = other18.Limits;
+MRotationConstraint& MRotationConstraint::operator=(const MRotationConstraint& other8) {
+  Limits = other8.Limits;
   return *this;
 }
 void MRotationConstraint::printTo(std::ostream& out) const {
@@ -954,21 +659,21 @@ void swap(MGeometryConstraint &a, MGeometryConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MGeometryConstraint::MGeometryConstraint(const MGeometryConstraint& other19) {
-  ParentObjectID = other19.ParentObjectID;
-  ParentToConstraint = other19.ParentToConstraint;
-  TranslationConstraint = other19.TranslationConstraint;
-  RotationConstraint = other19.RotationConstraint;
-  WeightingFactor = other19.WeightingFactor;
-  __isset = other19.__isset;
+MGeometryConstraint::MGeometryConstraint(const MGeometryConstraint& other9) {
+  ParentObjectID = other9.ParentObjectID;
+  ParentToConstraint = other9.ParentToConstraint;
+  TranslationConstraint = other9.TranslationConstraint;
+  RotationConstraint = other9.RotationConstraint;
+  WeightingFactor = other9.WeightingFactor;
+  __isset = other9.__isset;
 }
-MGeometryConstraint& MGeometryConstraint::operator=(const MGeometryConstraint& other20) {
-  ParentObjectID = other20.ParentObjectID;
-  ParentToConstraint = other20.ParentToConstraint;
-  TranslationConstraint = other20.TranslationConstraint;
-  RotationConstraint = other20.RotationConstraint;
-  WeightingFactor = other20.WeightingFactor;
-  __isset = other20.__isset;
+MGeometryConstraint& MGeometryConstraint::operator=(const MGeometryConstraint& other10) {
+  ParentObjectID = other10.ParentObjectID;
+  ParentToConstraint = other10.ParentToConstraint;
+  TranslationConstraint = other10.TranslationConstraint;
+  RotationConstraint = other10.RotationConstraint;
+  WeightingFactor = other10.WeightingFactor;
+  __isset = other10.__isset;
   return *this;
 }
 void MGeometryConstraint::printTo(std::ostream& out) const {
@@ -1137,21 +842,21 @@ void swap(MVelocityConstraint &a, MVelocityConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MVelocityConstraint::MVelocityConstraint(const MVelocityConstraint& other21) {
-  ParentObjectID = other21.ParentObjectID;
-  ParentToConstraint = other21.ParentToConstraint;
-  TranslationalVelocity = other21.TranslationalVelocity;
-  RotationalVelocity = other21.RotationalVelocity;
-  WeightingFactor = other21.WeightingFactor;
-  __isset = other21.__isset;
+MVelocityConstraint::MVelocityConstraint(const MVelocityConstraint& other11) {
+  ParentObjectID = other11.ParentObjectID;
+  ParentToConstraint = other11.ParentToConstraint;
+  TranslationalVelocity = other11.TranslationalVelocity;
+  RotationalVelocity = other11.RotationalVelocity;
+  WeightingFactor = other11.WeightingFactor;
+  __isset = other11.__isset;
 }
-MVelocityConstraint& MVelocityConstraint::operator=(const MVelocityConstraint& other22) {
-  ParentObjectID = other22.ParentObjectID;
-  ParentToConstraint = other22.ParentToConstraint;
-  TranslationalVelocity = other22.TranslationalVelocity;
-  RotationalVelocity = other22.RotationalVelocity;
-  WeightingFactor = other22.WeightingFactor;
-  __isset = other22.__isset;
+MVelocityConstraint& MVelocityConstraint::operator=(const MVelocityConstraint& other12) {
+  ParentObjectID = other12.ParentObjectID;
+  ParentToConstraint = other12.ParentToConstraint;
+  TranslationalVelocity = other12.TranslationalVelocity;
+  RotationalVelocity = other12.RotationalVelocity;
+  WeightingFactor = other12.WeightingFactor;
+  __isset = other12.__isset;
   return *this;
 }
 void MVelocityConstraint::printTo(std::ostream& out) const {
@@ -1320,21 +1025,21 @@ void swap(MAccelerationConstraint &a, MAccelerationConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MAccelerationConstraint::MAccelerationConstraint(const MAccelerationConstraint& other23) {
-  ParentObjectID = other23.ParentObjectID;
-  ParentToConstraint = other23.ParentToConstraint;
-  TranslationalAcceleration = other23.TranslationalAcceleration;
-  RotationalAcceleration = other23.RotationalAcceleration;
-  WeightingFactor = other23.WeightingFactor;
-  __isset = other23.__isset;
+MAccelerationConstraint::MAccelerationConstraint(const MAccelerationConstraint& other13) {
+  ParentObjectID = other13.ParentObjectID;
+  ParentToConstraint = other13.ParentToConstraint;
+  TranslationalAcceleration = other13.TranslationalAcceleration;
+  RotationalAcceleration = other13.RotationalAcceleration;
+  WeightingFactor = other13.WeightingFactor;
+  __isset = other13.__isset;
 }
-MAccelerationConstraint& MAccelerationConstraint::operator=(const MAccelerationConstraint& other24) {
-  ParentObjectID = other24.ParentObjectID;
-  ParentToConstraint = other24.ParentToConstraint;
-  TranslationalAcceleration = other24.TranslationalAcceleration;
-  RotationalAcceleration = other24.RotationalAcceleration;
-  WeightingFactor = other24.WeightingFactor;
-  __isset = other24.__isset;
+MAccelerationConstraint& MAccelerationConstraint::operator=(const MAccelerationConstraint& other14) {
+  ParentObjectID = other14.ParentObjectID;
+  ParentToConstraint = other14.ParentToConstraint;
+  TranslationalAcceleration = other14.TranslationalAcceleration;
+  RotationalAcceleration = other14.RotationalAcceleration;
+  WeightingFactor = other14.WeightingFactor;
+  __isset = other14.__isset;
   return *this;
 }
 void MAccelerationConstraint::printTo(std::ostream& out) const {
@@ -1394,14 +1099,14 @@ uint32_t MPathConstraint::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->PolygonPoints.clear();
-            uint32_t _size25;
-            ::apache::thrift::protocol::TType _etype28;
-            xfer += iprot->readListBegin(_etype28, _size25);
-            this->PolygonPoints.resize(_size25);
-            uint32_t _i29;
-            for (_i29 = 0; _i29 < _size25; ++_i29)
+            uint32_t _size15;
+            ::apache::thrift::protocol::TType _etype18;
+            xfer += iprot->readListBegin(_etype18, _size15);
+            this->PolygonPoints.resize(_size15);
+            uint32_t _i19;
+            for (_i19 = 0; _i19 < _size15; ++_i19)
             {
-              xfer += this->PolygonPoints[_i29].read(iprot);
+              xfer += this->PolygonPoints[_i19].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1440,10 +1145,10 @@ uint32_t MPathConstraint::write(::apache::thrift::protocol::TProtocol* oprot) co
   xfer += oprot->writeFieldBegin("PolygonPoints", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->PolygonPoints.size()));
-    std::vector<MGeometryConstraint> ::const_iterator _iter30;
-    for (_iter30 = this->PolygonPoints.begin(); _iter30 != this->PolygonPoints.end(); ++_iter30)
+    std::vector<MGeometryConstraint> ::const_iterator _iter20;
+    for (_iter20 = this->PolygonPoints.begin(); _iter20 != this->PolygonPoints.end(); ++_iter20)
     {
-      xfer += (*_iter30).write(oprot);
+      xfer += (*_iter20).write(oprot);
     }
     xfer += oprot->writeListEnd();
   }
@@ -1466,15 +1171,15 @@ void swap(MPathConstraint &a, MPathConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MPathConstraint::MPathConstraint(const MPathConstraint& other31) {
-  PolygonPoints = other31.PolygonPoints;
-  WeightingFactor = other31.WeightingFactor;
-  __isset = other31.__isset;
+MPathConstraint::MPathConstraint(const MPathConstraint& other21) {
+  PolygonPoints = other21.PolygonPoints;
+  WeightingFactor = other21.WeightingFactor;
+  __isset = other21.__isset;
 }
-MPathConstraint& MPathConstraint::operator=(const MPathConstraint& other32) {
-  PolygonPoints = other32.PolygonPoints;
-  WeightingFactor = other32.WeightingFactor;
-  __isset = other32.__isset;
+MPathConstraint& MPathConstraint::operator=(const MPathConstraint& other22) {
+  PolygonPoints = other22.PolygonPoints;
+  WeightingFactor = other22.WeightingFactor;
+  __isset = other22.__isset;
   return *this;
 }
 void MPathConstraint::printTo(std::ostream& out) const {
@@ -1539,9 +1244,9 @@ uint32_t MJointConstraint::read(::apache::thrift::protocol::TProtocol* iprot) {
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast33;
-          xfer += iprot->readI32(ecast33);
-          this->JointType = ( ::MMIStandard::MJointType::type)ecast33;
+          int32_t ecast23;
+          xfer += iprot->readI32(ecast23);
+          this->JointType = ( ::MMIStandard::MJointType::type)ecast23;
           isset_JointType = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1623,19 +1328,19 @@ void swap(MJointConstraint &a, MJointConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MJointConstraint::MJointConstraint(const MJointConstraint& other34) {
-  JointType = other34.JointType;
-  GeometryConstraint = other34.GeometryConstraint;
-  VelocityConstraint = other34.VelocityConstraint;
-  AccelerationConstraint = other34.AccelerationConstraint;
-  __isset = other34.__isset;
+MJointConstraint::MJointConstraint(const MJointConstraint& other24) {
+  JointType = other24.JointType;
+  GeometryConstraint = other24.GeometryConstraint;
+  VelocityConstraint = other24.VelocityConstraint;
+  AccelerationConstraint = other24.AccelerationConstraint;
+  __isset = other24.__isset;
 }
-MJointConstraint& MJointConstraint::operator=(const MJointConstraint& other35) {
-  JointType = other35.JointType;
-  GeometryConstraint = other35.GeometryConstraint;
-  VelocityConstraint = other35.VelocityConstraint;
-  AccelerationConstraint = other35.AccelerationConstraint;
-  __isset = other35.__isset;
+MJointConstraint& MJointConstraint::operator=(const MJointConstraint& other25) {
+  JointType = other25.JointType;
+  GeometryConstraint = other25.GeometryConstraint;
+  VelocityConstraint = other25.VelocityConstraint;
+  AccelerationConstraint = other25.AccelerationConstraint;
+  __isset = other25.__isset;
   return *this;
 }
 void MJointConstraint::printTo(std::ostream& out) const {
@@ -1692,9 +1397,9 @@ uint32_t MJointPathConstraint::read(::apache::thrift::protocol::TProtocol* iprot
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast36;
-          xfer += iprot->readI32(ecast36);
-          this->JointType = ( ::MMIStandard::MJointType::type)ecast36;
+          int32_t ecast26;
+          xfer += iprot->readI32(ecast26);
+          this->JointType = ( ::MMIStandard::MJointType::type)ecast26;
           isset_JointType = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1748,13 +1453,13 @@ void swap(MJointPathConstraint &a, MJointPathConstraint &b) {
   swap(a.PathConstraint, b.PathConstraint);
 }
 
-MJointPathConstraint::MJointPathConstraint(const MJointPathConstraint& other37) {
-  JointType = other37.JointType;
-  PathConstraint = other37.PathConstraint;
+MJointPathConstraint::MJointPathConstraint(const MJointPathConstraint& other27) {
+  JointType = other27.JointType;
+  PathConstraint = other27.PathConstraint;
 }
-MJointPathConstraint& MJointPathConstraint::operator=(const MJointPathConstraint& other38) {
-  JointType = other38.JointType;
-  PathConstraint = other38.PathConstraint;
+MJointPathConstraint& MJointPathConstraint::operator=(const MJointPathConstraint& other28) {
+  JointType = other28.JointType;
+  PathConstraint = other28.PathConstraint;
   return *this;
 }
 void MJointPathConstraint::printTo(std::ostream& out) const {
@@ -1819,14 +1524,14 @@ uint32_t MPostureConstraint::read(::apache::thrift::protocol::TProtocol* iprot) 
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->JointConstraints.clear();
-            uint32_t _size39;
-            ::apache::thrift::protocol::TType _etype42;
-            xfer += iprot->readListBegin(_etype42, _size39);
-            this->JointConstraints.resize(_size39);
-            uint32_t _i43;
-            for (_i43 = 0; _i43 < _size39; ++_i43)
+            uint32_t _size29;
+            ::apache::thrift::protocol::TType _etype32;
+            xfer += iprot->readListBegin(_etype32, _size29);
+            this->JointConstraints.resize(_size29);
+            uint32_t _i33;
+            for (_i33 = 0; _i33 < _size29; ++_i33)
             {
-              xfer += this->JointConstraints[_i43].read(iprot);
+              xfer += this->JointConstraints[_i33].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -1862,10 +1567,10 @@ uint32_t MPostureConstraint::write(::apache::thrift::protocol::TProtocol* oprot)
     xfer += oprot->writeFieldBegin("JointConstraints", ::apache::thrift::protocol::T_LIST, 2);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->JointConstraints.size()));
-      std::vector<MJointConstraint> ::const_iterator _iter44;
-      for (_iter44 = this->JointConstraints.begin(); _iter44 != this->JointConstraints.end(); ++_iter44)
+      std::vector<MJointConstraint> ::const_iterator _iter34;
+      for (_iter34 = this->JointConstraints.begin(); _iter34 != this->JointConstraints.end(); ++_iter34)
       {
-        xfer += (*_iter44).write(oprot);
+        xfer += (*_iter34).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -1883,15 +1588,15 @@ void swap(MPostureConstraint &a, MPostureConstraint &b) {
   swap(a.__isset, b.__isset);
 }
 
-MPostureConstraint::MPostureConstraint(const MPostureConstraint& other45) {
-  posture = other45.posture;
-  JointConstraints = other45.JointConstraints;
-  __isset = other45.__isset;
+MPostureConstraint::MPostureConstraint(const MPostureConstraint& other35) {
+  posture = other35.posture;
+  JointConstraints = other35.JointConstraints;
+  __isset = other35.__isset;
 }
-MPostureConstraint& MPostureConstraint::operator=(const MPostureConstraint& other46) {
-  posture = other46.posture;
-  JointConstraints = other46.JointConstraints;
-  __isset = other46.__isset;
+MPostureConstraint& MPostureConstraint::operator=(const MPostureConstraint& other36) {
+  posture = other36.posture;
+  JointConstraints = other36.JointConstraints;
+  __isset = other36.__isset;
   return *this;
 }
 void MPostureConstraint::printTo(std::ostream& out) const {
@@ -1899,6 +1604,301 @@ void MPostureConstraint::printTo(std::ostream& out) const {
   out << "MPostureConstraint(";
   out << "posture=" << to_string(posture);
   out << ", " << "JointConstraints="; (__isset.JointConstraints ? (out << to_string(JointConstraints)) : (out << "<null>"));
+  out << ")";
+}
+
+
+MConstraint::~MConstraint() noexcept {
+}
+
+
+void MConstraint::__set_ID(const std::string& val) {
+  this->ID = val;
+}
+
+void MConstraint::__set_GeometryConstraint(const MGeometryConstraint& val) {
+  this->GeometryConstraint = val;
+__isset.GeometryConstraint = true;
+}
+
+void MConstraint::__set_VelocityConstraint(const MVelocityConstraint& val) {
+  this->VelocityConstraint = val;
+__isset.VelocityConstraint = true;
+}
+
+void MConstraint::__set_AccelerationConstraint(const MAccelerationConstraint& val) {
+  this->AccelerationConstraint = val;
+__isset.AccelerationConstraint = true;
+}
+
+void MConstraint::__set_PathConstraint(const MPathConstraint& val) {
+  this->PathConstraint = val;
+__isset.PathConstraint = true;
+}
+
+void MConstraint::__set_JointPathConstraint(const MJointPathConstraint& val) {
+  this->JointPathConstraint = val;
+__isset.JointPathConstraint = true;
+}
+
+void MConstraint::__set_PostureConstraint(const MPostureConstraint& val) {
+  this->PostureConstraint = val;
+__isset.PostureConstraint = true;
+}
+
+void MConstraint::__set_JointConstraint(const MJointConstraint& val) {
+  this->JointConstraint = val;
+__isset.JointConstraint = true;
+}
+
+void MConstraint::__set_Properties(const std::map<std::string, std::string> & val) {
+  this->Properties = val;
+__isset.Properties = true;
+}
+std::ostream& operator<<(std::ostream& out, const MConstraint& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+
+uint32_t MConstraint::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_ID = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->ID);
+          isset_ID = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->GeometryConstraint.read(iprot);
+          this->__isset.GeometryConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->VelocityConstraint.read(iprot);
+          this->__isset.VelocityConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->AccelerationConstraint.read(iprot);
+          this->__isset.AccelerationConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->PathConstraint.read(iprot);
+          this->__isset.PathConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->JointPathConstraint.read(iprot);
+          this->__isset.JointPathConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->PostureConstraint.read(iprot);
+          this->__isset.PostureConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->JointConstraint.read(iprot);
+          this->__isset.JointConstraint = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 9:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->Properties.clear();
+            uint32_t _size37;
+            ::apache::thrift::protocol::TType _ktype38;
+            ::apache::thrift::protocol::TType _vtype39;
+            xfer += iprot->readMapBegin(_ktype38, _vtype39, _size37);
+            uint32_t _i41;
+            for (_i41 = 0; _i41 < _size37; ++_i41)
+            {
+              std::string _key42;
+              xfer += iprot->readString(_key42);
+              std::string& _val43 = this->Properties[_key42];
+              xfer += iprot->readString(_val43);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.Properties = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_ID)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t MConstraint::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("MConstraint");
+
+  xfer += oprot->writeFieldBegin("ID", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->ID);
+  xfer += oprot->writeFieldEnd();
+
+  if (this->__isset.GeometryConstraint) {
+    xfer += oprot->writeFieldBegin("GeometryConstraint", ::apache::thrift::protocol::T_STRUCT, 2);
+    xfer += this->GeometryConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.VelocityConstraint) {
+    xfer += oprot->writeFieldBegin("VelocityConstraint", ::apache::thrift::protocol::T_STRUCT, 3);
+    xfer += this->VelocityConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.AccelerationConstraint) {
+    xfer += oprot->writeFieldBegin("AccelerationConstraint", ::apache::thrift::protocol::T_STRUCT, 4);
+    xfer += this->AccelerationConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.PathConstraint) {
+    xfer += oprot->writeFieldBegin("PathConstraint", ::apache::thrift::protocol::T_STRUCT, 5);
+    xfer += this->PathConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.JointPathConstraint) {
+    xfer += oprot->writeFieldBegin("JointPathConstraint", ::apache::thrift::protocol::T_STRUCT, 6);
+    xfer += this->JointPathConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.PostureConstraint) {
+    xfer += oprot->writeFieldBegin("PostureConstraint", ::apache::thrift::protocol::T_STRUCT, 7);
+    xfer += this->PostureConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.JointConstraint) {
+    xfer += oprot->writeFieldBegin("JointConstraint", ::apache::thrift::protocol::T_STRUCT, 8);
+    xfer += this->JointConstraint.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.Properties) {
+    xfer += oprot->writeFieldBegin("Properties", ::apache::thrift::protocol::T_MAP, 9);
+    {
+      xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->Properties.size()));
+      std::map<std::string, std::string> ::const_iterator _iter44;
+      for (_iter44 = this->Properties.begin(); _iter44 != this->Properties.end(); ++_iter44)
+      {
+        xfer += oprot->writeString(_iter44->first);
+        xfer += oprot->writeString(_iter44->second);
+      }
+      xfer += oprot->writeMapEnd();
+    }
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(MConstraint &a, MConstraint &b) {
+  using ::std::swap;
+  swap(a.ID, b.ID);
+  swap(a.GeometryConstraint, b.GeometryConstraint);
+  swap(a.VelocityConstraint, b.VelocityConstraint);
+  swap(a.AccelerationConstraint, b.AccelerationConstraint);
+  swap(a.PathConstraint, b.PathConstraint);
+  swap(a.JointPathConstraint, b.JointPathConstraint);
+  swap(a.PostureConstraint, b.PostureConstraint);
+  swap(a.JointConstraint, b.JointConstraint);
+  swap(a.Properties, b.Properties);
+  swap(a.__isset, b.__isset);
+}
+
+MConstraint::MConstraint(const MConstraint& other45) {
+  ID = other45.ID;
+  GeometryConstraint = other45.GeometryConstraint;
+  VelocityConstraint = other45.VelocityConstraint;
+  AccelerationConstraint = other45.AccelerationConstraint;
+  PathConstraint = other45.PathConstraint;
+  JointPathConstraint = other45.JointPathConstraint;
+  PostureConstraint = other45.PostureConstraint;
+  JointConstraint = other45.JointConstraint;
+  Properties = other45.Properties;
+  __isset = other45.__isset;
+}
+MConstraint& MConstraint::operator=(const MConstraint& other46) {
+  ID = other46.ID;
+  GeometryConstraint = other46.GeometryConstraint;
+  VelocityConstraint = other46.VelocityConstraint;
+  AccelerationConstraint = other46.AccelerationConstraint;
+  PathConstraint = other46.PathConstraint;
+  JointPathConstraint = other46.JointPathConstraint;
+  PostureConstraint = other46.PostureConstraint;
+  JointConstraint = other46.JointConstraint;
+  Properties = other46.Properties;
+  __isset = other46.__isset;
+  return *this;
+}
+void MConstraint::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "MConstraint(";
+  out << "ID=" << to_string(ID);
+  out << ", " << "GeometryConstraint="; (__isset.GeometryConstraint ? (out << to_string(GeometryConstraint)) : (out << "<null>"));
+  out << ", " << "VelocityConstraint="; (__isset.VelocityConstraint ? (out << to_string(VelocityConstraint)) : (out << "<null>"));
+  out << ", " << "AccelerationConstraint="; (__isset.AccelerationConstraint ? (out << to_string(AccelerationConstraint)) : (out << "<null>"));
+  out << ", " << "PathConstraint="; (__isset.PathConstraint ? (out << to_string(PathConstraint)) : (out << "<null>"));
+  out << ", " << "JointPathConstraint="; (__isset.JointPathConstraint ? (out << to_string(JointPathConstraint)) : (out << "<null>"));
+  out << ", " << "PostureConstraint="; (__isset.PostureConstraint ? (out << to_string(PostureConstraint)) : (out << "<null>"));
+  out << ", " << "JointConstraint="; (__isset.JointConstraint ? (out << to_string(JointConstraint)) : (out << "<null>"));
+  out << ", " << "Properties="; (__isset.Properties ? (out << to_string(Properties)) : (out << "<null>"));
   out << ")";
 }
 

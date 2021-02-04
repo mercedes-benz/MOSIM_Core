@@ -11,3 +11,4 @@
 *.lib
 */build
 /vcpkg
+*.hint

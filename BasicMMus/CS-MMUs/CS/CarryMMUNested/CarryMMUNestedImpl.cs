@@ -19,7 +19,7 @@ namespace CarryMMUNested
     ///The MMU useses the other MMU "move" in order to simulate a carry behavior.
     ///Postbuild: "../../../MMUDescriptionAutoGenerator\bin\Debug\MMUDescriptionAutoGenerator.exe" "$(TargetDir)$(ProjectName).dll"
     /// </summary>
-    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUNested", "carryNested", "","A carry MMU", "A carry MMU realized as nested co-simulation")]
+    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUNested", "Object/Carry/carryNested", "","A carry MMU", "A carry MMU realized as nested co-simulation")]
     public class CarryMMUNestedImpl:MMUBase
     {
         #region private fields

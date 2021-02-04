@@ -66,6 +66,9 @@ namespace MMIUnity.TargetEngine
         public bool AutoStart = true;
 
 
+        [Header("Specifies whether multiple avatars are executed in parallel.")]
+        public bool ExecuteAvatarsParallel = false;
+
         /// <summary>
         /// On initialized event
         /// </summary>
@@ -228,24 +231,47 @@ namespace MMIUnity.TargetEngine
             //Create a dictionary which contains the avatar states for each MMU
             ConcurrentDictionary<MMIAvatar, MSimulationResult> results = new ConcurrentDictionary<MMIAvatar, MSimulationResult>();
 
-
-            //Parallel.ForEach(this.Avatars, (UnityAvatar avatar) =>
-            //{
-            //    SimulationResult result = avatar.CoSimulator.DoStep(time, new AvatarState() { Initial = avatar.GetPosture(), Current = avatar.GetPosture() });
-            //    results.TryAdd(avatar.CoSimulator, result);
-            //});
-
-
-            foreach (MMIAvatar avatar in this.Avatars)
+            ///Optionall execute multiple avatars in parallel
+            if (ExecuteAvatarsParallel && this.Avatars.Count > 1)
             {
-                //Can be optimized in future -> Instead of simulation state -> transmit nothing
-                MSimulationResult result = avatar.CoSimulator.DoStep(time, new MSimulationState() { Initial = avatar.GetPosture(), Current = avatar.GetPosture() });
+                //Pre compute frame (on main thread)
+                foreach (MMIAvatar avatar in this.Avatars)
+                {
+                    avatar.CoSimulator.PreComputeFrame();
+                }
 
-                //Execute additional method which can be implemented by child class
-                this.OnResultComputed(result,avatar);
+                //Perform in parallel
+                System.Threading.Tasks.Parallel.ForEach(this.Avatars, (MMIAvatar avatar) =>
+                {
+                    MSimulationResult result = avatar.CoSimulator.ComputeFrame(time);
+                    results.TryAdd(avatar, result);
+                });
 
-                //Add the results
-                results.TryAdd(avatar, result);
+
+                //Pre compute frame (on main thread)
+                foreach (MMIAvatar avatar in this.Avatars)
+                {
+                    avatar.CoSimulator.PostComputeFrame(results[avatar]);
+
+                    //Execute additional method which can be implemented by child class
+                    this.OnResultComputed(results[avatar], avatar);
+                }
+   
+            }
+
+            else
+            {
+                foreach (MMIAvatar avatar in this.Avatars)
+                {
+                    //Can be optimized in future -> Instead of simulation state -> transmit nothing
+                    MSimulationResult result = avatar.CoSimulator.DoStep(time, new MSimulationState() { Initial = avatar.GetPosture(), Current = avatar.GetPosture() });
+
+                    //Execute additional method which can be implemented by child class
+                    this.OnResultComputed(result, avatar);
+
+                    //Add the results
+                    results.TryAdd(avatar, result);
+                }
             }
 
             //####################### Incorporate Results ##################################################

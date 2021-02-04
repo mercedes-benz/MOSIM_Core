@@ -1,12 +1,21 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
 #include<filesystem>
 #include<unordered_map>
-#include "src/mmu_types.h"
+#include "gen-cpp/mmu_types.h"
 #include <string>
+#include <nlohmann/json.hpp>
+
 
 using namespace std;
 using namespace std::filesystem;
+using json = nlohmann::json;
 using namespace MMIStandard;
+
+
 namespace MMIStandard {
 	class FileWatcher
 	{
@@ -48,5 +57,13 @@ namespace MMIStandard {
 		//	Starts the check for loadable MMUs
 		void Start();
 	};
+
+	// functions for parsing json into the MMIStandard datatypes 
+	void from_json(const json& j, MConstraint& c);
+	void from_json(const json& j, MDependency& d);
+	void from_json(const json& j, MDependencyType& d);
+	void from_json(const json& j, MVersion& v);
+	void from_json(const json &j, MParameter &p);
 }
+
 

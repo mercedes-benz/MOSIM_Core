@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace CarryMMUSimple
 {
-    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUSimple", "carry", "carrySingleHanded", "A carry MMU", "A single handed carry MMU.")]
+    [MMUDescriptionAttribute("Felix Gaisbauer", "1.0", "CarryMMUSimple", "Object/Carry", "carrySingleHanded", "A carry MMU", "A single handed carry MMU.")]
     public class CarryMMUSimpleImpl:MMUBase
     {
         #region private fields
@@ -352,8 +352,6 @@ namespace CarryMMUSimple
                 //Estimate the root velocity
                 velocity = (rootPositionLastFrame.Subtract(currentRootPosition)).Magnitude() / (float)time;
             }
-
-            Console.WriteLine("Root velocity: " + velocity);
 
             this.rootPositionLastFrame = new MVector3(simulationState.Initial.PostureData[0], 0, simulationState.Initial.PostureData[2]);
 

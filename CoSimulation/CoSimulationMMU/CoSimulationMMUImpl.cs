@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using MMICoSimulation;
 using MMICSharp.Common;
+using MMICoSimulation.Solvers;
 
 namespace CoSimulationMMU
 {
@@ -65,8 +66,10 @@ namespace CoSimulationMMU
             Console.WriteLine("---------------------------------------------------------");
             Console.WriteLine("Initializing co-simulation MMU");
 
-            //Full scene transmission initial required
+            //Full scene transmission initially required
             this.transmitFullScene = true;
+
+            //Initialize the skeleton access
             MSkeletonAccess.Iface SkeletonAccess = new IntermediateSkeleton();
             SkeletonAccess.InitializeAnthropometry(avatarDescription);
 
@@ -121,16 +124,49 @@ namespace CoSimulationMMU
                     //Use the default priorities -> hacky
                     priorities = new Dictionary<string, float>()
                     {
+                        {"Default", -1 },
+
+                        //Level 0
+                        {"Pose", 0 },
+                        {"Pose/Idle", 0 },
                         {"idle", 0 },
+
+                        //Level 1
+                        {"Locomotion", 1 },
+                        {"Locomotion/Walk", 1 },
+                        {"Locomotion/Run", 1 },
+                        {"Locomotion/Jog", 1 },
+                        {"Locomotion/Crouch", 1 },
+                        {"Locomotion/Turn", 1 },
                         {"walk", 1 },
-                        {"grasp",2},
+
+                        //Level 2
+                        {"Pose/Reach",2},
                         {"positionObject",2},
                         {"releaseObject",2},
+
+                        {"Object/Release",2},
+                        {"Object/Carry",2},
+                        {"Object/Move",2},
+                        {"Object/Turn",2},
+
                         {"release",2},
-                        {"move",3},
                         {"carry",2},
+                        {"move",3},
                         {"putDown",2},
-                        {"pickupMTM-SD",2}
+                        {"pickupMTM-SD",2},
+                        {"turn",2},
+                        {"UseTool",2},
+
+
+                        //Level 3
+                        {"Pose/MoveFingers",3},
+                        {"moveFingers",3},
+                        {"grasp",3},
+
+                        //Level 4
+                        {"Pose/Gaze",4},
+                        {"Pose/EyeTravel",4},
                     };
 
                 }
@@ -157,12 +193,11 @@ namespace CoSimulationMMU
                 }
 
                 Console.WriteLine("All MMUs successfully loaded");
+                Console.WriteLine("------------------------------------------");
 
-
+                //Print all MMUs
                 foreach (MMUDescription description in loadableMMUs)
-                {
-                    Console.WriteLine(description.Name);
-                }
+                    Console.WriteLine(description.Name  + " " + description.MotionType + " " + description.ID);
 
 
                 //Initialize all MMUs
@@ -189,6 +224,17 @@ namespace CoSimulationMMU
 
                 //Set the priorities of the motions
                 this.coSimulator.SetPriority(priorities);
+
+
+                //Create and add the solvers (by default we usa an ik solver)
+                coSimulator.Solvers = new List<ICoSimulationSolver>
+                {
+                    new IKSolver(this.ServiceAccess, SkeletonAccess, this.AvatarDescription.AvatarID)
+                };
+
+                //Record if in debuggin mode
+                this.coSimulator.Recording = true;
+
 
 
                 return new MBoolResponse(true);
@@ -284,6 +330,19 @@ namespace CoSimulationMMU
 
         public override Dictionary<string, string> ExecuteFunction(string name, Dictionary<string, string> parameters)
         {
+            switch (name)
+            {
+                //Returnst the co-simulation record for debugging
+                case "GetRecord":
+                    Dictionary<string, string> recordResult = new Dictionary<string, string>();
+
+                    CoSimulationRecord record = this.coSimulator.GetRecord();
+
+                    recordResult.Add("Record", MMICSharp.Common.Communication.Serialization.ToJsonString(record));
+
+                    return recordResult;
+            }
+
             return this.coSimulator.ExecuteFunction(name, parameters);
         }
 

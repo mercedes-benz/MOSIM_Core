@@ -1,7 +1,12 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser
+
+
 package Extensions;
 
-import MMIStandard.MQuaternion;
-import MMIStandard.MVector3;
+import de.mosim.mmi.math.MQuaternion;
+import de.mosim.mmi.math.MVector3;
 
 import java.util.ArrayList;
 import java.util.List;

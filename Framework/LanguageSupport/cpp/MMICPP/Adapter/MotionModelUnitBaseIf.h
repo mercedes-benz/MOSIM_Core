@@ -1,9 +1,13 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Niclas Delfs, Stephan Adam
+
 #pragma once
 
 #include "Access/ServiceAccesIf.h"
-#include "src/MSceneAccess.h"
-#include "src/MotionModelUnit.h"
-#include "src/MSkeletonAccess.h"
+#include "gen-cpp/MSceneAccess.h"
+#include "gen-cpp/MotionModelUnit.h"
+#include "gen-cpp/MSkeletonAccess.h"
 
 using namespace MMIStandard;
 
@@ -15,10 +19,10 @@ class MotionModelUnitBaseIf : public MotionModelUnitIf
 public:
 
 	//	The access to the services
-	 ServiceAccessIf * serviceAccess ;
+	ServiceAccessIf * serviceAccess ;
 
 	//	The access to the scene
-	 MSceneAccessIf * sceneAccess;
+	MSceneAccessIf * sceneAccess;
 
 	//	The name of the MMU
 	const string name;

@@ -368,7 +368,9 @@ namespace MMIUnity.TargetEngine.Editor
 
                         index++;
 
-                        p.transform.position = new Vector3((float)posConstraint.X(), (float)posConstraint.Y(), (float)posConstraint.Z());
+
+                        if(endeffectorConstraint.GeometryConstraint.ParentToConstraint !=null)
+                            p.transform.position = endeffectorConstraint.GeometryConstraint.ParentToConstraint.Position.ToVector3();
                     }
                 }
             }
@@ -548,6 +550,47 @@ namespace MMIUnity.TargetEngine.Editor
                 {
                 }
             }
+
+
+
+            ///Load remotely (if a remote co-simulation is used) -> only display if remote co-simulation is active
+            if (this.SourceAvatar !=null && this.SourceAvatar.UseRemoteCoSimulation && GUI.Button(new Rect(sliderOffsetX + 430, Screen.height - 45, 100, 40), "Load (Remote)"))
+            {
+                try
+                {
+                    Dictionary<string, string> result = this.SourceAvatar.CoSimulator.ExecuteFunction("GetRecord", new Dictionary<string, string>());
+
+                    if (result.ContainsKey("Record"))
+                    {
+                        this.record = MMICSharp.Common.Communication.Serialization.FromJsonString<CoSimulationRecord>(result["Record"]);
+                    }
+
+                    this.instructionWindows = new List<InstructionWindow>();
+
+                    //Disable the simulation controller
+                    GameObject.FindObjectOfType<SimulationController>().enabled = false;
+
+
+                    //Add the instruction windows
+                    foreach (MInstruction instruction in this.record.Instructions)
+                    {
+                        InstructionWindow w = this.GetInstructionWindow(instruction);
+
+                        if (w.StartIndex == -1)
+                            continue;
+
+                        if (w.EndIndex == -1)
+                            w.EndIndex = this.record.Frames.Count - 1;
+
+
+                        this.instructionWindows.Add(w);
+                    }
+                }
+                catch (System.Exception)
+                {
+                }
+            }
+
 
 
             if (this.SourceAvatar.CoSimulator !=null && this.SourceAvatar.CoSimulator.Recording)

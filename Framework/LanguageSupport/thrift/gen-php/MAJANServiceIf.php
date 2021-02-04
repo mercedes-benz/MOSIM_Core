@@ -18,11 +18,11 @@ interface MAJANServiceIf
 {
     /**
      * @param string $name
-     * @param string $template
+     * @param string $templateAgent
      * @param \MRDFGraph $knowledge
      * @return string
      */
-    public function CreateAgent($name, $template, \MRDFGraph $knowledge);
+    public function CreateAgent($name, $templateAgent, \MRDFGraph $knowledge);
     /**
      * @param string $agentName
      * @return bool

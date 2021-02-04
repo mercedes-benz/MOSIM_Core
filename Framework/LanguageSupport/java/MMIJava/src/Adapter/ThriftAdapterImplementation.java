@@ -1,9 +1,18 @@
+// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Andreas Kaiser, Felix Gaisbauer
+
 package Adapter;
 
-import MMIStandard.*;
-import MMIStandard.MMIAdapter.Iface;
 import Utils.LogLevel;
 import Utils.Logger;
+import de.mosim.mmi.avatar.MAvatarDescription;
+import de.mosim.mmi.constraints.MConstraint;
+import de.mosim.mmi.core.MBoolResponse;
+import de.mosim.mmi.mmu.*;
+import de.mosim.mmi.register.MAdapterDescription;
+import de.mosim.mmi.register.MMIAdapter;
+import de.mosim.mmi.scene.*;
 import org.apache.thrift.TException;
 
 import java.nio.ByteBuffer;
@@ -11,7 +20,7 @@ import java.text.DateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ThriftAdapterImplementation implements Iface {
+public class ThriftAdapterImplementation implements MMIAdapter.Iface {
 
     /**
      * Implementation of the thrift adapter functionality
@@ -286,10 +295,14 @@ public class ThriftAdapterImplementation implements Iface {
 
     //	Method loads MMUs for the specific session
     @Override
-    public MBoolResponse LoadMMUs(List<String> mmus, String sessionID) throws TException {
+    public HashMap<String,String> LoadMMUs(List<String> mmus, String sessionID) throws TException {
         Logger.printLog(LogLevel.L_DEBUG, "LoadMMUs");
         SessionData.lastAccess = System.currentTimeMillis();
-        MBoolResponse result = new MBoolResponse(true);
+
+        //To do
+        HashMap<String, String> mmuInstanceMapping = new HashMap<String, String>();
+
+
 
         try {
             String[] arr = SessionTools.getSplittedIDs(sessionID);
@@ -324,10 +337,10 @@ public class ThriftAdapterImplementation implements Iface {
         } catch (Exception e) {
             String message = e.getMessage();
             Logger.printLog(LogLevel.L_ERROR, message);
-            result.addToLogData(message);
-            result.setSuccessful((false));
+            //result.addToLogData(message);
+            //result.setSuccessful((false));
         }
-        return result;
+        return mmuInstanceMapping;
     }
 
     //	Method creates checkpoint of the given MMU

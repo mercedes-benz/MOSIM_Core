@@ -22,15 +22,298 @@ namespace MMIULibrary
     [Serializable]
     public class RemoteMMUList
     {
-        public string url;
-        public string vendorID;
-        public string name;
-        public string version;
-        public uint sortorder;
-        public bool enabled;
+        public string url { get; set; }
+        public string vendorID { get; set; }
+        public string name { get; set; }
+        public string version { get; set; }
+        public string author { get; set; }
+        public string motiontype { get; set; }
+        public uint sortorder { get; set; }
+        public bool enabled { get; set; }
+        public bool inLocal { get; set; }
+        public bool excludeFromSync { get; set; }
+
+        public Visibility inLocalImg { get { return (inLocal ? Visibility.Visible : Visibility.Hidden); } }
     }
 
-    class MMULibrary
+    [Serializable]
+    public class LibraryLink
+    {
+        public string url;
+        public string token;
+        public string name;
+        /*
+        public LibraryLink(string _url, string _token, string _name)
+        {
+            this.url = _url;
+            this.token = _token;
+            this.name = _name;
+        }*/
+    }
+
+    public class LibraryDetails
+    {
+        public LibraryDetails(int Index, string Name)
+        {
+            this.index = Index;
+            this.name = Name;
+            this.canDownload = (Index >= 0);
+            this.canRemove = (Index == -1);
+            this.canAdd = (Index == -1);
+        }
+
+        public LibraryDetails(int Index, string Name, bool allowRemove, bool allowAdd, bool allowDownload)
+        {
+            this.index = Index;
+            this.name = Name;
+            this.canDownload = allowDownload;
+            this.canRemove = allowRemove;
+            this.canAdd = allowAdd;
+        }
+
+        public int index { get; set; } //negative index means local library, positive index is remote library
+        public string name { get; set; }
+        public bool canRemove { get; set; }
+        public bool canAdd { get; set; }
+        public bool canDownload { get; set; }
+        public bool isLocal { get { return index < 0; } }
+        public bool isRemote { get { return index >= 0; } }
+    }
+
+    public class RemoteLibrary
+    {
+        public RemoteLibrary(string url, string token)
+        {
+            this.URL = url;
+            this.Token = token;
+            this.MMUs = new RemoteMMUList[0];
+        }
+
+        public RemoteLibrary(string url, string token, string name)
+        {
+            this.URL = url;
+            this.Token = token;
+            this.Name = name;
+            this.MMUs = new RemoteMMUList[0];
+        }
+
+        public RemoteLibrary(LibraryLink link)
+        {
+            this.URL = link.url;
+            this.Token = link.token;
+            this.Name = link.name;
+            this.MMUs = new RemoteMMUList[0];
+        }
+
+        public RemoteLibrary(LibraryLink link, string fileName)
+        {
+            this.URL = link.url;
+            this.Token = link.token;
+            this.Name = link.name;
+            this.LocalFileName = fileName;
+            this.MMUs = new RemoteMMUList[0];
+        }
+
+        public void UpdateConnection(HttpClient client)
+        {
+            _client = client;
+        }
+
+        private bool _canDownload;
+        private bool _canUpload;
+        private bool _canRemove;
+        private long _chunkSize = 0;
+        private HttpClient _client;
+
+        public long chunkSize { get { return _chunkSize; } }
+        public string Token;
+        public string URL;
+        public string Name { get; set; }
+        public string LocalFileName;
+        public bool canDownload { get { return _canDownload; } }
+        public bool canUpload { get { return _canUpload; } }
+        public bool canRemove { get { return _canRemove; } }
+        public RemoteMMUList[] MMUs;
+
+        private string GetTagValue(string data, string tag)
+        {
+            var L = tag.Length + 2;
+            var a = data.IndexOf("<" + tag + ">");
+            var b = data.IndexOf("</" + tag + ">");
+            if ((a > -1) && (b > -1))
+                return data.Substring(a + L, b - a - L);
+            return "";
+        }
+
+        public async Task GetSettings()
+        {
+            Dictionary<string, string> PostData = new Dictionary<string, string>();
+            PostData.Add("token", Token);
+            PostData.Add("action", "getSettings");
+
+            string html = "";
+            var PostForm = new FormUrlEncodedContent(PostData);
+            try
+            {
+                var content = await _client.PostAsync(URL, PostForm);
+                html += content.Content.ReadAsStringAsync().Result;
+                var sChunkSize = GetTagValue(html, "chunkSize");
+                if (sChunkSize != "")
+                    _chunkSize = long.Parse(sChunkSize);
+                var scanDownload = GetTagValue(html, "canDownload");
+                if (scanDownload != "")
+                    _canDownload = (scanDownload == "True");
+                var scanUpload = GetTagValue(html, "canUpload");
+                if (scanUpload != "")
+                    _canUpload = (scanUpload == "True");
+                var scanRemove = GetTagValue(html, "canRemove");
+                if (scanRemove != "")
+                    _canRemove = (scanRemove == "True");
+            }
+            catch (Exception err)
+            {
+                if (err.InnerException != null)
+                    html = "Connection error to MMU Library "+URL+": \r\n" + err.InnerException.Message;
+                else
+                    html = "Connection error to MMU Library "+URL+": \r\n" + err.Message;
+                System.Windows.MessageBox.Show(html, "Remote MMU Library settings", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        public async Task GetSettingsIfNecessary()
+        {
+            if (_chunkSize == 0)
+                await GetSettings();
+            if (_chunkSize == 0)
+                _chunkSize = 1024 * 128;
+        }
+
+        public async Task GetMMUListFromServer()
+        {
+            Dictionary<string, string> PostData = new Dictionary<string, string>();
+            PostData.Add("token", Token);
+            PostData.Add("action", "getMMUList");
+
+            string html = "";
+            var PostForm = new FormUrlEncodedContent(PostData);
+            try
+            {
+                var content = await _client.PostAsync(URL, PostForm);
+                html = content.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception err)
+            {
+                if (err.InnerException != null)
+                    html = "Connection error to MMU Library: \r\n" + err.InnerException.Message;
+                else
+                    html = "Connection error to MMU Library: \r\n" + err.Message;
+                System.Windows.MessageBox.Show(html, "Remote MMU Library", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                MMUs = Serialization.FromJsonString<RemoteMMUList[]>(html);
+            }
+            catch
+            {
+                System.Windows.MessageBox.Show("Serialization error of " +URL+ "\r\n" + html, "Remote MMU Library", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        public async Task RemoveMMU(string id)
+        {
+            if (!_canRemove)
+                return;
+
+            Dictionary<string, string> PostData = new Dictionary<string, string>();
+            PostData.Add("token", Token);
+            PostData.Add("action", "removeMMU");
+            PostData.Add("vendorID", id);
+
+            string html = "";
+            var PostForm = new FormUrlEncodedContent(PostData);
+            try
+            {
+                var content = await _client.PostAsync(URL, PostForm);
+                html += content.Content.ReadAsStringAsync().Result;
+            
+                var scanRemove = GetTagValue(html, "result");
+
+                if (scanRemove == "ERR")
+                {
+                    System.Windows.MessageBox.Show(GetTagValue(html, "msg"), "Remote MMU delete", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (scanRemove=="")
+                    try
+                    {
+                        MMUs = Serialization.FromJsonString<RemoteMMUList[]>(html);
+                    }
+                    catch
+                    {
+                        html = "MMU list serialization error";
+                        System.Windows.MessageBox.Show(html, "Remote MMU delete", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+            }
+            catch (Exception err)
+            {
+                if (err.InnerException != null)
+                    html = "Connection error to MMU Library " + URL + ": \r\n" + err.InnerException.Message;
+                else
+                    html = "Connection error to MMU Library " + URL + ": \r\n" + err.Message;
+                System.Windows.MessageBox.Show(html, "Remote MMU delete", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+    }
+
+    
+    public class CopyPair
+    {
+        public CopyPair(int sourceMmuId, int sourceLibraryId, int destLibraryId)
+        {
+            this.mmu = sourceMmuId;
+            this.sourceLibrary = sourceLibraryId;
+            this.destLibrary = destLibraryId;
+        }
+
+        public int mmu;
+        public int sourceLibrary;
+        public int destLibrary;
+    }
+
+    public class UpDownPair
+    {
+        public UpDownPair(int mmuID, int libraryID)
+        {
+            this.mmu = mmuID;
+            this.library = libraryID;
+            this.zipFile = "";
+        }
+
+        public UpDownPair(string zipFileName, int libraryID)
+        {
+            this.mmu = -1;
+            this.zipFile = zipFileName;
+            this.library = libraryID;
+        }
+
+        public int mmu;
+        public int library;
+        public string zipFile;
+    }
+
+    /*
+    public class MyList : List<UpDownPair> //example of list extension with custom add method.
+    {
+        public void Add(int a, int b)
+        {
+            this.Add(new UpDownPair(a, b));
+        }
+    }
+    */
+    public class MMULibrary
     {
         private long chunkSize = 0;
         public List<MMUOrderAndDescriptionData> MMUs = new List<MMUOrderAndDescriptionData>();
@@ -38,11 +321,16 @@ namespace MMIULibrary
         string RemoteLibraryUrl;
         string RemoteLibraryToken;
         string LocalMMULibrary;
-        private List<int> UploadMMU = new List<int>();
-        private List<int> DownloadMMU = new List<int>();
+        string localZipMMULibrary;
+        private List<CopyPair> CopyMMU = new List<CopyPair>();
+        private List<UpDownPair> UploadMMU = new List<UpDownPair>();
+        private List<UpDownPair> DownloadMMU = new List<UpDownPair>();
         private bool isUploading = false;
         private bool isDownloading = false;
         public RemoteMMUList[] RemoteMMUs;
+        public List<RemoteLibrary> Remotes = new List<RemoteLibrary>();
+
+        public delegate void Progress(long max, long progress);
 
         public int SyncUpCount()
         {
@@ -54,25 +342,90 @@ namespace MMIULibrary
             return DownloadMMU.Count;
         }
 
-        public void ConfigureConnection(HttpClient httpClient, string MMULibraryPath, string MMULibraryUrl, string MMULibraryToken)
+        public void ConfigureConnection(HttpClient httpClient, string MMULibraryPath, string mmuZipLibraryPath, string MMULibraryUrl, string MMULibraryToken)
         {
             client = httpClient;
             RemoteLibraryUrl = MMULibraryUrl;
             RemoteLibraryToken = MMULibraryToken;
             LocalMMULibrary = MMULibraryPath;
+            localZipMMULibrary = mmuZipLibraryPath;
         }
 
-        public void AddToUpload(int mmuIndex)
+        public void ClearUploadList()
         {
-            UploadMMU.Add(mmuIndex);
+            UploadMMU.Clear();
         }
 
-        public void ScanLibrary(string mmuPath)
+        public void ClearDownloadList()
         {
-            string[] mmuFolders = Directory.GetDirectories(mmuPath);
+            DownloadMMU.Clear();
+        }
+
+        public void ClearCopyList()
+        {
+            CopyMMU.Clear();
+        }
+
+        public void AddToCopy(int sourceMMU, int sourceLibrary, int destLibrary)
+        {
+            CopyMMU.Add(new CopyPair(sourceMMU, sourceLibrary, destLibrary));
+        }
+
+        public void AddToUpload(int localMmuIndex,int remoteLibraryIndex)
+        {
+            UploadMMU.Add(new UpDownPair(localMmuIndex, remoteLibraryIndex));
+        }
+
+        public void AddToUpload(string zipFile, int remoteLibraryIndex)
+        {
+            UploadMMU.Add(new UpDownPair(zipFile, remoteLibraryIndex));
+        }
+
+        public void AddToDownload(int remoteMmuIndex, int remoteLibraryIndex)
+        {
+            DownloadMMU.Add(new UpDownPair(remoteMmuIndex, remoteLibraryIndex));
+        }
+
+        public void AddToDownload(string url, int remoteLibraryIndex)
+        {
+            DownloadMMU.Add(new UpDownPair(url, remoteLibraryIndex));
+        }
+
+        public bool FindLibrary(LibraryLink library)
+        {
+            for (int i = 0; i < Remotes.Count; i++)
+                if ((Remotes[i].URL == library.url) && (Remotes[i].Token == library.token))
+                    return true;
+            return false;
+        }
+
+        public bool FindLibrary(string url, string token)
+        {
+            for (int i = 0; i < Remotes.Count; i++)
+                if ((Remotes[i].URL == url) && (Remotes[i].Token == token))
+                    return true;
+            return false;
+        }
+
+        public void AddRemote(RemoteLibrary newLib, HttpClient client)
+        {
+            Remotes.Add(newLib);
+            Remotes[Remotes.Count - 1].UpdateConnection(client);
+        }
+
+        public void InsertRemote(int InsertIndex, RemoteLibrary newLib, HttpClient client)
+        {
+            Remotes.Insert(InsertIndex,newLib);
+            Remotes[InsertIndex].UpdateConnection(client);
+        }
+
+        public void ScanLibrary()
+        {
+            MMUs.Clear();
+            string[] mmuFolders = Directory.GetDirectories(LocalMMULibrary);
             for (int i = 0; i < mmuFolders.Length; i++)
             {
-                string descFile = mmuFolders[i] + (mmuFolders[i].EndsWith("/") ? "" : "/") + "description.json";
+                string descFile = mmuFolders[i] + (mmuFolders[i].EndsWith("/") || mmuFolders[i].EndsWith("\\") ? "" : "\\") + "description.json";
                 if (File.Exists(descFile))
                 {
                     var mmuDesc = Serialization.FromJsonString<MMUDescription>(File.ReadAllText(descFile));
@@ -82,40 +435,71 @@ namespace MMIULibrary
             }
         }
 
-        public void CompareRemoteAndLocal(string outputDir)
+        public void ScanMMU(string mmuPath)
+        {
+            string descFile = mmuPath + (mmuPath.EndsWith("/") || mmuPath.EndsWith("\\") ? "" : "\\") + "description.json";
+            if (File.Exists(descFile))
+            {
+                var mmuDesc = Serialization.FromJsonString<MMUDescription>(File.ReadAllText(descFile));
+                var mmuExtDesc = new MMUOrderAndDescriptionData(mmuDesc, 0, mmuPath);
+                MMUs.Add(mmuExtDesc);
+            }
+        }
+
+        public void CompareRemoteAndLocal(int remoteIndex)
+        {
+            bool found = false;
+
+            for (int i = 0; i < Remotes[remoteIndex].MMUs.Length; i++)
+            {
+                found = false;
+                for (int j = 0; (j < MMUs.Count) && !found; j++)
+                    if (Remotes[remoteIndex].MMUs[i].vendorID == MMUs[j].ID)
+                        found = true;
+                Remotes[remoteIndex].MMUs[i].inLocal = found;
+            }
+        }
+
+        public void CompareAndPackRemoteAndLocal(int remoteIndex)
         {
             if (isUploading || isDownloading)
                 return;
-
+            
             UploadMMU.Clear();
             DownloadMMU.Clear();
             bool found = false;
             for (int i = 0; i < MMUs.Count; i++)
             {
                 found = false;
-                for (int j = 0; j < RemoteMMUs.Length; j++)
-                    if (RemoteMMUs[j].vendorID == MMUs[i].ID)
+                for (int j = 0; j < Remotes[remoteIndex].MMUs.Length; j++)
+                    if (Remotes[remoteIndex].MMUs[j].vendorID == MMUs[i].ID)
                         found = true;
                 if (!found)
                 {
-                    Pack(i, outputDir);
-                    UploadMMU.Add(i);
+                    Pack(i);
+                    UploadMMU.Add(new UpDownPair(i, remoteIndex));
                 }
             }
 
-            for (int i = 0; i < RemoteMMUs.Length; i++)
+            for (int i = 0; i < Remotes[remoteIndex].MMUs.Length; i++)
             {
                 found = false;
-                for (int j = 0; j < MMUs.Count; j++)
-                    if (RemoteMMUs[i].vendorID == MMUs[j].ID)
+                for (int j = 0; (j < MMUs.Count) && !found; j++)
+                    if (Remotes[remoteIndex].MMUs[i].vendorID == MMUs[j].ID)
                         found = true;
+                Remotes[remoteIndex].MMUs[i].inLocal = found;
                 if (!found)
-                    DownloadMMU.Add(i);
+                    DownloadMMU.Add(new UpDownPair(i, remoteIndex));
             }
         }
 
         public async Task GetMMUListFromServer()
         {
+            if (RemoteLibraryUrl=="")
+            {
+                RemoteMMUs = new RemoteMMUList[0];
+                return;
+            }
             Dictionary<string, string> PostData = new Dictionary<string, string>();
             PostData.Add("token", RemoteLibraryToken);
             PostData.Add("action", "getMMUList");
@@ -145,6 +529,12 @@ namespace MMIULibrary
             {
                 System.Windows.MessageBox.Show("Serialization error of \r\n" + html, "Remote MMU Library", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        public void RemoveRemoteLibrary(int index)
+        {
+            File.Delete(Remotes[index].LocalFileName);
+            Remotes.RemoveAt(index); //add refreshing in the user interface after this operation in the MMULibraryWindow.xaml.cs
         }
 
         private string GetTagValue(string data, string tag)
@@ -194,20 +584,32 @@ namespace MMIULibrary
             return hash;
         }
 
-        public async Task SendToServer(string inputDir)
+        public async Task SendToServer(Progress UploadProgress = null)
         {
             if (isUploading)
                 return;
 
-            if (chunkSize == 0)
-                await GetServerSettings();
-            if (chunkSize == 0)
-                chunkSize = 1024 * 128; //default chunk size if server settings cannot be obtained - generally they should always be available.
+            long uploadSize = 0;
+            long uploadedSize = 0;
+            for (int k = 0; k < UploadMMU.Count; k++)
+            {
+                string inputFile = localZipMMULibrary + "mmu" + k.ToString() + ".zip";
+                if (UploadMMU[k].mmu == -1)
+                    inputFile = localZipMMULibrary + UploadMMU[k].zipFile;
+                var fs = new FileStream(inputFile, FileMode.Open);
+                uploadSize += fs.Length;
+                fs.Close();
+            }
+
+            //string summary = "";
+
+            UploadProgress?.Invoke(uploadSize, uploadedSize);
 
             isUploading = true;
             for (int k=0; k<UploadMMU.Count; k++)
             {
-            int itemIndex = UploadMMU[k];
+            await Remotes[UploadMMU[k].library].GetSettingsIfNecessary();
+                chunkSize = Remotes[UploadMMU[k].library].chunkSize;
             string msg="";
             bool success = true;
             string html = "";
@@ -215,7 +617,9 @@ namespace MMIULibrary
             int chunkNum = 0;
             string fileID = "0";
             string sessionID = CreateBoundaryString();
-            string inputFile = inputDir + "\\mmu" + itemIndex.ToString() + ".zip";
+            string inputFile = localZipMMULibrary + "\\mmu" + k.ToString() + ".zip";
+                if (UploadMMU[k].mmu == -1)
+                    inputFile = localZipMMULibrary + UploadMMU[k].zipFile;
 
             byte[] buffer = new byte[chunkSize];
             var fs = new FileStream(inputFile, FileMode.Open);
@@ -232,13 +636,14 @@ namespace MMIULibrary
             do {
                 fs.Position = chunkEnd;
                 int thisChunkSize = fs.Read(buffer, 0, Convert.ToInt32(Math.Min(fs.Length-chunkEnd,chunkSize)));
+                uploadedSize+= thisChunkSize;
                 PostData["chunkend"]= (chunkEnd+thisChunkSize).ToString();
                 PostData["fileID"]= fileID;
                 PostData["chunknum"]=chunkNum.ToString();
                 var FormData = new MultipartFormDataContent(CreateBoundaryString());
                  for (int i=0; i<PostData.Keys.Count; i++)
                  FormData.Add(new StringContent(PostData.Values.ElementAt<string>(i)), String.Format("\"{0}\"", PostData.Keys.ElementAt<string>(i)));
-                FormData.Add(new StreamContent(new MemoryStream(buffer, 0, thisChunkSize)), "chunk", "mmu" + itemIndex.ToString() + ".zip");
+                FormData.Add(new StreamContent(new MemoryStream(buffer, 0, thisChunkSize)), "chunk", Path.GetFileName(inputFile));
                 try
                 {
                     var content = await client.PostAsync(RemoteLibraryUrl, FormData);
@@ -257,7 +662,7 @@ namespace MMIULibrary
                             if (val == "ERR")
                             {
                                 success = false;
-                                msg = MMUs[itemIndex].Name + " " + MMUs[itemIndex].Version + "\r\n" + GetTagValue(html, "msg");
+                                msg = MMUs[k].Name + " " + MMUs[k].Version + "\r\n" + GetTagValue(html, "msg");
                             }
                             else
                                 msg = GetTagValue(html, "mmuName") + " " + GetTagValue(html, "mmuVersion");
@@ -283,6 +688,7 @@ namespace MMIULibrary
                         success = false;
                     else
                         fileID = val;
+                 UploadProgress?.Invoke(uploadSize, uploadedSize);
                 }
                 catch (Exception err)
                 {
@@ -306,7 +712,7 @@ namespace MMIULibrary
             isUploading = false;
         }
 
-        public async Task GetFromServer(string inputDir)
+        public async Task GetFromServer(Progress DownloadProgress = null)
         {
             if (isUploading)
                 return;
@@ -316,27 +722,31 @@ namespace MMIULibrary
             if (chunkSize == 0)
                 chunkSize = 1024 * 128; //default chunk size if server settings cannot be obtained - generally they should always be available.
 
+            DownloadProgress?.Invoke(DownloadMMU.Count, 0);
+
             isDownloading = true;
             for (int k = 0; k < DownloadMMU.Count; k++)
             {
-                int itemIndex = DownloadMMU[k];
+                int itemIndex = DownloadMMU[k].mmu;
                 string msg = "";
                 bool success = true;
                 string html = "";
-                string inputFile = inputDir + "\\mmu-d" + itemIndex.ToString() + ".zip";
+                string inputFile = localZipMMULibrary + "\\mmu-d" + itemIndex.ToString() + ".zip";
 
                 Dictionary<string, string> PostData = new Dictionary<string, string>();
                 PostData.Add("token", RemoteLibraryToken);
                 PostData.Add("action", "downloadMMU");
-                PostData.Add("mmuID", RemoteMMUs[DownloadMMU[k]].url);
+                 if (DownloadMMU[k].mmu>=0)
+                 PostData.Add("mmuID", Remotes[DownloadMMU[k].library].MMUs[DownloadMMU[k].mmu].url);
+                 else
+                    PostData.Add("mmuID", DownloadMMU[k].zipFile);
 
-                    var FormData = new MultipartFormDataContent(CreateBoundaryString());
+                var FormData = new MultipartFormDataContent(CreateBoundaryString());
                     for (int i = 0; i < PostData.Keys.Count; i++)
                         FormData.Add(new StringContent(PostData.Values.ElementAt<string>(i)), String.Format("\"{0}\"", PostData.Keys.ElementAt<string>(i)));
                 try
                 {
                     var content = await client.PostAsync(RemoteLibraryUrl, FormData);
-
                     if (content.Content.Headers.Contains("Content-Type"))
                     {
                         if (content.Content.Headers.ContentType.MediaType == "application/zip")
@@ -357,7 +767,7 @@ namespace MMIULibrary
                     }
                     else
                         success = false;
-                    
+                    DownloadProgress?.Invoke(DownloadMMU.Count, k+1);
                 }
                 catch (Exception err)
                 {
@@ -379,25 +789,12 @@ namespace MMIULibrary
             isDownloading = false;
         }
 
-        public void Pack(int itemIndex, string outputDir)
+        public void Pack(int itemIndex)
         {
-            string outputFile = outputDir + "\\mmu" + itemIndex.ToString() + ".zip";
+            string outputFile = localZipMMULibrary + "\\mmu" + itemIndex.ToString() + ".zip";
             if (File.Exists(outputFile))
                 File.Delete(outputFile);
             ZipFile.CreateFromDirectory(MMUs[itemIndex].FolderPath, outputFile ,CompressionLevel.Optimal,true);
-            
-            /*using (FileStream zipToOpen = new FileStream(outputDir+"\\mmu.zip", FileMode.Create))
-            {
-                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
-                {
-                    ZipArchiveEntry readmeEntry = archive.CreateEntry("Readme.txt");
-                    using (StreamWriter writer = new StreamWriter(readmeEntry.Open()))
-                    {
-                        writer.WriteLine("Information about this package.");
-                        writer.WriteLine("========================");
-                    }
-                }
-            }*/
         }
 
         public string NameMUUDir(ZipArchive zip)
@@ -430,12 +827,34 @@ namespace MMIULibrary
             return dir;
         }
 
-        public int ImportMMUs(string[] mmuZipFiles)
+        public int ImportMMUs(string[] mmuZipFiles,int mmuLibrary=-1, Progress ProgressUpdate = null)
         {
             int success = 0;
-            for (int i = 0; i < mmuZipFiles.Length; i++)
-                if (Extract(mmuZipFiles[i], LocalMMULibrary))
-                    success++;
+            if (mmuLibrary == -1) //local library import
+            {
+                for (int i = 0; i < mmuZipFiles.Length; i++)
+                    if (Extract(mmuZipFiles[i], LocalMMULibrary))
+                        success++;
+            }
+            else //remote library direct mmu add
+                success = ImportMMUsRemote(mmuZipFiles, mmuLibrary, ProgressUpdate);
+            return success;
+        }
+
+        public int ImportMMUsRemote(string[] mmuZipFiles, int mmuLibrary, Progress ProgressUpdate = null)
+        {
+            int success = 0;
+            UploadMMU.Clear();
+                for (int i = 0; i < mmuZipFiles.Length; i++)
+                {
+                 var fname = "mmu-up-" + i.ToString() + ".zip";
+                if (File.Exists(localZipMMULibrary + "\\" + fname))
+                    File.Delete(localZipMMULibrary + "\\" + fname);
+                 File.Copy(mmuZipFiles[i], localZipMMULibrary + "\\"+fname, true);
+                 AddToUpload(fname, mmuLibrary);
+                 success++;
+                }
+            SendToServer(ProgressUpdate);
             return success;
         }
 
@@ -471,6 +890,7 @@ namespace MMIULibrary
                 }
                 dir = dir.Replace("mmu", "").Replace("MMU", "");
                 zip.ExtractToDirectory(outputDir + dir);
+                ScanMMU(outputDir + dir);
             }
             else
             { //there is common folder - check if it is unque in the folder sturcture, if not change the folder name using MMU name and version
@@ -522,14 +942,15 @@ namespace MMIULibrary
                         if (basefile!="") //it is empty in case of root directory entry
                         zip.Entries[i].ExtractToFile(outputDir + dir + basefile);
                     }
+                    ScanMMU(outputDir + dir);
                 }
                 else
                 {
                    // dir = dir.Replace("mmu", "").Replace("MMU", "");
                     zip.ExtractToDirectory(outputDir);
+                    ScanMMU(outputDir + dir);
                 }
             }
-            
 
             zip.Dispose();
             return true;

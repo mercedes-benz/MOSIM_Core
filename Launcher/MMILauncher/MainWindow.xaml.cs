@@ -22,9 +22,96 @@ using Encryption;
 using System.Net.Http;
 using System.Net;
 using MMIULibrary;
+using System.Windows.Media.Animation;
 
 namespace MMILauncher
 {
+
+    public class TWatcherError
+    {
+        private class PathErrPair
+        {
+            public PathErrPair(string filePath)
+            {
+                this.path = filePath;
+                this.ErrCount = 1;
+            }
+            public string path;
+            public int ErrCount;
+        }
+
+        private List<PathErrPair> data;
+        private System.Timers.Timer ErrTimer;
+
+        public TWatcherError(int ErrorTreshold, OnFileCheck CheckFile)
+        {
+            data = new List<PathErrPair>();
+            ErrTreshold = ErrorTreshold;
+            OnCheckFile = CheckFile;
+
+            ErrTimer = new System.Timers.Timer();
+            ErrTimer.Interval = 2000;
+            // Hook up the Elapsed event for the timer. 
+            ErrTimer.Elapsed += OnTimer;
+            // Have the timer fire repeated events (true is the default)
+            ErrTimer.AutoReset = true;
+        }
+        
+        private void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            for (int i = data.Count-1; i>=0 ; i--)
+                if (OnCheckFile(data[i].path))
+                {
+                    data.RemoveAt(i);
+                    if (data.Count == 0)
+                        ErrTimer.Enabled = false;
+                }
+        }
+
+        public bool AddError(string filePath)
+        {
+            bool found = false;
+            for (int i = 0; i < data.Count; i++)
+                if (data[i].path == filePath)
+                {
+                    found = true;
+                    data[i].ErrCount++;
+                    if (data[i].ErrCount > ErrTreshold)
+                    {
+                        OnTresholdEvent(data[i].path);
+                        data.RemoveAt(i);
+                        if (data.Count == 0)
+                            ErrTimer.Enabled = false;
+                        return true;
+                    }
+                }
+            if (!found)
+            {
+                data.Add(new PathErrPair(filePath));
+                ErrTimer.Enabled = true;
+            }
+            return false;
+        }
+
+        public bool RemoveError(string filePath)
+        {
+            for (int i = 0; i < data.Count; i++)
+                if (data[i].path == filePath)
+                {
+                    data.RemoveAt(i);
+                     if (data.Count == 0)
+                     ErrTimer.Enabled = false;
+                     return true;
+                }
+            return false;
+        }
+
+        public int ErrTreshold;
+        public OnTreshold OnTresholdEvent;
+        public OnFileCheck OnCheckFile;
+        public delegate void OnTreshold(string path);
+        public delegate bool OnFileCheck(string path);
+    }
 
     /// <summary>
     /// Central class which represents the main window of the MMU Server Launcher application.
@@ -57,7 +144,7 @@ namespace MMILauncher
 
         #region private variables
 
-        private const string version = "5.1.2";
+        private const string version = "5.1.4";
 
         /// <summary>
         /// The instance of the register server
@@ -74,10 +161,16 @@ namespace MMILauncher
         private PerformanceCounter cpuCounter;
         private int port;
 
+        public bool isRunning { get { return running;  } }
+
         private HttpClientHandler httpClientHandler;
         private WebProxy proxy;
-        private HttpClient client;
-        private MMULibrary mmus = new MMULibrary();
+        public HttpClient client;
+        public MMULibrary mmus = new MMULibrary();
+        public string MMULibraryName = "Default";
+        FileSystemWatcher watcherMMULib; //file system watcher for MMU library settings files
+
+        private TWatcherError WatcherErrors;
 
         #endregion
 
@@ -90,12 +183,14 @@ namespace MMILauncher
         public MainWindow()
         {
             InitializeComponent();
+            //Register for unhandled exceptions
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             this.StopButton.IsEnabled = false;
             //Important assign the dispatcher at the beginning
             UIData.Initialize(this.Dispatcher);
-
-            //Register for unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            SetupLibraries();
+            RegisterAppInstance(); //register app instance in system's registry to allow passing MMUs and other resources to specific instances.
 
             //Initialize gui related things
             this.adapterListView.ItemsSource = UIData.AdapterCollection;
@@ -115,27 +210,24 @@ namespace MMILauncher
             this.registerService.OnServiceRegistered += RegisterService_OnServiceRegistered;
             this.registerService.OnServiceUnregistered += RegisterService_OnServiceUnregistered;
 
-            //Parse the settings from file
+            if (!File.Exists(AppPath() + "settings.json"))
+                initiateSettingsFile();
+            else //Parse the settings from file
             try
-            {
-                //Load the settings file from json
-                settings = Serialization.FromJsonString<ServerSettings>(File.ReadAllText("settings.json"));
-
+            {  //Load the settings file from json
+                settings = Serialization.FromJsonString<ServerSettings>(File.ReadAllText(AppPath() + "settings.json"));
+                    if (settings.DataPath.EndsWith("/"))
+                        settings.DataPath = settings.DataPath.Substring(0, settings.DataPath.Length - 1) + "\\";
+                    else
+                    if (!settings.DataPath.EndsWith("\\"))
+                        settings.DataPath += "\\";
                 //Check if directory exists -> if not user must provide input
-                if (!Directory.Exists(settings.DataPath))
-                {
-                    ShowFolderSelectionDialog("Invalid path: ");
-                }
-                
+                if (!FolderStructureOK(settings.DataPath))
+                ShowFolderSelectionDialog("Invalid path: ");
             }
             catch (Exception)
             {
-                //Create a new settings file
-                settings = new ServerSettings();
-
-                //Show the folder selection dialog
-                ShowFolderSelectionDialog("No settings file found: ");
-                SaveSettings(); //if settings did not exist before save the default settings
+               initiateSettingsFile();
             }
 
             //Read settings from system registry
@@ -145,6 +237,9 @@ namespace MMILauncher
             //Assign the port (common for loaded settings from file or settings from default settings file.
             RuntimeData.MMIRegisterAddress.Port = settings.RegisterPort;
             RuntimeData.MMIRegisterAddress.Address = settings.RegisterAddress;
+
+            //Loads MMU libraries
+            LoadMMULibraries();
 
             //Sets up the performance bar which visualizes performance stats within the main window
             SetupPerformanceBar();
@@ -163,9 +258,36 @@ namespace MMILauncher
 
             //Directly start all processes if autostart is enabled
             if (this.settings.AutoStart)
-            {
                 this.StartButton_Click(this, new RoutedEventArgs());
-            }
+        }
+
+        public void initiateSettingsFile()
+        {
+            settings = new ServerSettings();
+            string path = AppPath();
+            path = path.Substring(0, path.Length - 1);
+            int i = path.LastIndexOf("\\");
+                if (i > -1)
+                {
+                    if (FolderStructureOK(path.Substring(0, i+1)))
+                    settings.DataPath = path.Substring(0, i+1);
+                    else
+                    ShowFolderSelectionDialog("No settings file found: "); //Show the folder selection dialog
+                }
+                else
+                    if (FolderStructureOK(path))
+                    settings.DataPath = path;
+                    else
+                    ShowFolderSelectionDialog("No settings file found: "); //Show the folder selection dialog
+            SaveSettings(); //if settings did not exist before save the default settings
+        }
+
+        public string AppPath()
+        {
+            var path = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            if (path[path.Length - 1] != '\\')
+                path += "\\";
+            return path;
         }
 
         /// <summary>
@@ -201,7 +323,7 @@ namespace MMILauncher
             this.CheckFolderStructure(datapath);
 
             //Set up the environment
-            this.SetupEnvironment(datapath + "Adapters/", datapath + "MMUs/", datapath + "Services/");
+            this.SetupEnvironment(datapath + "Adapters\\", datapath + "MMUs\\", datapath + "Services\\");
         }
 
         public void Stop()
@@ -221,7 +343,6 @@ namespace MMILauncher
         public void Restart()
         {
             Stop();
-
             try
             { //Start a new server with the specific configuration
                 Start();
@@ -232,7 +353,178 @@ namespace MMILauncher
             }
         }
 
+        public void SetupLibraries()
+        {
+            WatcherErrors = new TWatcherError(5, AddNewLibraryFile);
+            string path = AppPath() + "settings\\libraries\\mmu";
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            watcherMMULib = new FileSystemWatcher();
+            watcherMMULib.Path = path;
+            watcherMMULib.Filter = "*.json";
+            watcherMMULib.Created += WatcherMMULib_Created;
+            watcherMMULib.Changed += WatcherMMULib_Created;
+            watcherMMULib.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.LastWrite;
+            watcherMMULib.EnableRaisingEvents = true;
+        }
+
+        private void WatcherMMULib_Created(object sender, FileSystemEventArgs e)
+        {
+            AddNewLibraryFile(e.FullPath);            
+        }
+
+        private bool AddNewLibraryFile(string path)
+        {
+            try
+            {
+                LibraryLink newMMULib = Serialization.FromJsonString<LibraryLink>(File.ReadAllText(path)); //when file is incomplete this will throw exception
+                bool found = false;
+                for (int i = 0; (i < mmus.Remotes.Count) && (!found); i++)
+                    if ((mmus.Remotes[i].URL == newMMULib.url) && (mmus.Remotes[i].Token == newMMULib.token))
+                        found = true;
+                WatcherErrors.RemoveError(path); //if until now there is no exception remove the file from error list to avoid multiple dialog boxes showing up.
+                if (!found)
+                {
+                    mmus.AddRemote(new RemoteLibrary(newMMULib,path),client);
+                    string msg = UpdateDefaultTaskEditor()==true ? "\r\nTask editor settings have been updated to match the new library data." : "";
+                    System.Windows.Forms.MessageBox.Show("New MMU library has been added: " + newMMULib.name + msg, "MMU library discovery", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch
+            {
+                if (WatcherErrors.AddError(path)) //if adding the same path for nth time and n is larger than treshold, show error message.
+                    System.Windows.Forms.MessageBox.Show("New MMU library file has been added, but it cannot be read or file content is corrupted.\r\n" + Path.GetFileName(path), "MMU library discovery", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return true;
+            }
+            return false;
+        }
+
+        public void AddMMULibrary(LibraryLink LibLink)
+        {
+            var path = Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            if (path[path.Length - 1] != '\\')
+                path += "\\";
+            var mmupath = path + "settings\\libraries\\mmu";
+            if (!Directory.Exists(mmupath))
+                Directory.CreateDirectory(mmupath);
+            int n = 1;
+            while (System.IO.File.Exists(mmupath + "lib" + n.ToString() + ".json"))
+                n++;
+            System.IO.File.WriteAllText(mmupath + "lib" + n.ToString() + ".json", Serialization.ToJsonString(LibLink));
+            LoadMMULibraries();
+        }
+
+        public void UpdateMMULibrary(LibraryLink LibLink)
+        {
+            int index = -1;
+            for (int i = 0; i < mmus.Remotes.Count; i++)
+                if ((mmus.Remotes[i].URL == LibLink.url) && (mmus.Remotes[i].Token == LibLink.token))
+                    index = i;
+            if (index > -1)
+            {
+                if (mmus.Remotes[index].LocalFileName != "")
+                {
+                    mmus.Remotes[index].Name = LibLink.name;
+                    if (System.IO.File.Exists(mmus.Remotes[index].LocalFileName))
+                        System.IO.File.Delete(mmus.Remotes[index].LocalFileName);
+                    System.IO.File.WriteAllText(mmus.Remotes[index].LocalFileName, Serialization.ToJsonString(LibLink));
+                    //LoadMMULibraries();
+                }
+                else
+                    AddMMULibrary(LibLink);
+            }
+        }
+
+        public bool UpdateDefaultTaskEditor()
+        {
+            string path = AppPath() + "settings\\libraries\\mmu";
+            string newDefault = "-1";
+            if (File.Exists(path + "\\defaultlib.txt"))
+            {
+                newDefault = path + "\\lib" + File.ReadAllText(path + "\\defaultlib.txt") + ".json";
+                for (int i=0; i<mmus.Remotes.Count; i++)
+                    if (mmus.Remotes[i].LocalFileName==newDefault)
+                    {
+                        settings.TaskEditorApiUrl = mmus.Remotes[i].URL;
+                        settings.TaskEditorToken = mmus.Remotes[i].Token;
+                        try
+                        {
+                            SaveSettings(false);
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                        try
+                        {
+                            System.IO.File.Delete(path + "\\defaultlib.txt");
+                            return true;
+                        }
+                        catch { }
+                    }
+            }
+            return false;
+        }
+
+        public void LoadMMULibraries()
+        {
+            mmus.Remotes.Clear();
+            string path = AppPath() + "settings\\libraries\\mmu";
+
+            var mmuLibs = Directory.GetFiles(path);
+            for (int i = 0; i < mmuLibs.Length; i++)
+                if (mmuLibs[i].Substring(mmuLibs[i].Length-5) ==".json")
+                {
+                    try
+                    {
+                        LibraryLink newMMULib = Serialization.FromJsonString<LibraryLink>(File.ReadAllText(mmuLibs[i]));
+                        if (!mmus.FindLibrary(newMMULib))
+                            mmus.AddRemote(new RemoteLibrary(newMMULib, mmuLibs[i]),client);
+                    }
+                    catch (Exception)
+                    { }
+                }
+
+            if ((settings.TaskEditorApiUrl != "") && !mmus.FindLibrary(settings.TaskEditorApiUrl, settings.TaskEditorToken))
+                mmus.InsertRemote(0,new RemoteLibrary(settings.TaskEditorApiUrl, settings.TaskEditorToken, "Project library"), client);
+
+            mmus.ConfigureConnection(client, settings.DataPath + "MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+            UpdateDefaultTaskEditor();
+        }
+
         public void LoadRegistrySettings()
+        {
+            Microsoft.Win32.RegistryKey key;
+            key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\MOSIM\\Launcher"); //key with proxy settings that are same for task editor and launcher
+            if (key != null)
+            {
+                int instanceCount = 0;
+                var values = key.GetSubKeyNames();
+                for (int i = 0; i < key.SubKeyCount; i++)
+                    if (values[i].IndexOf("Instance") == 0)
+                    {
+                        int curinstance = 0;
+                        if (Int32.TryParse(values[i].Substring(8), out curinstance))
+                        {
+                            instanceCount = Math.Max(curinstance, instanceCount);
+                            var subkey = key.OpenSubKey(values[i], false);
+                            if (subkey != null)
+                            {
+                                if (subkey.GetValue("Path").ToString() == System.Windows.Forms.Application.ExecutablePath)
+                                {
+                                    var val = subkey.GetValue("Name");
+                                    if (val != null)
+                                        MMULibraryName = val.ToString();
+                                }
+                            }
+                            subkey.Close();
+                        }
+                    }   
+            }
+            LoadProxySettings();
+        }
+
+        public void LoadProxySettings()
         {
             Microsoft.Win32.RegistryKey key;
             key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\MOSIM\\TaskEditor\\Unity"); //key with proxy settings that are same for task editor and launcher
@@ -301,9 +593,71 @@ namespace MMILauncher
             proxyClient(); //update client settings to use proxy
         }
 
-        public void SaveSettings()
+        public bool RegisterAppInstance(bool saveName = false)
         {
-            File.WriteAllText("settings.json", Serialization.ToJsonString(settings));
+            string instanceKey = "";
+            List<string> names = new List<string>();
+            Microsoft.Win32.RegistryKey key;
+            key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE\\MOSIM\\Launcher");
+            if (key!=null)
+            {
+                int instanceCount = 0;
+                bool found = false;
+                var values = key.GetSubKeyNames();
+                for (int i = 0; i < key.SubKeyCount; i++)
+                    if (values[i].IndexOf("Instance") == 0)
+                    {
+                        int curinstance = 0;
+                        if (Int32.TryParse(values[i].Substring(8), out curinstance))
+                        {
+                            instanceCount = Math.Max(curinstance, instanceCount);
+                            var subkey = key.OpenSubKey(values[i], false);
+                            if (subkey != null)
+                            {
+                                if (subkey.GetValue("Path").ToString() == System.Windows.Forms.Application.ExecutablePath)
+                                {
+                                    found = true;
+                                    instanceKey = values[i];
+                                }
+                                else
+                                    names.Add(subkey.GetValue("Name").ToString());
+                            }
+                            subkey.Close();
+                        }
+                    }
+                if ((!found) || (saveName))
+                {
+                    instanceCount++;
+                    var subkey = key.CreateSubKey(found?instanceKey:("Instance" + instanceCount.ToString()));
+                    if (subkey != null)
+                    {
+                        subkey.SetValue("Path", System.Windows.Forms.Application.ExecutablePath);
+                        subkey.SetValue("Version", version);
+                        if (saveName)
+                        {
+                            if (names.Exists(x=> x==MMULibraryName))
+                                saveName = false;
+                            else
+                                subkey.SetValue("Name", MMULibraryName);
+                        }
+                        else
+                            subkey.SetValue("Name", (instanceCount == 1 ? "Default" : ("Instance " + instanceCount.ToString())));
+                        subkey.Close();
+                    }
+                }
+                key.Close();
+            }
+            return saveName;
+        }
+
+        public void SaveSettings(bool updateTitle = true)
+        {
+            ServerSettings saveset = new ServerSettings(); //making sure the settings file does not contain proxy user name and password.
+            saveset = settings;
+            saveset.ProxyPass = "";
+            saveset.ProxyUser = "";
+            File.WriteAllText(AppPath() + "settings.json", Serialization.ToJsonString(saveset));
+            if (updateTitle)
             UpdateTitleBar();
         }
 
@@ -316,41 +670,27 @@ namespace MMILauncher
             {
                 //Dispose every executed instance
                 foreach (ExecutableController executableController in RuntimeData.ExecutableControllers)
-                {
                     executableController.Dispose();
-                }
 
                 //Dispose every adapter
                 foreach (RemoteAdapter remoteAdapter in RuntimeData.AdapterInstances.Values)
-                {
                     remoteAdapter.Dispose();
-                }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) {}
 
             try
             {
                 //Dispose every service connection
                 foreach (RemoteService service in RuntimeData.ServiceInstances.Values)
-                {
                     service.Dispose();
-                }
             }
-            catch (Exception)
-            {
-
-            }
+            catch (Exception) {}
 
             try
             {
                 this.registerServer.Dispose();
             }
-            catch (Exception)
-            {
-
-            }
+            catch (Exception) { }
 
             //Clear all the data
             RuntimeData.AdapterInstances.Clear();
@@ -483,44 +823,67 @@ namespace MMILauncher
                 client = new HttpClient();
         }
 
-        //my new experimental integration to task list editor
+        private void TaskEditorMsgNoSetup()
+        {
+            System.Windows.MessageBox.Show("Task editor connection details are missing, go to settings to configure task list editor connectivity.", "Task Editor connection", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        [Serializable] //this is also used in settings window - create separate task editor library
+        public class TaskEditorTestResponse
+        {
+            public int projectid;
+            public string projectName;
+            public TaskEditorTestResponse()
+            {
+                this.projectid = 0;
+                this.projectName = "";
+            }
+        }
+
+        //Testing task editor connectivity - this should also be used on the settings window instead of separate implementation
         private async void TaskEditorButton_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> PostData = new Dictionary<string, string>();
 
             PostData.Add("token", settings.TaskEditorToken);
-            PostData.Add("action", "getTaskList");
-            
+            PostData.Add("action", "testConnection");
+
             if (settings.TaskEditorApiUrl == "")
-                System.Windows.MessageBox.Show("Task editor connection details are missing, go to settings to configure task list editor connectivity.", "Task Editor connection", MessageBoxButton.OK, MessageBoxImage.Information);
+                TaskEditorMsgNoSetup();
             else
             {
-                string html = "Connection succesfull: ";
+                string html = "Connection succesfull to: ";
                 var PostForm = new FormUrlEncodedContent(PostData);
                 try
                 {
                     var content = await client.PostAsync(settings.TaskEditorApiUrl, PostForm);
-                    html += content.Content.ReadAsStringAsync().Result;
+                    var testResult = Serialization.FromJsonString<TaskEditorTestResponse>(content.Content.ReadAsStringAsync().Result);
+                    html += testResult.projectName;
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
-                    if (err.InnerException!=null)
-                    html = "Connection error: " + err.InnerException.Message;
+                    if (err.InnerException != null)
+                        html = "Connection error: " + err.InnerException.Message;
                     else
-                    html = "Connection error: " + err.Message;
+                        html = "Connection error: " + err.Message;
                 }
-                System.Windows.MessageBox.Show(html, "Task Editor connection", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show(html, "Task Editor connection test", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         private async void MMULibraryBrowse_Click(object sender, RoutedEventArgs e)
         {
-            mmus.ConfigureConnection(client, settings.DataPath + "\\MMUs\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
-            await mmus.GetMMUListFromServer();
-            string mmuList = "";
-            for (int i = 0; i < mmus.RemoteMMUs.Length; i++)
-                mmuList += mmus.RemoteMMUs[i].name + " " + mmus.RemoteMMUs[i].version + "\r\n";
-            System.Windows.MessageBox.Show("Remote library contains:\r\n"+mmuList, "Remote MMU library content",MessageBoxButton.OK,MessageBoxImage.Information);
+            mmus.ConfigureConnection(client, settings.DataPath + "MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+            mmus.ScanLibrary();
+            for (int i=0; i<mmus.Remotes.Count; i++)
+            {
+                await mmus.Remotes[i].GetSettings();
+                await mmus.Remotes[i].GetMMUListFromServer();
+                mmus.CompareRemoteAndLocal(i);
+            }
+
+            MMULibraryWindow dialog = new MMULibraryWindow(this);
+            dialog.ShowDialog();
         }
 
         private void MMULibraryAdd_Click(object sender, RoutedEventArgs e)
@@ -531,62 +894,139 @@ namespace MMILauncher
             openDialog.Multiselect = true;
             if (openDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                mmus.ConfigureConnection(client, settings.DataPath + "\\MMUs\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+                mmus.ConfigureConnection(client, settings.DataPath + "MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
                 int importedCount = mmus.ImportMMUs(openDialog.FileNames);
                 System.Windows.MessageBox.Show("Successfully imported " + importedCount.ToString() + " out of " + openDialog.FileNames.Length.ToString() + ".", "MMU import",MessageBoxButton.OK,MessageBoxImage.Information);
             }
-
         }
 
         private async void MMULibrarySyncDown_Click(object sender, RoutedEventArgs e)
         {
-            mmus.ConfigureConnection(client, settings.DataPath + "\\MMUs\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+            if (settings.TaskEditorApiUrl=="")
+            {
+                TaskEditorMsgNoSetup();
+                return;
+            }
+            Storyboard s = (Storyboard)TryFindResource("clearText");
+            s.Stop();
+            ActionProgressBar.Maximum = 100;
+            ActionProgressBar.Value = 0;
+            ActionProgressBar.Visibility = Visibility.Visible;
+            ActionLabel.Content = "Comparing MMU lists...";
+            ActionLabel.Opacity = 1;
+            mmus.ConfigureConnection(client, settings.DataPath + "MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
             await mmus.GetMMUListFromServer();
-            mmus.ScanLibrary(settings.DataPath + "MMUs/");
-            if (!Directory.Exists(settings.DataPath + "MMU-zip/"))
-                Directory.CreateDirectory(settings.DataPath + "MMU-zip/");
-            mmus.CompareRemoteAndLocal(settings.DataPath + "MMU-zip/");
+            mmus.ScanLibrary();
+            if (!Directory.Exists(settings.DataPath + "MMU-zip"))
+                Directory.CreateDirectory(settings.DataPath + "MMU-zip");
+            mmus.CompareAndPackRemoteAndLocal(0);
             if (mmus.SyncDownCount() == 0)
                 System.Windows.MessageBox.Show("All remote MMUs are already available locally", "MMU library synchronization");
             else
                 System.Windows.MessageBox.Show("There are " + mmus.SyncDownCount().ToString() + " MMUs to load from server", "MMU library synchronization");
             if (mmus.SyncDownCount() > 0)
-                await mmus.GetFromServer(settings.DataPath + "MMU-zip/");
+            {
+                ActionLabel.Content = "Downloading MMUs...";
+                await mmus.GetFromServer();
+            }
+            ActionProgressBar.Visibility = Visibility.Hidden;
+            ActionLabel.Content = "MMU download complete";
+            s.Begin();
         }
 
         private async void MMULibrarySyncUp_Click(object sender, RoutedEventArgs e)
         {
-            mmus.ConfigureConnection(client, settings.DataPath + "\\MMUs\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+            if (settings.TaskEditorApiUrl == "")
+            {
+                TaskEditorMsgNoSetup();
+                return;
+            }
+            Storyboard s = (Storyboard)TryFindResource("clearText");
+            s.Stop();
+            ActionProgressBar.Maximum = 100;
+            ActionProgressBar.Value = 0;
+            ActionProgressBar.Visibility = Visibility.Visible;
+            ActionLabel.Content = "Comparing MMU lists...";
+            ActionLabel.Opacity = 1;
+            mmus.ConfigureConnection(client, settings.DataPath + "MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
             await mmus.GetMMUListFromServer();
-            mmus.ScanLibrary(settings.DataPath + "MMUs/");
-            if (!Directory.Exists(settings.DataPath + "MMU-zip/"))
-                Directory.CreateDirectory(settings.DataPath + "MMU-zip/");
-            mmus.CompareRemoteAndLocal(settings.DataPath + "MMU-zip/");
+            mmus.ScanLibrary();
+            if (!Directory.Exists(settings.DataPath + "MMU-zip"))
+                Directory.CreateDirectory(settings.DataPath + "MMU-zip");
+            mmus.CompareAndPackRemoteAndLocal(0);
             if (mmus.SyncUpCount() + mmus.SyncDownCount() == 0)
                 System.Windows.MessageBox.Show("ALL local MMUs are already available on the server", "MMU library synchronization");
             else
                 System.Windows.MessageBox.Show("There are " + mmus.SyncUpCount().ToString() + " MMUs to send to server.", "MMU library synchronization");
             if (mmus.SyncUpCount() > 0)
-                await mmus.SendToServer(settings.DataPath + "MMU-zip/");
+            {
+                ActionLabel.Content = "Uploading MMUs...";
+                await mmus.SendToServer(ActionProgress);
+            }
+            ActionProgressBar.Visibility = Visibility.Hidden;
+            ActionLabel.Content = "MMU sync up complete";
+            s.Begin();
+        }
+
+        private void appsecurity()
+        {
+            var md5 = System.Security.Cryptography.MD5.Create();
+            var b = File.OpenRead(System.Windows.Forms.Application.ExecutablePath);
+            var hashcode = md5.ComputeHash(b);
+            var s=BitConverter.ToString(hashcode).Replace("-", "");
+            b.Close();
+            md5.Clear();
+            //System.Text.Encoding.Default.GetString(hashcode)
+            System.Windows.Forms.MessageBox.Show(s,"Hash code"); //verifies the code has not be modified by comparing the code with the code from license server.
+            var aes = System.Security.Cryptography.Aes.Create();
+            aes.Clear();
+        }
+
+        private void ActionProgress(long maxvalue, long value)
+        {
+            ActionProgressBar.Maximum=maxvalue;
+            ActionProgressBar.Value = value;
         }
 
         private async void MMULibrarySync_Click(object sender, RoutedEventArgs e)
         {
-            mmus.ConfigureConnection(client,settings.DataPath+"\\MMUs\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
+            if (settings.TaskEditorApiUrl == "")
+            {
+                TaskEditorMsgNoSetup();
+                return;
+            }
+            Storyboard s = (Storyboard)TryFindResource("clearText");
+            s.Stop();
+            ActionProgressBar.Maximum = 100;
+            ActionProgressBar.Value = 0;
+            ActionProgressBar.Visibility = Visibility.Visible;
+            ActionLabel.Content = "Comparing MMU lists...";
+            ActionLabel.Opacity = 1;
+            mmus.ConfigureConnection(client,settings.DataPath+"MMUs\\", settings.DataPath + "MMU-zip\\", settings.TaskEditorApiUrl, settings.TaskEditorToken);
             await mmus.GetMMUListFromServer();
-            mmus.ScanLibrary(settings.DataPath + "MMUs/");
-            if (!Directory.Exists(settings.DataPath + "MMU-zip/"))
-                Directory.CreateDirectory(settings.DataPath + "MMU-zip/");
-            mmus.CompareRemoteAndLocal(settings.DataPath + "MMU-zip/");
+            mmus.ScanLibrary();
+            if (!Directory.Exists(settings.DataPath + "MMU-zip"))
+                Directory.CreateDirectory(settings.DataPath + "MMU-zip");
+            mmus.CompareAndPackRemoteAndLocal(0);
             if (mmus.SyncUpCount()+ mmus.SyncDownCount() == 0)
                 System.Windows.MessageBox.Show("MMU libraries are in sync", "MMU library synchronization");
             else
                 System.Windows.MessageBox.Show("There are " + mmus.SyncUpCount().ToString() + " MMUs to send to server.\r\nThere are " + mmus.SyncDownCount().ToString() + " MMUs to load from server", "MMU library synchronization");
-            if (mmus.SyncUpCount()>0)
-            await mmus.SendToServer(settings.DataPath + "MMU-zip/");
+            if (mmus.SyncUpCount() > 0)
+            {
+                ActionLabel.Content = "Uploading MMUs...";
+                await mmus.SendToServer(ActionProgress);
+            }
             if (mmus.SyncDownCount() > 0)
-            await mmus.GetFromServer(settings.DataPath + "MMU-zip/");
+            {
+                ActionLabel.Content = "Downloading MMUs...";
+                await mmus.GetFromServer(ActionProgress);
+            }
 
+            ActionProgressBar.Visibility = Visibility.Hidden;
+            ActionLabel.Content = "MMU sync complete";
+            s.Begin();
+            
             /*
             Dictionary<string, string> PostData = new Dictionary<string, string>();
 
@@ -616,6 +1056,38 @@ namespace MMILauncher
             }*/
         }
 
+        [Serializable]
+        class mycl
+        {
+            public string[] data;
+            public string name;
+        };
+
+        public void RegisterURLHandler(string protocolName, string applicationPath) //this should be removed or linked to MMU Linker Library
+        {
+            mycl var1 = new mycl();
+            var1.name="my name";
+            var1.data = new string[2];
+            var1.data[0]="string 1";
+            var1.data[1]="string 2";
+            
+            File.WriteAllText(@"C:\Users\a0308730\Downloads\MOSIM\Idle\test.json", Serialization.ToJsonString<mycl>(var1));
+            appsecurity();
+            /*
+            var mainkey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software", true).OpenSubKey("Classes", true);
+            var key = mainkey.CreateSubKey(protocolName);
+            key.SetValue("URL Protocol", protocolName);
+            key.CreateSubKey(@"shell\open\command").SetValue("", "\"" + applicationPath + "\"");
+            key.Close();
+            mainkey.Close();*/
+        }
+
+        private void RegisterURLHandler_Click(object sender, RoutedEventArgs e)
+        {
+
+            RegisterURLHandler("mmulib",System.Windows.Forms.Application.ExecutablePath);
+        }
+
         /// <summary>
         /// Method is called if the exit button is clicked
         /// </summary>
@@ -637,9 +1109,7 @@ namespace MMILauncher
             //Create and open a new settings window
             SettingsWindow window = new SettingsWindow(this);
             window.ShowDialog(); //showing window in modal form, then it cannot be hidden somwehere below the main window
-            //window.Show();
         }
-
 
         /// <summary>
         /// Method is called if the arrange window button is clicked
@@ -661,7 +1131,6 @@ namespace MMILauncher
         {
             this.showPerformance = false;
             this.running = false;
-
             this.Dispose();
         }
 
@@ -671,7 +1140,6 @@ namespace MMILauncher
             try
             {
                 RemoteAdapter adapter = UIData.AdapterCollection.ElementAt(this.adapterListView.SelectedIndex);
-
 
                 System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
 
@@ -685,14 +1153,10 @@ namespace MMILauncher
                     stringBuilder.AppendLine("Parameters:");
 
                     foreach (var entry in adapter.Description.Parameters)
-                    {
                         stringBuilder.AppendLine(entry.Name + " , " + entry.Type + " , required:" + entry.Required);
-                    }
                 }
 
                 System.Windows.MessageBox.Show(stringBuilder.ToString(), adapter.Name);
-
-
             }
             catch (Exception ex)
             {
@@ -706,23 +1170,18 @@ namespace MMILauncher
             {
                 RemoteService service = UIData.ServiceCollection.ElementAt(this.serviceListView.SelectedIndex);
 
-
                 System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-
 
                 stringBuilder.AppendLine("Name" + " : " + service.Description.Name);
                 stringBuilder.AppendLine("ID" + " : " + service.Description.ID);
                 stringBuilder.AppendLine("Language" + " : " + service.Description.Language);
-
 
                 if (service.Description.Parameters != null && service.Description.Parameters.Count > 0)
                 {
                     stringBuilder.AppendLine("Parameters:");
 
                     foreach (var entry in service.Description.Parameters)
-                    {
                         stringBuilder.AppendLine(entry.Name + " , " + entry.Type + " , required:" + entry.Required);
-                    }
                 }
                 System.Windows.MessageBox.Show(stringBuilder.ToString(), service.Name);
 
@@ -741,11 +1200,8 @@ namespace MMILauncher
                 (item.DataContext as MMUOrderAndDescriptionData).Priority++;
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(this.mmuView.ItemsSource);
                 view.Refresh();
-                
                 //mmuView.RaiseEvent(new RoutedEventArgs(mmuView.SourceUpdated));
-
             }
-
             //e.Source.DataContext.Priority++;
         }
 
@@ -771,43 +1227,32 @@ namespace MMILauncher
                 if (mmu.Properties != null && mmu.Properties.Count > 0)
                 {
                     stringBuilder.AppendLine("---------------------------------------------------------");
-
                     stringBuilder.AppendLine("Properties:");
 
                     foreach (var entry in mmu.Properties)
-                    {
                         stringBuilder.AppendLine(entry.Key + " : " + entry.Value);
-                    }
                 }
 
                 if (mmu.Parameters != null && mmu.Parameters.Count > 0)
                 {
                     stringBuilder.AppendLine("---------------------------------------------------------");
-
                     stringBuilder.AppendLine("Parameters:");
 
                     foreach (var entry in mmu.Parameters)
-                    {
                         stringBuilder.AppendLine(entry.Name + " , " + entry.Type + " , required:" + entry.Required + " , " + entry.Description);
-                    }
                 }
 
                 //Print the events
                 if (mmu.Events != null && mmu.Events.Count > 0)
                 {
                     stringBuilder.AppendLine("---------------------------------------------------------");
-
                     stringBuilder.AppendLine("Events:");
 
                     foreach (var entry in mmu.Events)
-                    {
                         stringBuilder.AppendLine(entry);
-                    }
                 }
 
-
                 System.Windows.MessageBox.Show(stringBuilder.ToString(), mmu.Name);
-
             }
             catch (Exception ex)
             {
@@ -831,7 +1276,10 @@ namespace MMILauncher
 
                 if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    settings.DataPath = folderDialog.SelectedPath + "/";
+                    if (folderDialog.SelectedPath.EndsWith("\\"))
+                        settings.DataPath = folderDialog.SelectedPath;
+                    else
+                        settings.DataPath = folderDialog.SelectedPath + "\\";
                     SaveSettings();
                 }
             }
@@ -853,6 +1301,16 @@ namespace MMILauncher
             }
         }
 
+        private bool FolderStructureOK(string path)
+        {
+            if (!Directory.Exists(path + "Adapters"))
+                return false;
+            if (!Directory.Exists(path + "MMUs"))
+                return false;
+            if (!Directory.Exists(path + "Services"))
+                return false;
+            return true;
+        }
 
         /// <summary>
         /// Method checks if the required folders are defined. Otherwise they are automatically generated
@@ -863,21 +1321,19 @@ namespace MMILauncher
             try
             {                
                 if (!Directory.Exists(path + "Adapters"))
-                    Directory.CreateDirectory(path + "//Adapters");
+                    Directory.CreateDirectory(path + "Adapters");
 
                 if (!Directory.Exists(path + "MMUs"))
-                    Directory.CreateDirectory(path + "//MMUs");
+                    Directory.CreateDirectory(path + "MMUs");
 
                 if (!Directory.Exists(path + "Services"))
-                    Directory.CreateDirectory(path + "//Services");
+                    Directory.CreateDirectory(path + "Services");
             }
             catch (Exception e)
             {
                 System.Windows.MessageBox.Show("Problem at automatically setting up folder structure" + e.Message, "Problem at setting up folder structure");
             }
         }
-
-
 
         /// <summary>
         /// Setups the environment and starts the modules
@@ -887,12 +1343,10 @@ namespace MMILauncher
         private void SetupEnvironment(List<string> adapterPaths, List<string> mmuPaths, List<string> servicePaths)
         {
             //To do 
-
             port = settings.MinPort - 1; //on the first use the port number is incremented so we don't want to skip the actual first port specified in the settings, thus -1
             //Set the running flag to true
             this.running = true;
         }
-
 
         /// <summary>
         /// Sets up the adapters
@@ -948,7 +1402,6 @@ namespace MMILauncher
                 if (descriptionFile == null)
                     continue;
 
-
                 //Get the ExecutableDescription of the service
                 MExecutableDescription executableDescription = Serialization.FromJsonString<MExecutableDescription>(File.ReadAllText(descriptionFile));
                 string executableFile = Directory.GetFiles(folderPath).ToList().Find(s => s.Contains(executableDescription.ExecutableName));
@@ -961,9 +1414,7 @@ namespace MMILauncher
                 }
 
                 ExecutableController exeController = new ExecutableController(executableDescription, new MIPAddress(RuntimeData.MMIRegisterAddress.Address, port), RuntimeData.MMIRegisterAddress, mmuPath, executableFile, settings.HideWindows);
-
                 RuntimeData.ExecutableControllers.Add(exeController);
-
             }
         }
 
@@ -974,6 +1425,9 @@ namespace MMILauncher
         /// <param name="mmuPath">The path of the mmus</param>
         private void SetupEnvironment(string adapterPath, string mmuPath, string servicePath)
         {
+            mmuPath=mmuPath.Replace("\\", "/"); //passing as argument escaped string leads to error in CSharpAdapter interpreting such windows path, hence changing of backward to forward slashes solves the problem
+            adapterPath = adapterPath.Replace("\\", "/"); 
+            servicePath = servicePath.Replace("\\", "/");
             port = settings.MinPort - 1; //on the first use the port number is incremented so we don't want to skip the actual first port specified in the settings, thus -1
             //Set the running flag to true
             this.running = true;
@@ -1003,10 +1457,7 @@ namespace MMILauncher
 
                 //Create a controller for the executable process
                 ExecutableController exeController = new ExecutableController(executableDescription, new MIPAddress(RuntimeData.MMIRegisterAddress.Address, port),RuntimeData.MMIRegisterAddress, mmuPath, executableFile, settings.HideWindows);
-
                 RuntimeData.ExecutableControllers.Add(exeController);
-
-                
             }
 
             //Setup the services
@@ -1032,9 +1483,7 @@ namespace MMILauncher
                 }
 
                 ExecutableController exeController = new ExecutableController(executableDescription, new MIPAddress(RuntimeData.MMIRegisterAddress.Address, port), RuntimeData.MMIRegisterAddress, mmuPath, executableFile, settings.HideWindows);
-
                 RuntimeData.ExecutableControllers.Add(exeController);
-
             }
 
             //Start the controllers
@@ -1043,9 +1492,7 @@ namespace MMILauncher
                 MBoolResponse response = executableController.Start();
 
                 if (!response.Successful)
-                {
                     System.Windows.MessageBox.Show("Cannot start application: " + executableController.Name + " " + (response.LogData.Count >0? response.LogData[0]: ""));
-                }
             }
 
             //Create a new thread which checks the loadable MMUs
@@ -1054,7 +1501,6 @@ namespace MMILauncher
                 while (this.running)
                 {
                     Thread.Sleep(1000);
-
                     this.UpdateLoadableMMUs();
                 }
             });
@@ -1067,7 +1513,6 @@ namespace MMILauncher
         private void SetupPerformanceBar()
         {
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-
             ThreadPool.QueueUserWorkItem(delegate
             {
                 while (this.showPerformance)
@@ -1096,7 +1541,6 @@ namespace MMILauncher
         {
             //Create a dictionary which holds the MMU Descriptions and the corresponding addresses
             Dictionary<MMUDescription, List<MIPAddress>> availableMMUs = new Dictionary<MMUDescription, List<MIPAddress>>();
-
             //Iterate over each adapter (do use for instead for-each due to possible changes of list)
             for (int i = RuntimeData.AdapterInstances.Count - 1; i >= 0; i--)
             {
@@ -1111,18 +1555,15 @@ namespace MMILauncher
                 {
                     Console.WriteLine("Problem receiving loadable MMUs: " + e.Message);
                 }
-
                 //Check if MMU is already available and add to dictionary
                 foreach (MMUDescription description in mmuDescriptions)
                 {
                     MMUDescription match = availableMMUs.Keys.ToList().Find(s => s.ID == description.ID && s.Name == description.Name);
-
                     if (match == null)
                     {
                         availableMMUs.Add(description, new List<MIPAddress>());
                         match = description;
                     }
-
                     availableMMUs[match].Add(new MIPAddress(adapter.Address, adapter.Port));
                 }
             }
