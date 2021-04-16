@@ -434,6 +434,9 @@ namespace MMIUnity.TargetEngine.Scene
         /// <param name="sceneObject"></param>
         public static void AddAvatar(MAvatar avatar)
         {
+            //Acquire the mutex
+            sceneMutex.WaitOne();
+
             if (Instance.SceneUpdate.AddedAvatars == null)
                 Instance.SceneUpdate.AddedAvatars = new List<MAvatar>();
 
@@ -453,9 +456,14 @@ namespace MMIUnity.TargetEngine.Scene
 
             else
             {
-                //To do check if list already contains the id
+                if (!Instance.nameIdMappingAvatars.ContainsKey(avatar.ID))
+                    Instance.nameIdMappingAvatars.Add(avatar.ID, new List<string>());   
+
                 Instance.nameIdMappingAvatars[avatar.ID].Add(avatar.ID);
             }
+
+            sceneMutex.ReleaseMutex();
+
 
         }
 
@@ -466,6 +474,9 @@ namespace MMIUnity.TargetEngine.Scene
         /// <param name="sceneObject"></param>
         public static void AddSceneObject(MSceneObject sceneObject)
         {
+            //Acquire the mutex
+            sceneMutex.WaitOne();
+
             if (Instance.SceneUpdate.AddedSceneObjects == null)
                 Instance.SceneUpdate.AddedSceneObjects = new List<MSceneObject>();
 
@@ -487,6 +498,8 @@ namespace MMIUnity.TargetEngine.Scene
                 //To do check if list already contains the id
                 Instance.nameIdMappingSceneObjects[sceneObject.Name].Add(sceneObject.ID);
             }
+
+            sceneMutex.ReleaseMutex();
         }
 
 

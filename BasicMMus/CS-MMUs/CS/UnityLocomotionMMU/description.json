@@ -60,6 +60,30 @@
       "Required": true
     },
     {
+      "Name": "ForcePath",
+      "Type": "bool",
+      "Description": "If set, a straight line path is used if no valid one can be planned.",
+      "Required": false
+    },
+    {
+      "Name": "FilterSceneObjects",
+      "Type": "bool",
+      "Description": "Optionally filters scene objects being close to the avatar for path planning.",
+      "Required": false
+    },
+    {
+      "Name": "UseTargetOrientation",
+      "Type": "bool",
+      "Description": "If set, the target orientation of the target object will be used.",
+      "Required": false
+    },
+    {
+      "Name": "UseVelocityStoppingThreshold",
+      "Type": "bool",
+      "Description": "Optionally defined threshold above which the motion cannot be terminated.",
+      "Required": false
+    },
+    {
       "Name": "ReplanningTime",
       "Type": "int",
       "Description": "The timespan [ms]after which the replanning is performed.",
@@ -72,15 +96,15 @@
       "Required": false
     },
     {
-      "Name": "TransitionModeling",
-      "Type": "bool",
-      "Description": "Specifies whether the transition modeling is enabled.",
+      "Name": "AngularVelocity",
+      "Type": "float",
+      "Description": "The max angular velocity of the walk motion.",
       "Required": false
     },
     {
       "Name": "Trajectory",
-      "Type": "list<MVector2>",
-      "Description": "An optional trajectory which can be defined.",
+      "Type": "MPathConstraint",
+      "Description": "An optional trajectory that is used as reference path.",
       "Required": false
     }
   ],

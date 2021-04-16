@@ -52,6 +52,9 @@ class ServiceAccess(object):
         self.service_descriptions = dict()
         self.__RetargetingService = None
         self.__PathPlanningService = None
+        self.__BlendingService = None
+
+        self.loadedServices = {}
         self.__sessionID = sessionID
         self.initialize()
         
@@ -115,6 +118,15 @@ class ServiceAccess(object):
             self.__PathPlanningService = ThriftClient(description.Addresses[0].Address, description.Addresses[0].Port, MPathPlanningService.Client)
             self.__PathPlanningService.__enter__()
         return self.__PathPlanningService._access
+
+    def GetService(self, name, ServiceType):
+        if not name in self.loadedServices:
+            description = self._get_service_description(name)
+            self.loadedServices[name] = ThriftClient(description.Addresses[0].Address, description.Addresses[0].Port, ServiceType.Client)
+            self.loadedServices[name].__enter__()
+        return self.loadedServices[name]._access
+
+
 
     # Todo: enable access functions for all services. 
 

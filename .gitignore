@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs
+*UnityEngine.dll
+*UnityEditor.dll
+/BasicMMus/CS-MMUs/CS/UnityLocomotionMMU/UnityEngine.dll

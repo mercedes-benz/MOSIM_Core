@@ -15,6 +15,11 @@ namespace CSharpAdapter
     public class AvatarContent
     {
         /// <summary>
+        /// The specific service access for the avatar
+        /// </summary>
+        public ServiceAccess ServiceAccess;
+
+        /// <summary>
         /// The avatar id
         /// </summary>
         public string AvatarId;

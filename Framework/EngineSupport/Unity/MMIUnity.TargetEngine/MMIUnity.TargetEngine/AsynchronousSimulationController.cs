@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace MMIUnity.TargetEngine
@@ -39,9 +40,14 @@ namespace MMIUnity.TargetEngine
         /// <summary>
         /// Specifies the fixed frame time (if non realtime mode)
         /// </summary>
-        [Header("Specifies the fixed frame time (if non realtime mode)")]
+        [Header("Specifies the temporal accuracy (in s)")]
+        public float TemporalAccuracy = 0.01f;
 
-        public float FixedStepTime = 0.01f;
+
+        /// <summary>
+        /// Specifies the intervall after which a do step is triggered (0 as fast as possible)
+        /// </summary>
+        public float UpdateTime = 0.01f;
 
         /// <summary>
         /// The amount of physics updates within each frame
@@ -52,9 +58,7 @@ namespace MMIUnity.TargetEngine
         /// <summary>
         /// All assigned avatars
         /// </summary>
-        public List<MMIAvatar> Avatars;
-
-
+        protected List<MMIAvatar> Avatars = new List<MMIAvatar>();
         /// <summary>
         /// The address of the central register of the MMI framework
         /// </summary>
@@ -72,11 +76,21 @@ namespace MMIUnity.TargetEngine
 
         #region debugging
 
-        public bool RestoreStateFlag = false;
 
-        public bool SaveStateFlag = false;
+        public bool ShowFPS = false;
+        public bool ExecuteParallel = false;
+        public int MaxNumberThreads = 4;
 
+        [HideInInspector]
         public int currentCheckPointID = 0;
+
+        private float renderingFPS = 0;
+        private float mmiFPS = 0;
+        private List<float> mmiFPSList = new List<float>();
+        private List<float> renderingFPSList = new List<float>();
+        private System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        protected Mutex avatarModificationMutex = new Mutex();
+
 
         #endregion
 
@@ -123,7 +137,7 @@ namespace MMIUnity.TargetEngine
             Physics.autoSimulation = false;
 
             //Specify the target frame rate
-            Application.targetFrameRate = 90;
+            Application.targetFrameRate = 60;
 
             //Creates a new session ID
             if (this.AutoCreateSessionID)
@@ -133,7 +147,9 @@ namespace MMIUnity.TargetEngine
             }
 
             //Get all avatars 
-            this.Avatars = this.GetComponentsInChildren<MMIAvatar>().ToList();
+            foreach(MMIAvatar avatar in this.GetComponentsInChildren<MMIAvatar>())
+                this.Avatars.Add(avatar);
+
 
             //Setup the avatars
             foreach (MMIAvatar avatar in this.Avatars)
@@ -144,9 +160,6 @@ namespace MMIUnity.TargetEngine
 
             //Wait and check if all connections are initialized
             this.StartCoroutine(CheckInitialization());
-
-            //Create a timer
-            this.timer = new Timer(TimerCallback, "finished", 0, (int)(this.FixedStepTime * 1000.0f));      
         }
 
 
@@ -161,15 +174,48 @@ namespace MMIUnity.TargetEngine
         }
 
 
+        protected virtual void OnGUI()
+        {
+            //Display the current fps if enabled
+            if (ShowFPS)
+            {
+                int w = Screen.width, h = Screen.height;
 
+                GUIStyle style = new GUIStyle();
+
+                Rect rect = new Rect(w / 2, 0, w, h * 2 / 100);
+                style.alignment = TextAnchor.UpperLeft;
+                style.fontSize = h * 4 / 100;
+                style.normal.textColor = new Color(0.0f, 0.0f, 0.5f, 1.0f);
+                string text = "Rendering " + this.renderingFPS.ToString("F0") + " fps" + ", MMI Framework " + this.mmiFPS.ToString("F0") + " fps";
+                GUI.Label(rect, text, style);
+            }
+        }
+
+
+        bool eventHandlerRegistered = false;
         /// <summary>
         /// Performs a simulation cycle for a single frame
         /// </summary>
         /// <param name="time"></param>
         protected virtual void DoStepAsync(float time)
         {
-            //##################### Scene synchronization of each MMU Access ####################################################
-            this.PushScene();
+            //Variable for storing the changes occured in the scene 
+            MSceneUpdate sceneUpdates = null;
+
+            //Perform on main thread
+            MainThreadDispatcher.Instance.ExecuteBlocking(() =>
+            {
+                //Get the scene updates
+                sceneUpdates = UnitySceneAccess.Instance.GetSceneChanges();
+
+                //Clear the events since the current events have been already synchronized
+                UnitySceneAccess.ClearChanges();
+
+                //Pre compute frame (on main thread)
+                foreach (MMIAvatar avatar in this.Avatars)
+                    avatar.CoSimulator.PreComputeFrame();
+            });
 
             //##################### Do the Co Simulation for each Avatar ####################################################
 
@@ -177,22 +223,63 @@ namespace MMIUnity.TargetEngine
             ConcurrentDictionary<MMIAvatar, MSimulationResult> results = new ConcurrentDictionary<MMIAvatar, MSimulationResult>();
 
 
-            //Compute the frame in parallel manner
-            foreach (MMIAvatar avatar in this.Avatars)
+
+            //Perform in parallel
+            if (this.Avatars.Count > 1 && this.ExecuteParallel)
             {
-                MSimulationResult result = avatar.CoSimulator.DoStep(time, new MSimulationState()
+                //Perform in parallel
+                System.Threading.Tasks.Parallel.ForEach(this.Avatars, new ParallelOptions { MaxDegreeOfParallelism = this.MaxNumberThreads },(MMIAvatar avatar) =>
                 {
-                    Current = avatar.LastPosture,
-                    Initial = avatar.LastPosture
+                    //Synchronizes the scene in before each update
+                    avatar.MMUAccess.PushSceneUpdate(sceneUpdates);
+
+                    //Perform the actual do step
+                    MSimulationResult result = avatar.CoSimulator.ComputeFrame(time);
+
+                    //Assign the resulting posture
+                    avatar.LastPosture = result.Posture;
+
+                    //Execute additional method which can be implemented by child class
+                    //this.OnResultComputed(result, avatar);
+
+                    results.TryAdd(avatar, result);
                 });
 
-                //Assign the resulting posture
-                avatar.LastPosture = result.Posture;
+            }
 
-                //Execute additional method which can be implemented by child class
-                this.OnResultComputed(result, avatar);
+            //Perform sequential
+            else
+            {
+                //Synchronizes the scene of each avatar in before update
+                for (int i = 0; i < this.Avatars.Count; i++)
+                {
+                    this.Avatars.ElementAt(i).MMUAccess.PushSceneUpdate(sceneUpdates);
+                }
 
-                results.TryAdd(avatar, result);
+                if (!eventHandlerRegistered)
+                {
+                    foreach (MMIAvatar avatar in this.Avatars)
+                    {
+                        avatar.CoSimulator.LogEventHandler += CoSimulator_LogEventHandler;
+                    }
+                    eventHandlerRegistered = true;
+                }
+
+                //Compute the frames
+                foreach (MMIAvatar avatar in this.Avatars)
+                {
+
+
+                    MSimulationResult result = avatar.CoSimulator.ComputeFrame(time);
+
+                    //Assign the resulting posture
+                    avatar.LastPosture = result.Posture;
+
+                    //Execute additional method which can be implemented by child class
+                    this.OnResultComputed(result, avatar);
+
+                    results.TryAdd(avatar, result);
+                }
             }
 
             //Increment the frame number
@@ -204,20 +291,50 @@ namespace MMIUnity.TargetEngine
             //Perform on main thread
             MainThreadDispatcher.Instance.ExecuteBlocking(() =>
             {
+                //Execute post compute frame
+                foreach (var result in results)
+                {
+                    result.Key.CoSimulator.PostComputeFrame(result.Value);
+
+                    //Execute additional method which can be implemented by child class
+                    this.OnResultComputed(result.Value, result.Key);
+                }
+            
                 //Apply the manipulations of the scene
                 this.ApplySceneUpdate(results);
 
                 //Update the physics
                 this.UpdatePhysics(time);
-
-                //Assign the posture of each avatar
-                foreach (MMIAvatar avatar in this.Avatars)
-                {
-                    avatar.AssignPostureValues(avatar.LastPosture.Copy());
-                }
             });
+
+            watch.Stop();
+
+            if (this.mmiFPSList.Count > 30)
+                this.mmiFPSList.RemoveAt(0);
+
+            this.mmiFPSList.Add((float)(1.0 / watch.Elapsed.TotalSeconds));
+            this.mmiFPS = this.mmiFPSList.Sum() / this.mmiFPSList.Count;
+
+            watch.Restart();
+
         }
 
+        private void CoSimulator_LogEventHandler(object sender, CoSimulationLogEvent e)
+        {
+            Debug.Log(e.Message);
+        }
+
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (this.renderingFPSList.Count > 30)
+                this.renderingFPSList.RemoveAt(0);
+
+            this.renderingFPSList.Add(1.0f / Time.deltaTime);
+            this.renderingFPS = this.renderingFPSList.Sum() / this.renderingFPSList.Count;
+
+        }
 
         /// <summary>
         /// Method which is called for each frame and avatar.
@@ -230,6 +347,68 @@ namespace MMIUnity.TargetEngine
 
         }
 
+        /// <summary>
+        /// Registers a new avatar at the simulation controller
+        /// </summary>
+        /// <param name="avatar"></param>
+        public void RegisterAvatar(MMIAvatar avatar)
+        {
+            //Execute in new thread to avoid dead lock
+            Task.Run(() => 
+            {
+                this.avatarModificationMutex.WaitOne();
+
+                try
+                {
+                    this.Avatars.Add(avatar);
+
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Problem at adding avatar");
+                }
+                finally
+                {
+                    this.avatarModificationMutex.ReleaseMutex();
+                }
+            });
+
+        }
+
+        /// <summary>
+        /// Unregisters an avatar at the simulation controller
+        /// </summary>
+        /// <param name="avatar"></param>
+        public void UnregisterAvatar(MMIAvatar avatar)
+        {
+            //Execute in new thread to avoid dead lock
+            Task.Run(() =>
+            {
+                this.avatarModificationMutex.WaitOne();
+
+                try
+                {
+                    this.Avatars.Remove(avatar);
+
+                }
+                catch (Exception)
+                {
+                    Debug.Log("Problem at removing avatar");
+                }
+                finally
+                {
+                    this.avatarModificationMutex.ReleaseMutex();
+                }
+                this.avatarModificationMutex.WaitOne();
+
+
+
+            });
+
+        }
+
+
+
 
         #region private methods
 
@@ -239,13 +418,18 @@ namespace MMIUnity.TargetEngine
         /// <returns></returns>
         private IEnumerator CheckInitialization()
         {
-            while (this.Avatars.Exists(s => !s.MMUAccess.IsInitialized || s.CoSimulator == null))
+            while (this.Avatars.ToList().Exists(s => !s.MMUAccess.IsInitialized || s.CoSimulator == null))
             {
-                yield return null;
+                yield return new WaitForSeconds(0.1f);
             }
 
             Debug.Log("Initialized");
             this.initialized = true;
+
+            this.watch.Start();
+
+            //Create a timer
+            this.timer = new Timer(TimerCallback, "finished", 0, (int)(this.UpdateTime* 1000.0f));
         }
 
 
@@ -255,6 +439,8 @@ namespace MMIUnity.TargetEngine
         /// <param name="state"></param>
         private void TimerCallback(object state)
         {
+            //Ensure that the scene changes have been already incorporated
+
             //Skip if not initialized or still performing a do step
             if (this.inDoStepFlag || !this.initialized)
             {
@@ -266,8 +452,11 @@ namespace MMIUnity.TargetEngine
 
             try
             {
+                //Acquire mutex for avatar modifications
+                this.avatarModificationMutex.WaitOne();
+
                 //Perform the asynchronous do step
-                this.DoStepAsync(this.FixedStepTime);
+                this.DoStepAsync(this.TemporalAccuracy);
             }
             catch (Exception e)
             {
@@ -277,7 +466,11 @@ namespace MMIUnity.TargetEngine
             {
                 //Reset the flag
                 this.inDoStepFlag = false;
+
+                this.avatarModificationMutex.ReleaseMutex();
             }
+
+            //Start the next round
         }
 
 
@@ -348,24 +541,6 @@ namespace MMIUnity.TargetEngine
                     Physics.Simulate(delta);
                 }
             }
-        }
-
-
-        /// <summary>
-        /// Pushes the scene to each adapter/MMU
-        /// Scene synchronization
-        /// </summary>
-        private void PushScene()
-        {
-            //Synchronizes the scene in before each update
-            //To do parallelize in future
-            for (int i = 0; i < this.Avatars.Count; i++)
-            {
-                this.Avatars[i].MMUAccess.PushScene(false);
-            }
-
-            //Clear the events since the current events have been already synchronized
-            UnitySceneAccess.ClearChanges();
         }
 
 

@@ -579,6 +579,7 @@ namespace MMICSharp.Access
             if (transmitFullScene)
                 sceneUpdates = this.SceneAccess.GetFullScene();
 
+ 
 
             int serversToSynchronize = this.Adapters.Count;
             int adapterCount = this.Adapters.Count;
@@ -594,7 +595,36 @@ namespace MMICSharp.Access
                 adapter.PushScene(sceneUpdates, this.SessionId);
                 adapter.SceneSynchronized = true;
             });
+
         }
+
+
+
+        /// <summary>
+        /// Synchronizes the scene
+        /// </summary>
+        /// <param name="transmitFullScene">Specified whether the full scene should be transferred</param>
+        public void PushSceneUpdate(MSceneUpdate sceneUpdates)
+        {
+
+            int serversToSynchronize = this.Adapters.Count;
+            int adapterCount = this.Adapters.Count;
+
+            //Perform every synchronization in parallel
+            Parallel.For(0, serversToSynchronize, delegate (int index)
+            {
+                //Get the corresponding adapter
+                IAdapter adapter = this.Adapters[index];
+
+                //Set synchronized flag to false
+                adapter.SceneSynchronized = false;
+                adapter.PushScene(sceneUpdates, this.SessionId);
+                adapter.SceneSynchronized = true;
+            });
+            
+        }
+
+
 
 
         /// <summary>

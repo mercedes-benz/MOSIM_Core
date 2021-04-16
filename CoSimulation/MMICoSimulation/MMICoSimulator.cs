@@ -857,11 +857,13 @@ namespace MMICoSimulation
                         //Add all presently active instructions of the MMUContainer
                         currentFrame.Instructions.AddRange(mmuContainer.CurrentTasks.Select(s=>s.Instruction.ID));
 
-                        //Handle the drawing calls
-                        this.HandleDrawingCalls(result, mmuContainer);
+                        //Handle the drawing calls (if defined)
+                        if(result.DrawingCalls!=null && result.DrawingCalls.Count >0)
+                            this.HandleDrawingCalls(result, mmuContainer);
 
-                        //Handle the events of the MMUs
-                        this.HandleEvents(mmuContainer, result.Events);
+                        //Handle the events of the MMUs (if available)
+                        if(result.Events!=null && result.Events.Count >0)
+                            this.HandleEvents(mmuContainer, result.Events);
 
                         //Update the current simulation state which is the input for the next MMU in hiearchy
                         this.SimulationState.Current = result.Posture.Copy();
@@ -903,7 +905,7 @@ namespace MMICoSimulation
                     catch (Exception e)
                     {
                         //Create a new event for logging
-                        this.LogEventHandler?.Invoke(this, new CoSimulationLogEvent("Problem at performing do step: " + mmuContainer.MMU.ID + " " + e.Message + " " + e.StackTrace));
+                        this.LogEventHandler?.Invoke(this, new CoSimulationLogEvent("Problem at performing do step: " + mmuContainer.MMU.ID + " " + e.Message + " " + e.StackTrace + " " + e.InnerException));
                     }
                 }
             }
@@ -1100,6 +1102,9 @@ namespace MMICoSimulation
                     //Check end condition or if the instruction should be aborted
                     if (this.CheckEndCondition(currentTask))
                     {
+                        //Handle end action (if defined for the instruction)
+                        this.HandleEndActions(currentTask);
+
                         //If the endcondition is fulfilled -> MMU is set to inactive and aborted
                         mmuContainer.MMU.Abort(currentTask.Instruction.ID);
 
@@ -1189,6 +1194,11 @@ namespace MMICoSimulation
                 //Check if finished event is contained
                 if (events.Exists(s => s.Type == mmiConstants.MSimulationEvent_End && s.Reference == motionTask.Instruction.ID))
                 {
+
+                    //Handle the end actions
+                    this.HandleEndActions(motionTask);
+
+
                     //Deactivate the task
                     motionTask.IsRunning = false;
                     instance.History.Add(motionTask);
@@ -1302,10 +1312,35 @@ namespace MMICoSimulation
         /// <returns></returns>
         protected virtual IMotionModelUnitAccess FindCompatibleMMU(MInstruction instruction)
         {
+            //By default use the motion type
+            bool useMMUID = false;
+
+            if (instruction.Properties != null && instruction.Properties.ContainsKey("MMUID"))
+                useMMUID = true;
+
+
             foreach (MMUContainer mmuContainer in this.mmuContainers)
             {
-                if (mmuContainer.Description.MotionType == instruction.MotionType)
-                    return mmuContainer.MMU;
+                if (useMMUID)
+                {
+                    //Check if the MMU id matches and return the instance if true
+                    if (instruction.Properties["MMUID"] == mmuContainer.Description.ID)
+                    {
+                        return mmuContainer.MMU;
+                    }
+                }
+
+                //By default use the motion type
+                else
+                {
+                    //Check if the motion type matches and return the instance if true
+                    if (mmuContainer.Description.MotionType == instruction.MotionType)
+                    {
+                        return mmuContainer.MMU;
+                    }
+                }
+
+  
             }
 
             return null;

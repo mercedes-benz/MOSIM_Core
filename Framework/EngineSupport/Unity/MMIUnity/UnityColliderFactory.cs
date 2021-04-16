@@ -3,6 +3,7 @@
 // Original author(s): Felix Gaisbauer
 
 using MMIStandard;
+using System.Linq;
 using UnityEngine;
 
 namespace MMIUnity
@@ -20,12 +21,16 @@ namespace MMIUnity
         /// <returns></returns>
         public static Collider CreateCollider(MCollider collider, MTransform transform)
         {
+            //Skip if the collider or the transform are null
             if (collider == null || transform == null)
                 return null;
 
             GameObject result = null;
+
+            //Create gameobject and corresponding collider based on the defined type
             switch (collider.Type)
             {
+                //Create a box collider
                 case MColliderType.Box:
                     MBoxColliderProperties mboxCollider = collider.BoxColliderProperties;
 
@@ -35,6 +40,7 @@ namespace MMIUnity
                         return null;
                     }
 
+                    //Create a gameobject for the box collider
                     GameObject boxGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     boxGameObject.transform.position = transform.Position.ToVector3();
                     boxGameObject.transform.rotation = transform.Rotation.ToQuaternion();
@@ -44,9 +50,11 @@ namespace MMIUnity
                     boxCollider.center = collider.PositionOffset.ToVector3();
                     boxCollider.size = mboxCollider.Size.ToVector3();
 
+                    //Assign the resulting object
                     result = boxGameObject;
                     break;
 
+                //Create a sphere collider
                 case MColliderType.Sphere:
                     MSphereColliderProperties mSphereCollider = collider.SphereColliderProperties;
 
@@ -56,6 +64,7 @@ namespace MMIUnity
                         return null;
                     }
 
+                    //Create the corresponding gameobject which contains the sphere collider
                     GameObject sphereGameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     sphereGameObject.transform.position = transform.Position.ToVector3();
                     sphereGameObject.transform.rotation = transform.Rotation.ToQuaternion();
@@ -76,16 +85,38 @@ namespace MMIUnity
                         return null;
                     }
 
-                    GameObject capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                    capsule.transform.position = transform.Position.ToVector3();
-                    capsule.transform.rotation = transform.Rotation.ToQuaternion();
+                    GameObject capsuleGameObject = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                    capsuleGameObject.transform.position = transform.Position.ToVector3();
+                    capsuleGameObject.transform.rotation = transform.Rotation.ToQuaternion();
 
-                    CapsuleCollider capsuleCollider = capsule.GetComponent<CapsuleCollider>();
+                    CapsuleCollider capsuleCollider = capsuleGameObject.GetComponent<CapsuleCollider>();
                     capsuleCollider.center = collider.PositionOffset.ToVector3();
                     capsuleCollider.radius = (float)mCapsuleCollider.Radius;
                     capsuleCollider.height = (float)mCapsuleCollider.Height;
 
-                    result = capsule;
+                    result = capsuleGameObject;
+
+                    break;
+
+                case MColliderType.Cylinder:
+                    MCylinderColliderProperties mCylinderCollider = collider.CylinderColliderProperties;
+
+                    if (mCylinderCollider == null)
+                    {
+                        Debug.Log("Cylinder collider is null");
+                        return null;
+                    }
+
+                    GameObject cylinderGameObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                    cylinderGameObject.transform.position = transform.Position.ToVector3();
+                    cylinderGameObject.transform.rotation = transform.Rotation.ToQuaternion();
+
+                    CapsuleCollider capsuleCollider2 = cylinderGameObject.GetComponent<CapsuleCollider>();
+                    capsuleCollider2.center = collider.PositionOffset.ToVector3();
+                    capsuleCollider2.radius = (float)mCylinderCollider.Radius;
+                    capsuleCollider2.height = (float)mCylinderCollider.Height;
+
+                    result = cylinderGameObject;
 
                     break;
 
@@ -100,8 +131,17 @@ namespace MMIUnity
                     }
 
 
+                    GameObject meshObj = new GameObject();
+                    MeshFilter meshFilter = meshObj.AddComponent<MeshFilter>();
+                    MeshRenderer renderer = meshObj.AddComponent<MeshRenderer>();
 
-                    //To do
+                    meshFilter.mesh.SetVertices(mMeshCollider.Vertices.Select(s => s.ToVector3()).ToList());
+                    meshFilter.mesh.SetTriangles(mMeshCollider.Triangles,0);
+
+                    MeshCollider meshCollider = meshObj.AddComponent<MeshCollider>();
+                    meshCollider.sharedMesh = meshFilter.mesh;
+
+                    result = meshObj;
                     break;
             }
 

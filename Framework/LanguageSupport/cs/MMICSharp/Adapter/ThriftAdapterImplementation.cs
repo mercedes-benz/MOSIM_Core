@@ -24,11 +24,6 @@ namespace MMICSharp.Adapter
         /// </summary>
         private readonly IMMUInstantiation mmuInstantiator;
 
-        /// <summary>
-        /// Variable for storing the skeleton access
-        /// </summary>
-        private MSkeletonAccess.Iface skeletonAccess;
-
 
         /// <summary>
         /// The assigned session data
@@ -206,14 +201,13 @@ namespace MMICSharp.Adapter
                     return new Dictionary<string, string>();
                 }
 
-                //Assign the service access
-                mmu.ServiceAccess = sessionContent.ServiceAccess;
+
+                //Create and assign the service access
+                mmu.ServiceAccess = new ServiceAccess(SessionData.MMIRegisterAddress, sessionID);
+                ((ServiceAccess)mmu.ServiceAccess).Initialize();
 
                 //Assign the scene
                 mmu.SceneAccess = sessionContent.SceneBuffer;
-
-                //Assign a new instance of the skeleton access
-                mmu.SkeletonAccess = this.skeletonAccess;//new SkeletonAccess();
 
                 //Set the instance as the adapter
                 mmu.AdapterEndpoint = new AdapterEndpoint()
@@ -330,12 +324,8 @@ namespace MMICSharp.Adapter
         /// <param name="sessionID"></param>
         public virtual MBoolResponse Initialize(MAvatarDescription avatarDescription, Dictionary<string, string> properties, string mmuID, string sessionID)
         {
-            SessionContent sessionContent = null;
-            AvatarContent avatarContent = null;
-
-            MBoolResponse sessionResult = SessionData.GetContents(sessionID, out sessionContent, out avatarContent);
-            this.skeletonAccess = new IntermediateSkeleton();
-            this.skeletonAccess.InitializeAnthropometry(avatarDescription);
+            //Get the session result
+            MBoolResponse sessionResult = SessionData.GetContents(sessionID, out SessionContent sessionContent, out AvatarContent avatarContent);
 
             //Skip if invalid session result
             if (!sessionResult.Successful)
@@ -343,16 +333,21 @@ namespace MMICSharp.Adapter
 
             try
             {
+                //Get the corresponding MMU
+                IMotionModelUnitDev mmu = avatarContent.MMUs[mmuID];
+
+                //Setup the skeleton access
+                mmu.SkeletonAccess = new IntermediateSkeleton();
+                ((IntermediateSkeleton)mmu.SkeletonAccess).InitializeAnthropometry(avatarDescription);
+
                 //Update the access time
                 sessionContent.UpdateLastAccessTime();
 
-                //Get the corresponding MMU
-                IMotionModelUnitDev mmu = avatarContent.MMUs[mmuID];
 
                 Logger.Log(Log_level.L_INFO, "MMU initialized: " + mmu.Name + " " + sessionID);
 
                 //Call the respective MMU
-                return avatarContent.MMUs[mmuID].Initialize(avatarDescription, properties);
+                return mmu.Initialize(avatarDescription, properties);
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // The content of this file has been developed in the context of the MOSIM research project.
 // Original author(s): Felix Gaisbauer
+// Extended by: Adam Kłodowski
 
 using MMICoSimulation;
 using MMICSharp.Access;
@@ -9,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using MMICSharp.Common;
 
 namespace MMIUnity.TargetEngine.Scene
 {
@@ -18,7 +18,20 @@ namespace MMIUnity.TargetEngine.Scene
     /// </summary>
     public class MMIAvatar : UnityAvatarBase
     {
+
+        /// <summary>
+        /// Event is fired if the MMI Avatar has been successfully initialized
+        /// </summary>
+        public event EventHandler<EventArgs> OnInitialized;
+
         #region public variables
+
+        //task editor dependencies
+        [HideInInspector]
+        public ulong TaskEditorLocalID = 0; //Local ID - unique among avatars, assigned in the Unity
+        [HideInInspector]
+        public ulong TaskEditorID = 0; //Task editor ID - unique among all avatars within single server instance of task editor. 0 indicates default avatar
+        //end of task editor dependencies
 
         /// <summary>
         /// Flag specifies whether the internal Unity-Cosimulation is utilized or a remotely connected CoSimulation 
@@ -92,6 +105,12 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         [HideInInspector]
         public MAvatar MAvatar;
+
+        /// <summary>
+        /// List of mmu motion types that should be loaded
+        /// </summary>
+        [Header("Specifies the motion types of the MMUs that should be loaded (if empty, all will be loaded)")]
+        public List<string> MMUMotionTypesToLoad = new List<string>();
 
 
         /// <summary>
@@ -332,6 +351,15 @@ namespace MMIUnity.TargetEngine.Scene
                     loadableMMUs = new List<MMUDescription>() { cosim };
                 }
 
+                //Optionally use defined filtering
+                if (this.MMUMotionTypesToLoad.Count > 0)
+                {
+                    loadableMMUs = loadableMMUs.FindAll(s => MMUMotionTypesToLoad.Contains(s.MotionType)).ToList();
+
+                    foreach(MMUDescription description in loadableMMUs)
+                        Debug.Log("Loading MMU: " + description.MotionType + " " + description.Name);
+                }
+
                 //Load the mmus asynchronously
                 this.MMUAccess.LoadMMUsAsync(loadableMMUs, TimeSpan.FromSeconds(this.Timeout), this.LoadingCallback);
             }
@@ -388,7 +416,7 @@ namespace MMIUnity.TargetEngine.Scene
                 {
                     if(MainThreadDispatcher.Instance == null)
                     {
-                        Debug.LogError("Please add a MainTrhead Dispatcher to the scene in order to allow remote co simulation acess");
+                        Debug.LogError("Please add a MainThread Dispatcher to the scene in order to allow remote co simulation acess");
                         return;
                     }
 
@@ -418,6 +446,19 @@ namespace MMIUnity.TargetEngine.Scene
                         }
                     });
                 }
+
+                if (MainThreadDispatcher.Instance == null)
+                {
+                    Debug.LogError("Please add a MainThread Dispatcher to the scene in order to allow remote co simulation acess");
+                    return;
+                }
+
+                //Must be executed on main thread
+                MainThreadDispatcher.Instance.ExecuteBlocking(() =>
+                {
+                    //Raise event
+                    this.OnInitialized?.Invoke(this, new EventArgs());
+                });
             }
 
             else
@@ -455,6 +496,24 @@ namespace MMIUnity.TargetEngine.Scene
 
             if (this.remoteSkeletonAccessServer != null)
                 remoteSkeletonAccessServer.Dispose();
+        }
+
+        /// <summary>
+        /// Returns MMIScenObject represnting parent station or null if such is not found
+        /// </summary>
+        public MMISceneObject GetParentStation()
+        {
+            MMISceneObject n = this.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            while (n != null)
+            {
+                if (n.Type == MMISceneObject.Types.Station)
+                    break;
+                n = n.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            }
+
+            if ((n != null) && (n.Type == MMISceneObject.Types.Station))
+                return n;
+            return null;
         }
 
 

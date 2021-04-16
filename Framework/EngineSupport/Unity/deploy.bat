@@ -20,39 +20,12 @@ REM Build the MMIUnity programm.
 
 REM If the build was sucessfull, copy all files to the respective build folders. 
 if %ERRORLEVEL% EQU 0 (
-  IF NOT EXIST .\MMIUnity\build (
-    mkdir .\MMIUnity\build 
-  ) ELSE (
-    RMDIR /S/Q .\MMIUnity\build
-    mkdir .\MMIUnity\build
-  )
-  REM cmd /c has to be called to prevent xcopy to destroy any coloring of outputs
-  cmd /c xcopy /S/Y/Q .\MMIUnity\bin\Debug\*.dll .\MMIUnity\build /EXCLUDE:deploy_exclude_UnityEngine.txt
   
-  IF NOT EXIST .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\build (
-    mkdir .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\build 
-  ) ELSE (
-    RMDIR /S/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\build
-    mkdir .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\build
-  )
-  REM cmd /c has to be called to prevent xcopy to destroy any coloring of outputs
-  cmd /c xcopy /S/Y/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\bin\Debug\*.dll .\MMIUnity.TargetEngine\MMIUnity.TargetEngine\build /EXCLUDE:deploy_exclude_UnityEngine.txt
-  
-  
-  IF NOT EXIST .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build (
-    mkdir .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build 
-  ) ELSE (
-    RMDIR /S/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build
-    mkdir .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build
-  )
-  REM cmd /c has to be called to prevent xcopy to destroy any coloring of outputs
-  cmd /c xcopy /S/Y/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\bin\Debug\*.dll .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build /EXCLUDE:deploy_exclude_UnityEngine.txt
-  
-  REM Copy MMIAdapter first to UnityProject
-  cmd /c xcopy /S/Y/Q .\MMIAdapterUnity\bin\Debug\*.dll MMIAdapterUnity\UnityProject\Assets\Plugins /EXCLUDE:deploy_exclude_UnityEngine.txt
-  
-  cd .\MMIAdapterUnity\UnityProject
-  call .\deploy.bat
+  REM Call the Visual Studio Deploy file to deploy 
+  call .\deploy_vs.bat
+
+  call .\deploy_unity.bat
+
   
   if %ERRORLEVEL% EQU 0 (  
     ECHO [92mSuccessfully deployed Unity Support [0m

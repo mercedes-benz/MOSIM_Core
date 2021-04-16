@@ -21,7 +21,6 @@ from MMIStandard.register import MMIAdapter, MMIRegisterService
 
 from MMIPython.core.utils.description_utils import create_mmu_description
 from MMIPython.core.services.service_access import ServiceAccess
-from MMIPython.core.utils import conversion_utils as conv
 
 from MMIPython.adapter.session.session_data import SessionData
 

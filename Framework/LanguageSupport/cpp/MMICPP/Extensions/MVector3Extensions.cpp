@@ -9,11 +9,22 @@ void MVector3Extensions::ToMVector3(MVector3 & _return, const vector<double>& va
 {
 	if (values.size() < 3)
 	{
-		throw runtime_error("Can not create Mvector3: input has less than 3 values");
+		throw runtime_error("Can not create MVector3: input has less than 3 values");
 	}
 	_return.__set_X(values[0]);
 	_return.__set_Y(values[1]);
 	_return.__set_Z(values[2]);
+}
+
+void MVector3Extensions::ToDoubleVector(vector<double> & _return, const MVector3 & values)
+{	
+	if (_return.size() != 3)
+	{
+		throw runtime_error("Can not update double vector: Input needs to have exactly 3 values");
+	}
+	_return[0] = values.X;
+	_return[1] = values.Y;
+	_return[2] = values.Z;	
 }
 
 float MVector3Extensions::EuclideanDistance(const MVector3 &vector1, const MVector3 &vector2)

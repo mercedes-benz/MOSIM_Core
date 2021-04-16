@@ -30,6 +30,10 @@ IF EXIST .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\bin\Debug\ (
     RMDIR /S/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\bin\Debug\
 )
 
+IF EXIST .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build (
+    RMDIR /S/Q .\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\build
+)
+
 cd .\MMIAdapterUnity\UnityProject
 call .\clean.bat
 

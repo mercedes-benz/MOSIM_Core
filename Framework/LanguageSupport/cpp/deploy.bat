@@ -11,7 +11,7 @@ REM $Env:DEVENV = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professio
 REM Checking environment variables
 SET vsPATH = ""
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2021\Professional\Common7\IDE\devenv.com" (
-	ECHO "Found VS 2017"
+	ECHO "Found VS 2021"
 	SET vsPATH="C:\Program Files (x86)\Microsoft Visual Studio\2021\Professional\Common7\IDE\devenv.com"
 ) else (
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.com" (
@@ -19,7 +19,7 @@ if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Commo
 	SET vsPATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.com"
 ) else (
 if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com" (
-	ECHO "Found VS 2021"
+	ECHO "Found VS 2017"
 	SET vsPATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
 ) else (
 if defined DEVENV (

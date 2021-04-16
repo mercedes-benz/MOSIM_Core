@@ -6,6 +6,9 @@
 	Template class which represents a thrift client
 */
 
+#ifndef _THRIFT_CLIENT_H_
+#define _THRIFT_CLIENT_H_
+
 #pragma once
 #include <thrift/transport/TTransportUtils.h>
 
@@ -45,4 +48,4 @@ namespace MMIStandard {
 		void Start();
 	};
 }
-
+#endif

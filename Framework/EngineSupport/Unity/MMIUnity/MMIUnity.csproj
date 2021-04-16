@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationEndEvent.cs" />
     <Compile Include="Development\FPSView.cs" />
     <Compile Include="Development\LogViewer.cs" />
     <Compile Include="Development\UnityMMUBase.cs" />

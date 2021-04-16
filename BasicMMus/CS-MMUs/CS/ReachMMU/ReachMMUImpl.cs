@@ -100,7 +100,7 @@ namespace ReachMMU
         {
             MBoolResponse response = base.Initialize(avatarDescription, properties);
 
-            //Setuo the skeleton access
+            //Setup the skeleton access
             this.SkeletonAccess = new IntermediateSkeleton();
             this.SkeletonAccess.InitializeAnthropometry(avatarDescription);
 

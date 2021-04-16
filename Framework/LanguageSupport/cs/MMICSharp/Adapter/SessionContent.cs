@@ -21,12 +21,7 @@ namespace MMICSharp.Adapter
         public MMIScene SceneBuffer;
 
         /// <summary>
-        /// The specific service access for the session
-        /// </summary>
-        public ServiceAccess ServiceAccess;
-
-        /// <summary>
-        /// Dictionary to stroe the avatar content
+        /// Dictionary to store the avatar content
         /// </summary>
         public ConcurrentDictionary<string, AvatarContent> AvatarContent = new ConcurrentDictionary<string, CSharpAdapter.AvatarContent>();
 
@@ -39,7 +34,6 @@ namespace MMICSharp.Adapter
         /// The last time the session has been used
         /// </summary>
         public DateTime LastAccess;
-
 
         /// <summary>
         /// A reference to the session data
@@ -55,9 +49,6 @@ namespace MMICSharp.Adapter
             this.SessionID = sessionID;
             this.SceneBuffer = new MMIScene();
             this.sessionData = sessionData;
-
-            this.ServiceAccess = new ServiceAccess(this.sessionData.MMIRegisterAddress, sessionID);
-            this.ServiceAccess.Initialize();
         }
 
         /// <summary>

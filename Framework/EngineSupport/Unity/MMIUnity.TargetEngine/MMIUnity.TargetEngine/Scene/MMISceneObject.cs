@@ -1,20 +1,23 @@
 ﻿// SPDX-License-Identifier: MIT
 // The content of this file has been developed in the context of the MOSIM research project.
-// Original author(s): Felix Gaisbauer, Adam Klodowski, Janis Sprenger
+// Original author(s): Felix Gaisbauer, Adam Kłodowski, Janis Sprenger
 
 
 using MMIStandard;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.IO;
+using MMICSharp.Common.Communication;
 
 
 namespace MMIUnity.TargetEngine.Scene
 {
     /// <summary>
     /// Basic script for scene objects which should be synchronized with the MMI framework.
-    /// This practically means, that each object which should be synchronized with the framework must have the script attached.
+    /// This practically means, that each object which should be synchronized with the framework must have the script attached. Must execute in edit mode to track constraints and save them and load when necessary
     /// </summary>
+    [ExecuteInEditMode]
     public class MMISceneObject : MonoBehaviour
     {
         #region public variables
@@ -32,6 +35,10 @@ namespace MMIUnity.TargetEngine.Scene
         [HideInInspector]
         public ulong TaskEditorID = 0;
         //end of task editor dependencies
+
+        //File with constraints - constaints are too complex for unity editor to handle them propely between play and edit mode, hence this intermediate file for storing them
+        public string ConstraintsFile = "";
+
         /// <summary>
         /// Specifies whether the arrow pointing into the direction vector is displayed
         /// </summary>
@@ -105,14 +112,39 @@ namespace MMIUnity.TargetEngine.Scene
             WalkTarget,
             Area,
             Part,
-            Tool
+            Tool,
+            Group,
+            Station,
+            StationResult
+        }
+
+        public static string TypesToString(Types val)
+        {
+            switch (val)
+            {
+                case Types.MSceneObject: return "MSceneObject";
+                case Types.InitialLocation: return "InitialLocation";
+                case Types.FinalLocation: return "FinalLocation";
+                case Types.WalkTarget: return "WalkTarget";
+                case Types.Area: return "Area";
+                case Types.Part: return "Part";
+                case Types.Tool: return "Tool";
+                case Types.Group: return "Group";
+                case Types.Station: return "Station";
+                case Types.StationResult: return "StationResult";
+                default: return "";
+            }
         }
 
         public Types Type;
         public string Tool;
         public MMISceneObject InitialLocation;
+        public string InitialLocationConstraint;
         public MMISceneObject FinalLocation;
+        public string FinalLocationConstraint;
         public MMISceneObject IsLocatedAt;
+        public ulong StationRef = 0; //if StationResult is used as type, then those two fields are used to point to which station and which result from such station should be inserted into the object
+        public ulong GroupRef = 0;
 
 
         /// <summary>
@@ -135,6 +167,7 @@ namespace MMIUnity.TargetEngine.Scene
         /// A tracker which monitos potential changes related to the transform
         /// </summary>
         private TransformTracker transformTracker;
+        
 
         /// <summary>
         /// Flag indicates whetehr physics is enabled for the object (e.g. react on physical forces)
@@ -163,42 +196,30 @@ namespace MMIUnity.TargetEngine.Scene
             //Create a unique id for the scene object (only valid in the current session -> otherwise UUID required)
             string id = UnitySceneAccess.CreateSceneObjectID();
 
-
             //To check -> Is this informaton be required for every use case? Or should be remove it from here.
-            Dictionary<string, string> _dict = new Dictionary<string, string>();
-            if (Type == Types.Part)
+            //It is required on the task editor side (accessed from Unity directly), but here AJAN uses this fields
+            //I have simplified the if conditions below and added reference to group type of MMISceneObject - Adam
+            Dictionary<string, string> _dict = new Dictionary<string, string>(); 
+               _dict.Add("type", Type.ToString());
+            /*
+            if ((Type == Types.Part) || (Type == Types.Tool) || (Type == Types.Group))
             {
-                _dict.Add("type", Type.ToString());
                 if (InitialLocation != null)
                     _dict.Add("initialLocation", InitialLocation.MSceneObject.ID);
                 if (FinalLocation != null)
                     _dict.Add("finalLocation", FinalLocation.MSceneObject.ID);
                 if (IsLocatedAt != null)
-                    _dict.Add("isLocatedAt", InitialLocation.MSceneObject.ID);
+                    _dict.Add("isLocatedAt", IsLocatedAt.MSceneObject.ID);
             } 
-            else if (Type == Types.Tool)
-            {
-                _dict.Add("type", Tool);
-                if (InitialLocation != null)
-                    _dict.Add("initialLocation", InitialLocation.MSceneObject.ID);
-                if (FinalLocation != null)
-                    _dict.Add("finalLocation", FinalLocation.MSceneObject.ID);
-                if (IsLocatedAt != null)
-                    _dict.Add("isLocatedAt", InitialLocation.MSceneObject.ID);
-            }
-            else
-            {
-                _dict.Add("type", Type.ToString());
-            }
-
+            */
             //Create a new instance
             this.MSceneObject = new MSceneObject()
             {
                 Name = this.name,
                 ID = id,
                 Properties = _dict,
-                Transform = new MTransform(id, new MVector3(0, 0, 0), new MQuaternion(0, 0, 0, 1)),
-                Constraints = this.Constraints
+                Transform = new MTransform(id, new MVector3(0, 0, 0), new MQuaternion(0, 0, 0, 1))
+                //Constraints = this.Constraints; //they are loaded on start as they are read from file onEnable
             };
 
             //Create a new transform tracker
@@ -206,9 +227,16 @@ namespace MMIUnity.TargetEngine.Scene
         }
 
 
+        private void OnEnable()
+        {
+            LoadConstraints();
+        }
+
         // Use this for initialization
         protected virtual void Start()
         {
+            if (!Application.isPlaying)
+                return;
             //Setup the transforms of the MSceneObject
             this.SetupTransform();
 
@@ -237,6 +265,50 @@ namespace MMIUnity.TargetEngine.Scene
             if(this.TransferMesh)
                 this.SetupMesh();
 
+            if ((Type == Types.Part) || (Type == Types.Tool) || (Type == Types.Group))
+            {
+                if (InitialLocation != null)
+                {
+                    this.MSceneObject.Properties.Add("initialLocation", InitialLocation.MSceneObject.ID);
+                    if (InitialLocationConstraint!="")
+                      this.MSceneObject.Properties.Add("initialLocationConstraint", InitialLocationConstraint);
+                }
+                if (FinalLocation != null)
+                {
+                    this.MSceneObject.Properties.Add("finalLocation", FinalLocation.MSceneObject.ID);
+                    if (FinalLocationConstraint!="")
+                        this.MSceneObject.Properties.Add("finalLocationConstraint", FinalLocationConstraint);
+                }
+                if (IsLocatedAt != null)
+                    this.MSceneObject.Properties.Add("isLocatedAt", IsLocatedAt.MSceneObject.ID);
+            } 
+            if ((Type == Types.Station) && (Type == Types.StationResult))
+            {
+                MMISceneObject parentStation = this.GetParentStation();
+                if (parentStation!=null)
+                {
+                    this.MSceneObject.Properties.Add("ParentStationID",parentStation.TaskEditorID.ToString());
+                    this.MSceneObject.Properties.Add("ParentStationName",parentStation.name);
+                }
+                else
+                {
+                     this.MSceneObject.Properties.Add("ParentStationID","0");
+                     this.MSceneObject.Properties.Add("ParentStationName","");
+                }
+                MMISceneObject parent = this.GetParentPartOrGroup();
+                if (parent!=null)
+                {
+                    this.MSceneObject.Properties.Add("ParentPartGroupID",parent.MSceneObject.ID);
+                    this.MSceneObject.Properties.Add("ParentPartGroupName",parent.name);
+                }
+                else
+                {
+                    this.MSceneObject.Properties.Add("ParentPartGroupID","0");
+                    this.MSceneObject.Properties.Add("ParentPartGroupName","");
+                }
+            }
+
+            this.MSceneObject.Constraints=this.Constraints;
             //Add the scene object to the scene access
             UnitySceneAccess.AddSceneObject(this.MSceneObject);
         }
@@ -245,6 +317,8 @@ namespace MMIUnity.TargetEngine.Scene
         // Update is called once per frame
         protected virtual void Update()
         {
+            if (!Application.isPlaying)
+                return;
             //Handle physics
             if (this.rigidBody != null && physicsEnabled)
             {
@@ -290,6 +364,49 @@ namespace MMIUnity.TargetEngine.Scene
 
         }
 
+        /// <summary>
+        /// Returns MMIScenObject represnting parent station or null if such is not found
+        /// </summary>
+        public MMISceneObject GetParentStation()
+        {
+            MMISceneObject n = this.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            while (n != null)
+            {
+                if (n.Type == MMISceneObject.Types.Station)
+                    break;
+                n = n.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            }
+
+            if ((n != null) && (n.Type == MMISceneObject.Types.Station))
+                return n;
+            return null;
+        }
+
+        /// <summary>
+        /// Returns MMIScenObject represnting parent station or null if such is not found
+        /// </summary>
+        public MMISceneObject GetParentPartOrGroup()
+        {
+            MMISceneObject n = this.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            while (n != null)
+            {
+                if ((n.Type == MMISceneObject.Types.Group) || (n.Type == MMISceneObject.Types.Part))
+                    break;
+                n = n.gameObject.transform.parent.GetComponentInParent<MMISceneObject>();
+            }
+
+            if ((n != null) && ((n.Type == MMISceneObject.Types.Group) || (n.Type == MMISceneObject.Types.Part)))
+                return n;
+            return null;
+        }
+
+        /// <summary>
+        /// Returns MMIScenObject represnting parent MMIScenObject or null if such is not found
+        /// </summary>
+        public MMISceneObject GetParentMMIScenObject()
+        {
+            return this.GetComponentInParent<MMISceneObject>();
+        }
 
         /// <summary>
         /// Updates the transform of the corresponding MSceneObject
@@ -317,13 +434,81 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         public virtual void Synchronize()
         {
+            if (this.MSceneObject.Transform==null)
+                this.MSceneObject.Transform = new MTransform(this.MSceneObject.ID, new MVector3(0, 0, 0), new MQuaternion(0, 0, 0, 1));
             this.UpdateTransform(false);
-            this.MSceneObject.Constraints = Constraints;
+
+            this.MSceneObject.Constraints = this.Constraints;
 
             //To do -> further actions in here
             UnitySceneAccess.SceneObjectChanged(this.MSceneObject);
         }
 
+        /// <summary>
+        /// Function returns true if constraint with the name given as parameter is attached to it
+        /// </summary>
+        public bool HasConstraint(string constraintID)
+        {
+            for (int i = 0; i < this.Constraints.Count; i++)
+                if (this.Constraints[i].ID == constraintID)
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Method for adding component to part/tool/scene object's libraries - for now placeholder
+        /// </summary>
+        public void AddToLibrary()
+        {
+            Debug.Log("Adding objects to library is not implemented yet.");
+        }
+
+        /// <summary>
+        /// Method for loading constraints from file assigned to the object
+        /// </summary>
+        public void LoadConstraints()
+        {
+            string Dir = Application.dataPath + "/Constraints/";
+            if ((ConstraintsFile != "") && File.Exists(Dir + ConstraintsFile))
+            try
+            {
+                Constraints = null;
+                var constrs = Serialization.FromJsonString<List<MMIStandard.MConstraint>>(File.ReadAllText(Dir + ConstraintsFile));
+                Constraints = constrs;
+            }
+            catch
+            {
+                Debug.LogWarning("Loading constraints error: Wrong file format");
+            }
+        }
+
+        /// <summary>
+        /// Method for saving constraints to file assigned to the object
+        /// </summary>
+        public void SaveConstraints()
+        {
+            if (Application.isEditor && Application.isPlaying) 
+                return;
+            
+            string Dir = Application.dataPath + "/Constraints";
+                if (!Directory.Exists(Dir))
+                System.IO.Directory.CreateDirectory(Dir);
+            Dir += "/";
+            if ((ConstraintsFile == "") || !ConstraintsFile.EndsWith(".json"))
+            {
+                ConstraintsFile = this.name;
+                if (File.Exists(Dir + ConstraintsFile + ".json"))
+                {
+                    int i = 0;
+                    while (File.Exists(Dir + ConstraintsFile + i.ToString() + ".json"))
+                    i++;
+                    ConstraintsFile = ConstraintsFile + i.ToString() + ".json";
+                }
+                else
+                    ConstraintsFile = ConstraintsFile + ".json";
+            }
+            System.IO.File.WriteAllText(Dir + ConstraintsFile, Serialization.ToJsonString(Constraints));
+        }
 
         /// <summary>
         /// Debug print

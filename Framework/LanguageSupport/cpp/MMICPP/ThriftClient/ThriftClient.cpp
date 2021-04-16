@@ -7,7 +7,7 @@
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TTransportUtils.h>
 #include "Utils/Logger.h"
-#include "boost/exception/diagnostic_information.hpp"
+//#include "boost/exception/diagnostic_information.hpp"
 
 using namespace std;
 using namespace apache::thrift::protocol;
@@ -38,10 +38,10 @@ void ThriftClient<T>::Start()
 		if(!this->transport->isOpen())
 			this->transport->open();
 	}
-	catch (...)
+	catch (exception e)
 	{
-		Logger::printLog(L_ERROR, boost::current_exception_diagnostic_information());
-	
+		//Logger::printLog(L_ERROR, boost::current_exception_diagnostic_information());
+		Logger::printLog(L_ERROR, e.what());	// TODO: define error message
 	}
 	
 }

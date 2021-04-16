@@ -14,22 +14,22 @@ The core framework utilizes Apache Thrift for communication and to automatically
 
 Besides the infrastructure of the core framework, the repository comprises an implementation of the so-called co-simulation as well as basic MMUs.
 
-The MOSIM Framework is provided in four other repositories: The [MOSIM Services](https://git.hb.dfki.de/mosim/mosim_services) contains the implementation of various services, assisting in MMU and Co-Simulator development. The [MOSIM Tools](https://git.hb.dfki.de/mosim/mosim_tools) contains helpful tools, e.g. for MMUGenerator for animation based Unity MMUs. The [MOSIM Demos](https://git.hb.dfki.de/mosim/unitydemo) repository contains integrations to Unity 3D and Unreal Engine containing simple demonstration scenes. The [MOSIM (meta)](https://git.hb.dfki.de/mosim/mosim) repository is a meta repository, grouping all of the repositories together, providing a deploy functionality and central cloning opportunity.
+The MOSIM Framework is provided in four other repositories: The [MOSIM Services](https://github.com/Daimler/MOSIM_Services) contains the implementation of various services, assisting in MMU and Co-Simulator development. The [MOSIM Tools](https://github.com/Daimler/MOSIM_Tools) contains helpful tools, e.g. for MMUGenerator for animation based Unity MMUs. The [MOSIM Demos](https://github.com/Daimler/MOSIM_Demos) repository contains integrations to Unity 3D and Unreal Engine containing simple demonstration scenes. The [MOSIM (meta)](https://github.com/Daimler/MOSIM) repository is a meta repository, grouping all of the repositories together, providing a deploy functionality and central cloning opportunity.
 
 ## Usage
 
-If you want to **use the framework**, we recommend using the pre-compiled environment, documented in the article [Installing the pre-compiled framework](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/Tutorials/InstallPrecompiled).
+If you want to **use the framework**, we recommend using the pre-compiled environment, documented in the article [Installing the pre-compiled framework](https://github.com/Daimler/mosim_core/wiki/InstallPrecompiled).
 
-If you plan to **develop MMUs** for the MOSIM framework, we recommend starting with the article [MMU Development](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/Tutorials/MMUDevelopment).
+If you plan to **develop MMUs** for the MOSIM framework, we recommend starting with the article [MMU Development](https://github.com/Daimler/mosim_core/wiki/MMUDevelopment).
 
-If you plan to **develop Services** for the MOSIM framework, we recommend starting with the article [Service Development](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/Tutorials/ServiceDevelopment).
+If you plan to **develop Services** for the MOSIM framework, we recommend starting with the article [Service Development](https://github.com/Daimler/mosim_core/wiki/ServiceDevelopment).
 
 
-If you want to **integrate the MOSIM framework** to your own Unity Scene, we recommend reading the article [Integrating the MOSIM framework](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/Tutorials/IntegratingFramework).
+If you want to **integrate the MOSIM framework** to your own Unity Scene, we recommend reading the article [Integrating the MOSIM framework](https://github.com/Daimler/mosim_core/wiki/IntegratingFramework).
 
-If you want to **compile the MOSIM framework** from scratch, we recommend reading the article [Compling the MOSIM framework from scratch](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/Tutorials/CompileFramework). 
+If you want to **compile the MOSIM framework** from scratch, we recommend reading the article [Compling the MOSIM framework from scratch](https://github.com/Daimler/mosim_core/wiki/CompileFramework). 
 
-The full documentation of the MOSIM framework can be found in the wiki pages for the [technical architecture](https://git.hb.dfki.de/mosim/mosim_core/-/wikis/technical_architecture/home). 
+The full documentation of the MOSIM framework can be found in the wiki pages for the [technical architecture](https://github.com/Daimler/mosim_core/wiki/01_home). 
 
 
 ## Contributing

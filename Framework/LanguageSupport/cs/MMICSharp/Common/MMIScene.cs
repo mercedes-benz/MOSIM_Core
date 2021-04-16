@@ -4,6 +4,7 @@
 
 using MMIStandard;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,18 +21,18 @@ namespace MMICSharp.Common
         /// <summary>
         /// Mapping between the name of a scene object and a unique id
         /// </summary>
-        protected Dictionary<string, List<string>> nameIdMappingSceneObjects = new Dictionary<string, List<string>>();
+        protected ConcurrentDictionary<string, List<string>> nameIdMappingSceneObjects = new ConcurrentDictionary<string, List<string>>();
 
         /// <summary>
         /// Dictionary containing all scene objects structured by the specific id
         /// </summary>
-        protected Dictionary<string, MSceneObject> sceneObjectsByID = new Dictionary<string, MSceneObject>();
+        protected ConcurrentDictionary<string, MSceneObject> sceneObjectsByID = new ConcurrentDictionary<string, MSceneObject>();
 
 
-        protected Dictionary<string, MAvatar> avatarsByID = new Dictionary<string, MAvatar>();
+        protected ConcurrentDictionary<string, MAvatar> avatarsByID = new ConcurrentDictionary<string, MAvatar>();
 
 
-        protected Dictionary<string, List<string>> nameIdMappingAvatars = new Dictionary<string, List<string>>();
+        protected ConcurrentDictionary<string, List<string>> nameIdMappingAvatars = new ConcurrentDictionary<string, List<string>>();
 
 
         /// <summary>
@@ -83,11 +84,11 @@ namespace MMICSharp.Common
         {
             this.SceneHistory = new Queue<Tuple<int, MSceneUpdate>>();
             this.SceneUpdate = new MSceneUpdate();
-            this.sceneObjectsByID = new Dictionary<string, MSceneObject>();
-            this.avatarsByID = new Dictionary<string, MAvatar>();
+            this.sceneObjectsByID = new ConcurrentDictionary<string, MSceneObject>();
+            this.avatarsByID = new ConcurrentDictionary<string, MAvatar>();
             this.FrameID = 0;
-            this.nameIdMappingAvatars = new Dictionary<string, List<string>>();
-            this.nameIdMappingSceneObjects = new Dictionary<string, List<string>>();
+            this.nameIdMappingAvatars = new ConcurrentDictionary<string, List<string>>();
+            this.nameIdMappingSceneObjects = new ConcurrentDictionary<string, List<string>>();
         }
 
 
@@ -561,16 +562,18 @@ namespace MMICSharp.Common
                 if (!this.avatarsByID.ContainsKey(avatar.ID))
                 {
                     //Add either a clone or the original one
-                    this.avatarsByID.Add(avatar.ID, deepCopy ? avatar.Clone() : avatar);
+                    this.avatarsByID.TryAdd(avatar.ID, deepCopy ? avatar.Clone() : avatar);
                 }
 
                 //Add name <-> id mapping
                 if (!this.nameIdMappingAvatars.ContainsKey(avatar.Name))
-                    this.nameIdMappingAvatars.Add(avatar.Name, new List<string>() { avatar.ID });
+                    this.nameIdMappingAvatars.TryAdd(avatar.Name, new List<string>() { avatar.ID });
 
                 else
                 {
-                    //To do check if list already contains the id
+                    if (!this.nameIdMappingAvatars.ContainsKey(avatar.ID))
+                        this.nameIdMappingAvatars.TryAdd(avatar.ID, new List<string>());
+
                     this.nameIdMappingAvatars[avatar.ID].Add(avatar.ID);
                 }
             }
@@ -606,12 +609,12 @@ namespace MMICSharp.Common
                 if (!sceneObjectsByID.ContainsKey(sceneObject.ID))
                 {
                     //Add either a clone or the original one
-                    this.sceneObjectsByID.Add(sceneObject.ID, deepCopy ? sceneObject.Clone() : sceneObject);
+                    this.sceneObjectsByID.TryAdd(sceneObject.ID, deepCopy ? sceneObject.Clone() : sceneObject);
                 }
 
                 //Add name <-> id mapping
                 if (!this.nameIdMappingSceneObjects.ContainsKey(sceneObject.Name))
-                    this.nameIdMappingSceneObjects.Add(sceneObject.Name, new List<string>() { sceneObject.ID });
+                    this.nameIdMappingSceneObjects.TryAdd(sceneObject.Name, new List<string>() { sceneObject.ID });
 
                 else
                 {
@@ -740,7 +743,7 @@ namespace MMICSharp.Common
                     }
 
                     //Remove the scene object from the dictionary
-                    avatarsByID.Remove(id);
+                    avatarsByID.TryRemove(id, out MAvatar avatar);
                 }
             }
             return result;
@@ -766,7 +769,7 @@ namespace MMICSharp.Common
                     }
 
                     //Remove the scene object from the dictionary
-                    sceneObjectsByID.Remove(id);
+                    sceneObjectsByID.TryRemove(id, out MSceneObject sceneObject);
                 }
             }
             return result;

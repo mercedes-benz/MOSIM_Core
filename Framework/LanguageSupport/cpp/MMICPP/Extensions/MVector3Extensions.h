@@ -20,6 +20,9 @@ namespace MMIStandard {
 		//	Method which converts double values to MVector3
 		static void ToMVector3(MVector3 &_return, const vector<double> &values);
 
+		//  Method to convert MVector3 to double vector
+		static void ToDoubleVector(vector<double> & _return, const MVector3 & values);
+
 		//	Method calculates the euclidean distance between the two vectors
 		static float EuclideanDistance(const  MVector3 &vector1, const MVector3 &vector2);
 

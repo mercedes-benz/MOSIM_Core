@@ -66,9 +66,12 @@ namespace ReachMMUConcurrent
         /// <returns></returns>
         public override MBoolResponse Initialize(MAvatarDescription avatarDescription, Dictionary<string, string> properties)
         {
-            //Create the skeleton access
-            this.SkeletonAccess = new IntermediateSkeleton();
-            this.SkeletonAccess.InitializeAnthropometry(avatarDescription);
+            if (this.SkeletonAccess == null)
+            {
+                //Create the skeleton access
+                this.SkeletonAccess = new IntermediateSkeleton();
+                this.SkeletonAccess.InitializeAnthropometry(avatarDescription);
+            }
 
 
             return base.Initialize(avatarDescription, properties);

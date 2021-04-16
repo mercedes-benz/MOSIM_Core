@@ -55,7 +55,7 @@ namespace MMICSharp.Common
         /// </summary>
         /// <param name="globalTarget"></param>
         /// <returns></returns>
-        public MAvatarPostureValues RetargetToIntermediate(MAvatarPosture globalTarget)
+        public virtual MAvatarPostureValues RetargetToIntermediate(MAvatarPosture globalTarget)
         {
             RJoint root = ((RJoint)this.skeleton.GetRoot(globalTarget.AvatarID));
             bool rootFound = false;
@@ -87,7 +87,7 @@ namespace MMICSharp.Common
             return ret;
         }
 
-        public MAvatarPosture RetargetToTarget(MAvatarPostureValues intermediatePostureValues)
+        public virtual MAvatarPosture RetargetToTarget(MAvatarPostureValues intermediatePostureValues)
         {
             string id = intermediatePostureValues.AvatarID;
             RJoint root = ((RJoint)this.skeleton.GetRoot(id));
@@ -102,6 +102,7 @@ namespace MMICSharp.Common
                 outJ.ID = j.ID;
                 outJ.Type = j.Type;
                 outJ.Parent = j.Parent;
+
                 if (outJ.Type != MJointType.Undefined)
                 {
 

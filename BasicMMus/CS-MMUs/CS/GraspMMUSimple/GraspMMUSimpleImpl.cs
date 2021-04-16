@@ -279,11 +279,21 @@ namespace GraspMMUSimple
             {
                 //Setup left fingers
                 case MJointType.LeftWrist:
-                    hand.Fingers.Add(new Finger() { JointTypes = leftIndex, FingerTip = MJointType.LeftIndexTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = leftLittle, FingerTip = MJointType.LeftLittleTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = leftMiddle, FingerTip = MJointType.LeftMiddleTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = leftRing, FingerTip = MJointType.LeftRingTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = leftThumb, FingerTip = MJointType.LeftThumbTip });
+                    //Only consider the respective finger if the finger tip joint is explicitly set
+                    if (hand.FinalPosture.JointConstraints.Exists(s=>s.JointType == MJointType.LeftIndexTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = leftIndex, FingerTip = MJointType.LeftIndexTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.LeftLittleTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = leftLittle, FingerTip = MJointType.LeftLittleTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.LeftMiddleTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = leftMiddle, FingerTip = MJointType.LeftMiddleTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.LeftRingTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = leftRing, FingerTip = MJointType.LeftRingTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.LeftThumbTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = leftThumb, FingerTip = MJointType.LeftThumbTip });
 
                     hand.ClosedHand = this.closedHandLeft;
 
@@ -291,11 +301,21 @@ namespace GraspMMUSimple
 
                 //Setup right fingers
                 case MJointType.RightWrist:
-                    hand.Fingers.Add(new Finger() { JointTypes = rightIndex, FingerTip = MJointType.RightIndexTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = rightLittle, FingerTip = MJointType.RightLittleTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = rightMiddle,  FingerTip = MJointType.RightMiddleTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = rightRing, FingerTip = MJointType.RightRingTip });
-                    hand.Fingers.Add(new Finger() { JointTypes = rightThumb, FingerTip = MJointType.RightThumbTip });
+                    //Only consider the respective finger if the finger tip joint is explicitly set
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.RightIndexTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = rightIndex, FingerTip = MJointType.RightIndexTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.RightLittleTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = rightLittle, FingerTip = MJointType.RightLittleTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.RightMiddleTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = rightMiddle,  FingerTip = MJointType.RightMiddleTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.RightRingTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = rightRing, FingerTip = MJointType.RightRingTip });
+
+                    if (hand.FinalPosture.JointConstraints.Exists(s => s.JointType == MJointType.RightThumbTip))
+                        hand.Fingers.Add(new Finger() { JointTypes = rightThumb, FingerTip = MJointType.RightThumbTip });
 
                     //Load the closed hand
                     hand.ClosedHand = this.closedHandRight;

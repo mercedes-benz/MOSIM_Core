@@ -23,6 +23,18 @@ shared_ptr<MQuaternion> MQuaternionExtensions::ToMQuaternion(const vector<double
 	return _return;
 }
 
+void MQuaternionExtensions::ToDoubleVector(vector<double>& _return, const MQuaternion & values)
+{
+	if (_return.size() != 4)
+	{
+		throw runtime_error("Can not update double vector: input requires exactly 4 values");
+	}
+	_return[0] = values.X;
+	_return[1] = values.Y;
+	_return[2] = values.Z;
+	_return[3] = values.W;	
+}
+
 void MQuaternionExtensions::MultiplyToMVector3(MVector3 & _return, const MQuaternion & quat, const MVector3 & vec)
 {
 	double num = quat.X * 2.0;

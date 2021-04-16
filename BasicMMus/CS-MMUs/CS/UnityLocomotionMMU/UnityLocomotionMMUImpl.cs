@@ -346,6 +346,7 @@ namespace UnityLocomotionMMU
                 }
 
 
+                
 
 
                 if (this.trajectory == null ||this.trajectory.Poses.Count ==0)
@@ -384,7 +385,8 @@ namespace UnityLocomotionMMU
                     this.currentIndex = 0;
 
                     //Set the internal fields
-                    this.transform.position = new Vector3((float)rootPosition.X, 0, (float)rootPosition.Z);
+                    this.transform.position = new Vector3((float)rootPosition.X, (float)this.SkeletonAccess.GetGlobalJointPosition(this.AvatarDescription.AvatarID, MJointType.Root).Y, (float)rootPosition.Z);
+
 
                     // In the new intermediate skeleton definition, x is pointing backwards, y up, z right. 
                     this.transform.rotation = Quaternion.Euler(0, new Quaternion((float)rootRotation.X, (float)rootRotation.Y, (float)rootRotation.Z, (float)rootRotation.W).eulerAngles.y - 90.0f, 0);

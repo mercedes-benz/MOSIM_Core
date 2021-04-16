@@ -155,115 +155,128 @@ namespace MMIUnity.TargetEngine
         /// <param name="instance"></param>
         protected override void HandleDrawingCalls(MSimulationResult mmuResult, MMUContainer instance)
         {
-            ////Draw the avatar
-            //if (instance.PostureDraw != null)
-            //{
-            //    GameObject.Destroy(instance.PostureDraw);
-            //}
 
-            //instance.PostureDraw = DrawingUtils.DrawAvatarPosture(mmuResult.Posture);
-            //instance.PostureDraw.name = instance.MMU.Name;
-
-            //Disable the history drawings
-            foreach (MotionTask task in instance.History)
+            MainThreadDispatcher.Instance.ExecuteNonBlocking(() =>
             {
-                if (task.Drawings != null)
+
+
+                try
                 {
-                    foreach (GameObject obj in task.Drawings)
-                        if(obj != null)
-                            obj.SetActive(false);
-                }
-            }
+                    ////Draw the avatar
+                    //if (instance.PostureDraw != null)
+                    //{
+                    //    GameObject.Destroy(instance.PostureDraw);
+                    //}
 
+                    //instance.PostureDraw = DrawingUtils.DrawAvatarPosture(mmuResult.Posture);
+                    //instance.PostureDraw.name = instance.MMU.Name;
 
-            //Remove(disable all temporary drawings
-            if (!resetThisFrame)
-            {
-                for (int i = this.temporaryDrawings.Count - 1; i >= 0; i--)
-                {
-                    this.temporaryDrawings[i].SetActive(false);
-                    UnityEngine.Object.Destroy(this.temporaryDrawings[i]);
-                    this.temporaryDrawings.RemoveAt(i);
-                }
-                resetThisFrame = true;
-            }
-            
-
-
-            if (mmuResult.DrawingCalls == null)
-                return;
-
-            foreach (MDrawingCall drawingCall in mmuResult.DrawingCalls)
-            {
-                if (drawingCall == null)
-                    continue;
-
-                GameObject drawingObject = null;
-
-                switch (drawingCall.Type)
-                {
-                    case MDrawingCallType.DrawLine2D:
-                        GameObject line2D = DrawingUtils.DrawLine2D(drawingCall.Data);
-                        line2D.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
-                        instance.CurrentTasks[0].Drawings.Add(line2D);
-
-                        //Assign the created object
-                        drawingObject = line2D;
-
-                        break;
-
-                    case MDrawingCallType.DrawLine3D:
-                        GameObject line3D = DrawingUtils.DrawLine3D(drawingCall.Data);
-                        line3D.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
-                        instance.CurrentTasks[0].Drawings.Add(line3D);
-
-                        //Assign the created object
-                        drawingObject = line3D;
-
-                        break;
-
-                    case MDrawingCallType.DrawPoint3D:
-                        GameObject point = DrawingUtils.DrawPoint(drawingCall.Data);
-                        point.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
-                        instance.CurrentTasks[0].Drawings.Add(point);
-
-                        //Assign the created object
-                        drawingObject = point;
-                        break;
-
-                    case MDrawingCallType.DrawText:
-                        GameObject label = new GameObject(instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name);
-                        TextMesh textMesh = label.AddComponent<TextMesh>();
-                        label.transform.localPosition = new Vector3(0, 2.0f, 0);
-                        label.transform.parent = this.avatar.transform;
-                        label.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-                        textMesh.fontSize = 100;
-
-                        if (drawingCall.Properties.ContainsKey("Text"))
-                            textMesh.text = drawingCall.Properties["Text"];
-                        else
-                            textMesh.text = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
-
-                        instance.CurrentTasks[0].Drawings.Add(label);
-
-                        //Assign the created object
-                        drawingObject = label;
-
-                        break;
-
-                }
-
-
-                //Check if the drawing call has properties
-                if (drawingObject !=null && drawingCall.Properties != null && drawingCall.Properties.ContainsKey("DrawingMode"))
-                {
-                    if (drawingCall.Properties["DrawingMode"] == "Frame")
+                    //Disable the history drawings
+                    foreach (MotionTask task in instance.History)
                     {
-                        //Remove after next frame
-                        this.temporaryDrawings.Add(drawingObject);
+                        if (task.Drawings != null)
+                        {
+                            foreach (GameObject obj in task.Drawings)
+                                if (obj != null)
+                                    obj.SetActive(false);
+                        }
+                    }
+
+
+                    //Remove(disable all temporary drawings
+                    if (!resetThisFrame)
+                    {
+                        for (int i = this.temporaryDrawings.Count - 1; i >= 0; i--)
+                        {
+                            this.temporaryDrawings[i].SetActive(false);
+                            UnityEngine.Object.Destroy(this.temporaryDrawings[i]);
+                            this.temporaryDrawings.RemoveAt(i);
+                        }
+                        resetThisFrame = true;
+                    }
+
+
+
+                    if (mmuResult.DrawingCalls == null)
+                        return;
+
+                    foreach (MDrawingCall drawingCall in mmuResult.DrawingCalls)
+                    {
+                        if (drawingCall == null)
+                            continue;
+
+                        GameObject drawingObject = null;
+
+                        switch (drawingCall.Type)
+                        {
+                            case MDrawingCallType.DrawLine2D:
+                                GameObject line2D = DrawingUtils.DrawLine2D(drawingCall.Data);
+                                line2D.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
+                                instance.CurrentTasks[0].Drawings.Add(line2D);
+
+                                //Assign the created object
+                                drawingObject = line2D;
+
+                                break;
+
+                            case MDrawingCallType.DrawLine3D:
+                                GameObject line3D = DrawingUtils.DrawLine3D(drawingCall.Data);
+                                line3D.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
+                                instance.CurrentTasks[0].Drawings.Add(line3D);
+
+                                //Assign the created object
+                                drawingObject = line3D;
+
+                                break;
+
+                            case MDrawingCallType.DrawPoint3D:
+                                GameObject point = DrawingUtils.DrawPoint(drawingCall.Data);
+                                point.name = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
+                                instance.CurrentTasks[0].Drawings.Add(point);
+
+                                //Assign the created object
+                                drawingObject = point;
+                                break;
+
+                            case MDrawingCallType.DrawText:
+                                GameObject label = new GameObject(instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name);
+                                TextMesh textMesh = label.AddComponent<TextMesh>();
+                                label.transform.localPosition = new Vector3(0, 2.0f, 0);
+                                label.transform.parent = this.avatar.transform;
+                                label.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                                textMesh.fontSize = 100;
+
+                                if (drawingCall.Properties.ContainsKey("Text"))
+                                    textMesh.text = drawingCall.Properties["Text"];
+                                else
+                                    textMesh.text = instance.MMU.Name + "_" + instance.CurrentTasks[0].Instruction.Name;
+
+                                instance.CurrentTasks[0].Drawings.Add(label);
+
+                                //Assign the created object
+                                drawingObject = label;
+
+                                break;
+
+                        }
+
+
+                        //Check if the drawing call has properties
+                        if (drawingObject != null && drawingCall.Properties != null && drawingCall.Properties.ContainsKey("DrawingMode"))
+                        {
+                            if (drawingCall.Properties["DrawingMode"] == "Frame")
+                            {
+                                //Remove after next frame
+                                this.temporaryDrawings.Add(drawingObject);
+                            }
+                        }
                     }
                 }
-            }
+                catch (System.Exception e)
+                {
+                    Debug.Log("Exception at handling drawing calls: " + e.Message + " " + e.StackTrace);
+                }
+            });
         }
 
 
