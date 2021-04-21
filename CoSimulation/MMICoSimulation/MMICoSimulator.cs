@@ -691,6 +691,51 @@ namespace MMICoSimulation
 
 
         /// <summary>
+        /// Pauses an instruction given the defined instruction id.
+        /// Currently pausing an instruction will detach the corresponding MMU from the update routine/do step.
+        /// </summary>
+        /// <param name="instructionID"></param>
+        /// <returns></returns>
+        public virtual MBoolResponse PauseInstruction(string instructionID)
+        {
+            //Find the corresponding MMU container
+            MMUContainer match = this.mmuContainers.Find(s => s.CurrentTasks.Exists(x => x.ID == instructionID));
+
+            //Return false if no instruction is available
+            if (match == null)
+                return new MBoolResponse(false);
+
+            //Set to paused
+            match.IsPaused = true;
+
+            //Return true
+            return new MBoolResponse(true);
+        }
+
+
+        /// <summary>
+        /// Resumes a paused instruction given the defined instruction id
+        /// </summary>
+        /// <param name="instructionID"></param>
+        /// <returns></returns>
+        public virtual MBoolResponse ResumeInstruction(string instructionID)
+        {
+            //Find the corresponding MMU container
+            MMUContainer match = this.mmuContainers.Find(s => s.CurrentTasks.Exists(x => x.ID == instructionID));
+
+            //Return false if no instruction is available
+            if (match == null)
+                return new MBoolResponse(false);
+
+            //Set paused to false
+            match.IsPaused = false;
+
+            //Return true
+            return new MBoolResponse(true);
+        }
+
+
+        /// <summary>
         /// Methods overwrites an endcondition for a given instruction
         /// </summary>
         /// <param name="instructionID"></param>
@@ -829,8 +874,8 @@ namespace MMICoSimulation
 
             foreach (MMUContainer mmuContainer in mmuContainers)
             {
-                //Only perform do step if the MMU is active
-                if (mmuContainer.IsActive)
+                //Only perform do step if the MMU is active and not paused
+                if (mmuContainer.IsActive && !mmuContainer.IsPaused)
                 {
                     //Perform the do step routine with the specified time and fetch the result
                     try

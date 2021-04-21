@@ -39,6 +39,12 @@ namespace MMICoSimulation.Internal
         /// </summary>
         public bool IsActive = false;
 
+
+        /// <summary>
+        /// Flag indicates whether the MMU is currently paused
+        /// </summary>
+        public bool IsPaused = false;
+
         /// <summary>
         /// The current motion task
         /// </summary>
