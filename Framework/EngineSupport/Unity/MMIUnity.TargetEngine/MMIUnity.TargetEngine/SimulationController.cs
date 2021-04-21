@@ -231,17 +231,20 @@ namespace MMIUnity.TargetEngine
             //Create a dictionary which contains the avatar states for each MMU
             ConcurrentDictionary<MMIAvatar, MSimulationResult> results = new ConcurrentDictionary<MMIAvatar, MSimulationResult>();
 
+            //Get all active avatars 
+            IEnumerable<MMIAvatar> activeAvatars = this.Avatars.Where(s => s.enabled);
+
             ///Optionall execute multiple avatars in parallel
-            if (ExecuteAvatarsParallel && this.Avatars.Count > 1)
+            if (ExecuteAvatarsParallel && activeAvatars.Count > 1)
             {
                 //Pre compute frame (on main thread)
-                foreach (MMIAvatar avatar in this.Avatars)
+                foreach (MMIAvatar avatar in activeAvatars)
                 {
                     avatar.CoSimulator.PreComputeFrame();
                 }
 
                 //Perform in parallel
-                System.Threading.Tasks.Parallel.ForEach(this.Avatars, (MMIAvatar avatar) =>
+                System.Threading.Tasks.Parallel.ForEach(activeAvatars, (MMIAvatar avatar) =>
                 {
                     MSimulationResult result = avatar.CoSimulator.ComputeFrame(time);
                     results.TryAdd(avatar, result);
@@ -249,7 +252,7 @@ namespace MMIUnity.TargetEngine
 
 
                 //Pre compute frame (on main thread)
-                foreach (MMIAvatar avatar in this.Avatars)
+                foreach (MMIAvatar avatar in activeAvatars)
                 {
                     avatar.CoSimulator.PostComputeFrame(results[avatar]);
 
@@ -261,7 +264,7 @@ namespace MMIUnity.TargetEngine
 
             else
             {
-                foreach (MMIAvatar avatar in this.Avatars)
+                foreach (MMIAvatar avatar in activeAvatars)
                 {
                     //Can be optimized in future -> Instead of simulation state -> transmit nothing
                     MSimulationResult result = avatar.CoSimulator.DoStep(time, new MSimulationState() { Initial = avatar.GetPosture(), Current = avatar.GetPosture() });
