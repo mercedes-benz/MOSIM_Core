@@ -1486,8 +1486,33 @@ namespace MMILauncher
                 RuntimeData.ExecutableControllers.Add(exeController);
             }
 
+            // Load executable MMUs
+            foreach (string folderPath in Directory.GetDirectories(mmuPath))
+            {
+                //Find the description file
+                string descriptionFile = Directory.GetFiles(folderPath).ToList().Find(s => s.Contains("executable_description.json"));
+
+                //Skip if no description file
+                if (descriptionFile == null)
+                    continue;
+
+                System.Console.WriteLine("Start executable MMU");
+
+                //Get the ExecutableDescription of the service
+                MExecutableDescription executableDescription = Serialization.FromJsonString<MExecutableDescription>(File.ReadAllText(descriptionFile));
+
+                //Determine the filename of the executable file
+                string executableFile = Directory.GetFiles(folderPath).ToList().Find(s => s.Contains(executableDescription.ExecutableName));
+
+                ExecutableController exeController = new ExecutableController(executableDescription, new MIPAddress(RuntimeData.MMIRegisterAddress.Address, port), RuntimeData.MMIRegisterAddress, mmuPath, executableFile, settings.HideWindows, true);
+
+                RuntimeData.ExecutableControllers.Add(exeController);
+                port += 1;
+            }
+
+
             //Start the controllers
-            foreach(ExecutableController executableController in RuntimeData.ExecutableControllers)
+            foreach (ExecutableController executableController in RuntimeData.ExecutableControllers)
             {
                 MBoolResponse response = executableController.Start();
 
