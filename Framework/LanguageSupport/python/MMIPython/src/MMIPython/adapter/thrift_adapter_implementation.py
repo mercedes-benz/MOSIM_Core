@@ -193,8 +193,7 @@ class ThriftAdapterImplementation(MMIAdapter.Iface):
         assert (isinstance(time, float)),"time is no float"
         
         mmu_result = None
-        print("Do Step")
-        
+                
         # Get the avatar content for the stored posture hierarchy
         avatar_content = self.session_data.get_avatar_content(sessionID)
         
