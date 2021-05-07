@@ -1503,11 +1503,10 @@ namespace MMILauncher
 
                 //Determine the filename of the executable file
                 string executableFile = Directory.GetFiles(folderPath).ToList().Find(s => s.Contains(executableDescription.ExecutableName));
-
+                port = NetworkAdapters.getNextAvailablePort(port, this.settings.MaxPort);
                 ExecutableController exeController = new ExecutableController(executableDescription, new MIPAddress(RuntimeData.MMIRegisterAddress.Address, port), RuntimeData.MMIRegisterAddress, mmuPath, executableFile, settings.HideWindows, true);
 
                 RuntimeData.ExecutableControllers.Add(exeController);
-                port += 1;
             }
 
 
