@@ -24,6 +24,8 @@ from thrift.transport import TTransport
 from thrift.protocol import TCompactProtocol
 from thrift.server import TServer
 
+import uuid
+
 class AdapterController(object):
     """starts all adapter functions"""
 
@@ -47,7 +49,7 @@ class AdapterController(object):
         self.mmuPath=mmuPath
         self.session_data = SessionData(r_address)
         #create adapter descritpion
-        self.session_data.adapter_description=MAdapterDescription(Name="PythonAdapter",ID="1337-7999d37f-45da-9015-f4adde70a44d",Language="Python",Addresses=[a_address],Properties=None,Parameters=None)
+        self.session_data.adapter_description=MAdapterDescription(Name="PythonAdapter",ID=str(uuid.uuid1()),Language="Python",Addresses=[a_address],Properties=None,Parameters=None)
         self.session_data.start_time=datetime.now()
         self.mmuclasses = mmuclasses
 
