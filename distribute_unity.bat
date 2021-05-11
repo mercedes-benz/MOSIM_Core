@@ -2,21 +2,45 @@
 REM SPDX-License-Identifier: MIT
 REM The content of this file has been developed in the context of the MOSIM research project.
 REM Original author(s): Janis Sprenger
+
+IF EXIST "C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe" (
+ECHO Lost path
+)
+
 if not defined UNITY2018_4_1 (
-  ECHO [31mUNITY2018_4_1 Environment variable pointing to the Unity.exe for Unity version 2018.4.1f1 is missing.[0m
-  ECHO    e.g. SET "UNITY2018_4_1=C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe\"
-  pause
-  exit /b 1
+   IF EXIST "C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe" (
+    SET UNITY2018_4_1=C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe
+	ECHO Autodetecting UNITY2018_4_1 is now defined as: "%UNITY2018_4_1%"
+   ) ELSE (
+	IF EXIST "C:\Program Files\Unity\Hub\Editor\2018.4.1f1\Editor\Unity.exe" (
+    SET UNITY2018_4_1=C:\Program Files\Unity\Hub\Editor\2018.4.1f1\Editor\Unity.exe
+	ECHO Autodetecting UNITY2018_4_1 is now defined as: "%UNITY2018_4_1%"
+   ) ELSE (
+	ECHO [31mUNITY2018_4_1 Environment variable pointing to the Unity.exe for Unity version 2018.4.1f1 is missing.[0m
+	ECHO e.g. SET "UNITY2018_4_1=C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe\"
+	pause
+	exit /b 1
+    )
+   )
 ) else (
   ECHO UNITY2018_4_1 defined as: "%UNITY2018_4_1%"
 )
 
 if not defined UNITY2019_18_1 (
-  ECHO [31mUNITY2019_18_1 Environment variable pointing to the Unity.exe for Unity version 2019.18.1f1 is missing.[0m
-  ECHO    e.g. SET "UNITY2019_18_1=C:\Program Files\Unity Environments\2018.4.1f1\Editor\Unity.exe\"
-  ECHO UNITY2019_18_1 defined as: "%UNITY2019_18_1%"
-  pause
-  exit /b 1
+	IF EXIST "C:\Program Files\Unity Environments\2019.4.18f1\Editor\Unity.exe" (
+    SET UNITY2019_18_1=C:\Program Files\Unity Environments\2019.4.18f1\Editor\Unity.exe
+	ECHO Autodetecting UNITY2019_18_1 is now defined as: "%UNITY2019_18_1%"
+   ) ELSE (
+	IF EXIST "C:\Program Files\Unity\Hub\Editor\2019.4.18f1\Editor\Unity.exe" (
+    SET UNITY2019_18_1=C:\Program Files\Unity\Hub\Editor\2019.4.18f1\Editor\Unity.exe
+	ECHO Autodetecting UNITY2019_18_1 is now defined as: "%UNITY2019_18_1%"
+   ) ELSE (
+	ECHO [31mUNITY2019_18_1 Environment variable pointing to the Unity.exe for Unity version 2018.4.1f1 is missing.[0m
+	ECHO e.g. SET "UNITY2019_18_1=C:\Program Files\Unity Environments\2019.4.18f1\Editor\Unity.exe\"
+	pause
+	exit /b 1
+    )
+   )
 ) else (
   ECHO UNITY2019_18_1 defined as: "%UNITY2019_18_1%"
 )
