@@ -551,6 +551,7 @@ namespace MMICSharp.Common
 
         public virtual MBoolResponse Setup(MAvatarDescription avatar, Dictionary<string, string> properties)
         {
+            InitializeAnthropometry(avatar);
             return new MBoolResponse(true);
         }
 
