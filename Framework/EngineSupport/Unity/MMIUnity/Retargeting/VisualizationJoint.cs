@@ -16,7 +16,7 @@ namespace MMIUnity.Retargeting
 
         // Hard reference to human bones if possible. In case of the spine, this will be null. 
         //private HumanBodyBones referenceBone { get; }
-        private Transform reference;
+        public Transform reference { get; private set; }
 
 
         // Base rotations of human bones with respect to the reference bone. 
@@ -29,7 +29,7 @@ namespace MMIUnity.Retargeting
         //private Animator anim;
 
         private List<ISVisualizationJoint> children = new List<ISVisualizationJoint>();
-        private ISVisualizationJoint parent;
+        public ISVisualizationJoint parent { get; private set; }
         private MMICSharp.Common.RJoint j;
 
 
@@ -39,26 +39,16 @@ namespace MMIUnity.Retargeting
             {
                 string name = bonenameMap[jBase.GetMJoint().Type];
                 this.reference = RootBone.GetChildRecursiveByName(name);
-            } else
-            {
-                this.reference = null;
-            }
-            /*
-            if (bonemap.ContainsKey(jBase.GetMJoint().ID))
-            {
-                this.referenceBone = bonemap[jBase.GetMJoint().ID];
             }
             else
             {
-                //Debug.LogWarning("Retargeting: there is a bone without a reference: " + jBase.GetMJoint().ID);
-                this.referenceBone = HumanBodyBones.LastBone;
-            }*/
-            //this.anim = anim;
+                this.reference = null;
+            }
             this.j = jBase;
 
             for (int i = 0; i < jBase.children.Count; i++)
             {
-                MMICSharp.Common.RJoint child = (RJoint) jBase.children[i];
+                MMICSharp.Common.RJoint child = (RJoint)jBase.children[i];
                 ISVisualizationJoint retjoint = new ISVisualizationJoint(child, RootBone, bonenameMap);
                 retjoint.parent = this;
                 this.children.Add(retjoint);
@@ -81,8 +71,8 @@ namespace MMIUnity.Retargeting
         private void GetManualPostureValues(List<double> values)
         {
             Quaternion q = (this.inverseBaseRotation * this.gameJoint.transform.localRotation);
-            //Vector3 pos = this.gameJoint.transform.localPosition - this.j.GetMJoint().Position.ToVector3(); //this.GetRelativeWorldPos
             Vector3 pos = this.GetPositionAnimation();
+
             for (int i = 0; i < this.j.GetChannels().Count; i++)
             {
                 switch (this.j.GetChannels()[i])
@@ -100,13 +90,13 @@ namespace MMIUnity.Retargeting
                         values.Add(q.z);
                         break;
                     case MChannel.XOffset:
-                        values.Add(pos.x);// - this.j.GetOffsetPositions().X);
+                        values.Add(pos.x);
                         break;
                     case MChannel.YOffset:
-                        values.Add(pos.y);// - this.j.GetOffsetPositions().Y);
+                        values.Add(pos.y);
                         break;
                     case MChannel.ZOffset:
-                        values.Add(pos.z);// - this.j.GetOffsetPositions().Z);
+                        values.Add(pos.z);
                         break;
                 }
             }
@@ -146,42 +136,21 @@ namespace MMIUnity.Retargeting
             return dir;
         }
 
-        private Matrix4x4 GetGlobalMatrix()
+        public Matrix4x4 GetGlobalMatrix()
         {
             var t = j.GetOffsetPositions().ToVector3();
             var q = j.GetOffsetRotation().ToQuaternion();
             var m = Matrix4x4.TRS(t, q, Vector3.one);
-        
+
             if (parent != null)
             {
                 var parentM = parent.GetGlobalMatrix();
                 m = parentM * m;
             }
-            
+
             return m;
         }
 
-
-        private static Vector3 getJointPosition(Transform t)
-        {
-            if(t == null)
-            {
-                return Vector3.zero;
-            } else
-            {
-                return new Vector3(t.position.x, t.position.y, t.position.z);
-            }
-            /*
-            if (bone != HumanBodyBones.LastBone && anim.GetBoneTransform(bone) != null)
-            {
-                Vector3 v = anim.GetBoneTransform(bone).position;
-                return new Vector3(v.x, v.y, v.z);
-            }
-            else
-            {
-                return Vector3.zero;
-            }*/
-        }
 
         /// <summary>
         /// Creates the Game Objects for the skeleton joints. The Game Objects are not only for visualization but provide access to Unity3D transformation classes as well. 
@@ -238,84 +207,6 @@ namespace MMIUnity.Retargeting
             {
                 child.CreateGameObjSkel(jointPrefab);
             }
-        }
-
-        private void AlignJoint(ISVisualizationJoint start, ISVisualizationJoint end)
-        {
-            Vector3 source_dir = getJointPosition(end.reference) - getJointPosition(start.reference);
-            Vector3 endPos = end.GetGlobalMatrix().GetColumn(3);//end.gameJoint.transform.position;
-            Vector3 target_dir = endPos - getJointPosition(start.reference);
-            Quaternion q = Quaternion.FromToRotation(source_dir, target_dir);
-            
-            start.reference.rotation = q * start.reference.rotation;
-
-            //this.anim.GetBoneTransform (start.referenceBone).rotation = q * this.anim.GetBoneTransform(start.referenceBone).rotation;
-        }
-        
-        private void SetFingerJoints(ISVisualizationJoint j)
-        {
-
-            //set index joint to target index joint position
-            Vector3 targetPos = getJointPosition(j.reference);
-            Vector3 newOffset = j.parent.GetGlobalMatrix().inverse.MultiplyPoint3x4(targetPos);
-
-            j.reference.position = new Vector3(j.GetGlobalMatrix().GetColumn(3).x, j.GetGlobalMatrix().GetColumn(3).y, j.GetGlobalMatrix().GetColumn(3).z) ;            
-        }
-
-        private void AlignHand(string hand)
-        {
-            // under-aligning the fingers results in better visual quality
-            AlignJoint(this.GetJointByName(hand + "ThumbMid"), this.GetJointByName(hand + "ThumbCarpal"));
-            AlignJoint(this.GetJointByName(hand + "IndexProximal"), this.GetJointByName(hand + "IndexDistal"));
-            AlignJoint(this.GetJointByName(hand + "MiddleProximal"), this.GetJointByName(hand + "MiddleDistal"));
-            AlignJoint(this.GetJointByName(hand + "RingProximal"), this.GetJointByName(hand + "RingDistal"));
-            AlignJoint(this.GetJointByName(hand + "LittleProximal"), this.GetJointByName(hand + "LittleDistal"));
-
-            // equal numerical poses do not necessarily mean equal geometrical / meshed poses
-
-            /*
-            SetFingerJoints(this.GetJointByName(hand + "ThumbMid"));
-            SetFingerJoints(this.GetJointByName(hand + "IndexProximal"));
-            SetFingerJoints(this.GetJointByName(hand + "MiddleProximal"));
-            SetFingerJoints(this.GetJointByName(hand + "RingProximal"));
-            SetFingerJoints(this.GetJointByName(hand + "LittleProximal"));
-
-            AlignJoint(this.GetJointByName(hand + "ThumbMid"), this.GetJointByName(hand + "ThumbMeta"));
-            AlignJoint(this.GetJointByName(hand + "ThumbMeta"), this.GetJointByName(hand + "ThumbCarpal"));
-
-            AlignJoint(this.GetJointByName(hand + "IndexProximal"), this.GetJointByName(hand + "IndexMeta"));
-            AlignJoint(this.GetJointByName(hand + "IndexMeta"), this.GetJointByName(hand + "IndexDistal"));
-
-            AlignJoint(this.GetJointByName(hand + "MiddleProximal"), this.GetJointByName(hand + "MiddleMeta"));
-            AlignJoint(this.GetJointByName(hand + "MiddleMeta"), this.GetJointByName(hand + "MiddleDistal"));
-
-            AlignJoint(this.GetJointByName(hand + "RingProximal"), this.GetJointByName(hand + "RingMeta"));
-            AlignJoint(this.GetJointByName(hand + "RingMeta"), this.GetJointByName(hand + "RingDistal"));
-
-            AlignJoint(this.GetJointByName(hand + "LittleProximal"), this.GetJointByName(hand + "LittleMeta"));
-            AlignJoint(this.GetJointByName(hand + "LittleMeta"), this.GetJointByName(hand + "LittleDistal"));
-            */
-        }
-
-        /// <summary>
-        /// This function aligns the target avatar to the intermediate skeleton posture. It assumes, that both are in T-Pose and reduces the residual error due to small misalignments. 
-        /// This function may have to be adapted to incorporate / load manually pre-aligend configurations
-        /// </summary>
-        /// <param name="anim"></param>
-        public void AlignAvatar()
-        {
-            //this.anim = anim;
-            AlignJoint(this.GetJointByName("LeftHip"), this.GetJointByName("LeftAnkle"));
-            AlignJoint(this.GetJointByName("RightHip"), this.GetJointByName("RightAnkle"));
-            AlignJoint(this.GetJointByName("LeftShoulder"), this.GetJointByName("LeftWrist"));
-            AlignJoint(this.GetJointByName("RightShoulder"), this.GetJointByName("RightWrist"));
-
-            AlignJoint(this.GetJointByName("LeftWrist"), this.GetJointByName("LeftMiddleProximal"));
-            AlignJoint(this.GetJointByName("RightWrist"), this.GetJointByName("RightMiddleProximal"));
-
-
-            AlignHand("Left");
-            AlignHand("Right");
         }
 
         public MAvatarPostureValues GetZeroPosture(string AvatarID)
