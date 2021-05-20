@@ -41,15 +41,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="Thrift, Version=0.11.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Thrift.dll</HintPath>
+      <HintPath>..\..\..\..\Libraries\Thrift.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\thrift\gen-csharp\MMIStandard\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Thrift.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

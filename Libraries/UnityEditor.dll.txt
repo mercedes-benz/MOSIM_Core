@@ -1,0 +1,1 @@
+Please copy your local UnityEditor.dll file here or use the Core/distribute_unity.bat script to do this automatically. It is not permitted to track a UnityEditor.dll in a public github repository. 

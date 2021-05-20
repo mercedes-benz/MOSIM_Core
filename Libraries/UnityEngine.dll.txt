@@ -1,0 +1,1 @@
+Please copy your local UnityEngine.dll file here or use the Core/distribute_unity.bat script to do this automatically. It is not permitted to track a UnityEngine.dll in a public github repository. 

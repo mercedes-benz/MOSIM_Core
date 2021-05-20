@@ -31,14 +31,15 @@ set UnityEditorDLL2019=%UNITY2019_18_1:Unity.exe=Data\Managed\UnityEditor.dll%
 
 ECHO "%UnityEditorDLL2018%"
 
-XCOPY /y "%UnityDLL2019%" .\BasicMMUs\CS-MMUs\CS\UnityIdleMMU
-XCOPY /y "%UnityDLL2019%" .\BasicMMUs\CS-MMUs\CS\UnityLocomotionMMU
-XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIAdapterUnity
-XCOPY /y "%UnityEditorDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor
-XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor
-XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine
-XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity
-
+REM XCOPY /y "%UnityDLL2019%" .\BasicMMUs\CS-MMUs\CS\UnityIdleMMU
+REM XCOPY /y "%UnityDLL2019%" .\BasicMMUs\CS-MMUs\CS\UnityLocomotionMMU
+REM XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIAdapterUnity
+REM XCOPY /y "%UnityEditorDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor
+REM XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor
+REM XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine
+REM XCOPY /y "%UnityDLL2019%" .\Framework\EngineSupport\Unity\MMIUnity
+XCOPY /y "%UnityDLL2019%" .\Libraries\
+XCOPY /y "%UnityEditorDLL2019%" .\Libraries\
 
 ECHO [92mSuccessfully copied all UnityEngine.dlls and UnityEditor.dlls from your local system to the framework. [0m
 

@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Thrift, Version=0.11.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\Thrift.dll</HintPath>
+      <HintPath>..\..\Libraries\Thrift.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +56,6 @@
     <Compile Include="RemoteAdapter.cs" />
     <Compile Include="RemoteService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Thrift.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Framework\LanguageSupport\cs\MMICSharp\MMICSharp.csproj">

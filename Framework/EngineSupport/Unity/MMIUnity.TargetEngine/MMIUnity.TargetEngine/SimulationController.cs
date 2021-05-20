@@ -235,7 +235,7 @@ namespace MMIUnity.TargetEngine
             IEnumerable<MMIAvatar> activeAvatars = this.Avatars.Where(s => s.enabled);
 
             ///Optionall execute multiple avatars in parallel
-            if (ExecuteAvatarsParallel && activeAvatars.Count > 1)
+            if (ExecuteAvatarsParallel && activeAvatars.Count() > 1)
             {
                 //Pre compute frame (on main thread)
                 foreach (MMIAvatar avatar in activeAvatars)

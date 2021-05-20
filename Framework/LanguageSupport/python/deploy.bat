@@ -21,8 +21,8 @@ if NOT EXIST .\MMIStandard\src (
 REM Copy auto-generated files to MMIStandard
 cmd /c xcopy /S/Y/Q/E ..\thrift\gen-py\MMIStandard .\MMIStandard\src\MMIStandard
 
-call %MOSIMPIP% install -e MMIStandard
-call %MOSIMPIP% install -e MMIPython
+call %MOSIMPIP% install .\MMIStandard
+call %MOSIMPIP% install .\MMIPython
 
 
 if %ERRORLEVEL% EQU 0 (
