@@ -1,0 +1,25 @@
+{
+	"Name": "BVHStreamer",
+	"ID": "2a0123b3-f6eb-4815-acb3-asdfb6e10083",
+	"AssemblyName": "BVHStreamer",
+	"MotionType": "pose/yawn",
+	"Language": "python",
+	"Author": "Janis Sprenger",
+	"Version": "0.1",
+	"SupportedProportions": "",
+	"Properties": {},
+	"Dependencies": [],
+	"Events": [],
+	"LongDescription": "A Test MMU with Python",
+	"ShortDescription": "A python test MMU",
+	"Parameters": [],
+	  "__isset": {
+		"SupportedProportions": false,
+		"Properties": true,
+		"Dependencies": true,
+		"Events": true,
+		"LongDescription": true,
+		"ShortDescription": true,
+		"Parameters": true
+	}
+}

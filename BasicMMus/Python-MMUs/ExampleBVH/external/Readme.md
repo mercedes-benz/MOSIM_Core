@@ -1,0 +1,1 @@
+You can download and Install the external requirements (anim_utils: https://github.com/eherr/anim_utils) here. This folder will not be tracked by git. 

@@ -1,0 +1,488 @@
+{
+	"AvatarID": "asdf714",
+	"Joints": [
+		{
+			"ID": "Hips",
+			"Type": "PelvisCentre",
+			"Position": {
+				"X": 9.666759615001297e-10,
+				"Y": 1.020613670349121,
+				"Z": -0.009614499285817147
+			},
+			"Rotation": {
+				"X": 0.055300381034612659,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9984697699546814
+			},
+			"Channels": null,
+			"Parent": null,
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Chest",
+			"Type": "Undefined",
+			"Position": {
+				"X": 9.666759615001297e-10,
+				"Y": 1.128886342048645,
+				"Z": -0.009614505805075169
+			},
+			"Rotation": {
+				"X": 0,
+				"Y": 0,
+				"Z": 0,
+				"W": 1
+			},
+			"Channels": null,
+			"Parent": "Hips",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Chest2",
+			"Type": "S1L5Joint",
+			"Position": {
+				"X": 9.666754063886174e-10,
+				"Y": 1.2325345277786255,
+				"Z": -0.009614501148462296
+			},
+			"Rotation": {
+				"X": -0.05082252621650696,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9987078309059143
+			},
+			"Channels": null,
+			"Parent": "Chest",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Chest3",
+			"Type": "T12L1Joint",
+			"Position": {
+				"X": -5.229150445984487e-14,
+				"Y": 1.3267617225646973,
+				"Z": -0.019229518249630929
+			},
+			"Rotation": {
+				"X": -0.0508740171790123,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9987052083015442
+			},
+			"Channels": null,
+			"Parent": "Chest2",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Chest4",
+			"Type": "T1T2Joint",
+			"Position": {
+				"X": -9.666761835447347e-10,
+				"Y": 1.4208827018737794,
+				"Z": -0.028843490406870843
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "Chest3",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Neck",
+			"Type": "C4C5Joint",
+			"Position": {
+				"X": -9.666766276339445e-10,
+				"Y": 1.5489027500152588,
+				"Z": -0.028843501582741739
+			},
+			"Rotation": {
+				"X": 0.10982298851013184,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9939512014389038
+			},
+			"Channels": null,
+			"Parent": "Chest4",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "Head",
+			"Type": "HeadJoint",
+			"Position": {
+				"X": -1.3271109766677114e-9,
+				"Y": 1.6443628072738648,
+				"Z": -0.007487805560231209
+			},
+			"Rotation": {
+				"X": 0.029373707249760629,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.99956876039505
+			},
+			"Channels": null,
+			"Parent": "Neck",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightCollar",
+			"Type": "Undefined",
+			"Position": {
+				"X": 0.02785060741007328,
+				"Y": 1.4926445484161378,
+				"Z": -0.028843501582741739
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "Chest4",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightShoulder",
+			"Type": "RightShoulder",
+			"Position": {
+				"X": 0.1663915514945984,
+				"Y": 1.4926445484161378,
+				"Z": -0.02884351648390293
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "RightCollar",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightElbow",
+			"Type": "RightElbow",
+			"Position": {
+				"X": 0.45982101559638979,
+				"Y": 1.4926444292068482,
+				"Z": -0.02884351648390293
+			},
+			"Rotation": {
+				"X": 0,
+				"Y": -0.02014901489019394,
+				"Z": -2.3283064365386965e-10,
+				"W": 0.9997971057891846
+			},
+			"Channels": null,
+			"Parent": "RightShoulder",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightWrist",
+			"Type": "RightWrist",
+			"Position": {
+				"X": 0.7366864085197449,
+				"Y": 1.4926443099975587,
+				"Z": -0.017679596319794656
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "RightElbow",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftCollar",
+			"Type": "Undefined",
+			"Position": {
+				"X": -0.02785061113536358,
+				"Y": 1.4926445484161378,
+				"Z": -0.028843501582741739
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "Chest4",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftShoulder",
+			"Type": "LeftShoulder",
+			"Position": {
+				"X": -0.1663915514945984,
+				"Y": 1.4926445484161378,
+				"Z": -0.02884347178041935
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "LeftCollar",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftElbow",
+			"Type": "LeftElbow",
+			"Position": {
+				"X": -0.45982101559638979,
+				"Y": 1.4926444292068482,
+				"Z": -0.028843479230999948
+			},
+			"Rotation": {
+				"X": 0,
+				"Y": 0.02014901489019394,
+				"Z": 2.3283064365386965e-10,
+				"W": 0.9997971057891846
+			},
+			"Channels": null,
+			"Parent": "LeftShoulder",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftWrist",
+			"Type": "LeftWrist",
+			"Position": {
+				"X": -0.7366864085197449,
+				"Y": 1.4926443099975587,
+				"Z": -0.01767955906689167
+			},
+			"Rotation": {
+				"X": -3.725290298461914e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1.0000001192092896
+			},
+			"Channels": null,
+			"Parent": "LeftElbow",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightHip",
+			"Type": "RightHip",
+			"Position": {
+				"X": 0.08847619593143463,
+				"Y": 1.020613670349121,
+				"Z": -0.009614519774913788
+			},
+			"Rotation": {
+				"X": 0.023988869041204454,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.999712347984314
+			},
+			"Channels": null,
+			"Parent": "Hips",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightKnee",
+			"Type": "RightKnee",
+			"Position": {
+				"X": 0.08847620338201523,
+				"Y": 0.5541867613792419,
+				"Z": -0.032011955976486209
+			},
+			"Rotation": {
+				"X": 0.040321629494428638,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9991868734359741
+			},
+			"Channels": null,
+			"Parent": "RightHip",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightAnkle",
+			"Type": "RightAnkle",
+			"Position": {
+				"X": 0.08847626298666,
+				"Y": 0.097464919090271,
+				"Z": -0.06893356889486313
+			},
+			"Rotation": {
+				"X": -5.21540641784668e-8,
+				"Y": 0,
+				"Z": 0,
+				"W": 1
+			},
+			"Channels": null,
+			"Parent": "RightKnee",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "RightToe",
+			"Type": "RightBall",
+			"Position": {
+				"X": 0.08847630769014359,
+				"Y": 0.022267460823059083,
+				"Z": 0.10112830996513367
+			},
+			"Rotation": {
+				"X": 7.450580596923828e-9,
+				"Y": 0,
+				"Z": 0,
+				"W": 1
+			},
+			"Channels": null,
+			"Parent": "RightAnkle",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftHip",
+			"Type": "LeftHip",
+			"Position": {
+				"X": -0.08847620338201523,
+				"Y": 1.020613670349121,
+				"Z": -0.00961447786539793
+			},
+			"Rotation": {
+				"X": 0.02401765063405037,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9997115731239319
+			},
+			"Channels": null,
+			"Parent": "Hips",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftKnee",
+			"Type": "LeftKnee",
+			"Position": {
+				"X": -0.08847620338201523,
+				"Y": 0.554188072681427,
+				"Z": -0.03203877434134483
+			},
+			"Rotation": {
+				"X": 0.040639735758304599,
+				"Y": 0,
+				"Z": 0,
+				"W": 0.9991738796234131
+			},
+			"Channels": null,
+			"Parent": "LeftHip",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftAnkle",
+			"Type": "LeftAnkle",
+			"Position": {
+				"X": -0.08847613632678986,
+				"Y": 0.09748977422714234,
+				"Z": -0.06925120204687119
+			},
+			"Rotation": {
+				"X": -5.21540641784668e-8,
+				"Y": 0,
+				"Z": 0,
+				"W": 1
+			},
+			"Channels": null,
+			"Parent": "LeftKnee",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		},
+		{
+			"ID": "LeftToe",
+			"Type": "LeftBall",
+			"Position": {
+				"X": -0.08847609162330628,
+				"Y": 0.02229231595993042,
+				"Z": 0.10081066936254502
+			},
+			"Rotation": {
+				"X": 0,
+				"Y": 0,
+				"Z": 0,
+				"W": 1
+			},
+			"Channels": null,
+			"Parent": "LeftAnkle",
+			"__isset": {
+				"Channels": false,
+				"Parent": true
+			}
+		}
+	]
+}
