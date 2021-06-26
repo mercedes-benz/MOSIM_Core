@@ -54,6 +54,8 @@
     <Compile Include="Editor_MMIAvatar.cs" />
     <Compile Include="MMISceneObjectEditorWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Photobooth.cs" />
+    <Compile Include="Editor_Photobooth.cs" />
     <Compile Include="HighLevelTaskEditorBase.cs" />
     <Compile Include="Editor_HighLevelTaskEditor.cs" />
   </ItemGroup>

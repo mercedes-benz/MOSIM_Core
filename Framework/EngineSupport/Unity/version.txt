@@ -1,2 +1,7 @@
 MMI Framework:5
 Core/CoSim/TargetEngine: 5.2.1.1
+ - Photobooth script is integrated
+ - Objects Spawner script is integrated
+ - Photobooth allows background color selection
+ - Task editor controls photobooth and adds it to the main camer on enable if needed
+ - MMISceneObject editor shows Initial and Final locations as drop downs whenever task editor script is added to the scene object - connection to actual project is no longer necessary for this functionality

@@ -83,10 +83,10 @@ namespace MMIUnity.TargetEngine.Scene
         private static Mutex sceneMutex = new Mutex();
         private static Mutex sceneObjectIDMutex = new Mutex();
         private static Mutex avatarIDMutex = new Mutex();
-
-        private static int currentSceneObjectID = 1;
-        private static int currentAvatarID = 1;
-
+        [HideInInspector]
+        public static int currentSceneObjectID = 1; //changed to public so that it becomes persistant between edit and play mode
+        [HideInInspector]
+        public static int currentAvatarID = 1;
         #endregion
 
         #region protected fields for storing the data

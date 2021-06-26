@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using MMICSharp.Common.Communication;
+using System;
 
 
 namespace MMIUnity.TargetEngine.Scene
@@ -20,6 +21,62 @@ namespace MMIUnity.TargetEngine.Scene
     [ExecuteInEditMode]
     public class MMISceneObject : MonoBehaviour
     {
+        #region extra types
+        public class TConstraintIndex
+        {
+            public TConstraintIndex(int i, int j)
+            {
+                this.index=i;
+                this.pathIndex=j;
+            }
+            public int index;
+            public int pathIndex;
+        }
+
+        public class TConstraintShowList
+        {
+            public TConstraintShowList()
+            {
+                this.data=new List<TConstraintIndex>();
+            }
+
+            public void Add(int i, int j)
+            {
+                if (!Contains(i,j))
+                data.Add(new TConstraintIndex(i,j));
+            }
+
+            public bool Contains(int i, int j)
+            {
+                for (int a=0; a<data.Count; a++)
+                  if (data[a].index==i && data[a].pathIndex==j)
+                  return true;
+                return false;
+            }
+
+            public void Remove(int i, int j)
+            {
+                for (int a=0; a<data.Count; a++)
+                  if (data[a].index==i && data[a].pathIndex==j)
+                  {
+                    data.RemoveAt(a);
+                    return;
+                  }
+            }
+
+            public int Count()
+            {
+                return data.Count;
+            }
+
+            public TConstraintIndex Item(int i)
+            {
+                return data[i];
+            }
+
+            private List<TConstraintIndex> data;
+        }
+        #endregion
         #region public variables
 
         /// <summary>
@@ -28,6 +85,8 @@ namespace MMIUnity.TargetEngine.Scene
         /// 
 
         [HideInInspector]
+        public TConstraintShowList ShowConstraints = new TConstraintShowList();
+        [HideInInspector]
         public MSceneObject MSceneObject;
         //task editor dependencies
         [HideInInspector]
@@ -35,6 +94,8 @@ namespace MMIUnity.TargetEngine.Scene
         [HideInInspector]
         public ulong TaskEditorID = 0;
         //end of task editor dependencies
+        [HideInInspector] //used in edit mode to select which constraint attached to the object is visualized
+        public int selectedConstraint = -1;
 
         //File with constraints - constaints are too complex for unity editor to handle them propely between play and edit mode, hence this intermediate file for storing them
         public string ConstraintsFile = "";
@@ -136,6 +197,19 @@ namespace MMIUnity.TargetEngine.Scene
             }
         }
 
+        public static Types StringToType(string val)
+        {
+            if (val=="InitialLocation") return Types.InitialLocation;
+            if (val=="FinalLocation") return Types.FinalLocation;
+            if (val=="WalkTarget") return Types.WalkTarget;
+            if (val=="Area") return Types.Area;
+            if (val=="Part") return Types.Part;
+            if (val=="Tool") return Types.Tool;
+            if (val=="Group") return Types.Group;
+            if (val=="Station") return Types.Station;
+            if (val=="StationResult") return Types.StationResult;
+            return Types.MSceneObject;
+        }
         public Types Type;
         public string Tool;
         public MMISceneObject InitialLocation;
@@ -194,7 +268,11 @@ namespace MMIUnity.TargetEngine.Scene
         protected virtual void Awake()
         {
             //Create a unique id for the scene object (only valid in the current session -> otherwise UUID required)
-            string id = UnitySceneAccess.CreateSceneObjectID();
+            string id;
+            if (TaskEditorLocalID!=0)
+                id=TaskEditorLocalID.ToString();
+            else
+                id = UnitySceneAccess.CreateSceneObjectID();
 
             //To check -> Is this informaton be required for every use case? Or should be remove it from here.
             //It is required on the task editor side (accessed from Unity directly), but here AJAN uses this fields
@@ -307,16 +385,178 @@ namespace MMIUnity.TargetEngine.Scene
                     this.MSceneObject.Properties.Add("ParentPartGroupName","");
                 }
             }
+            if ((Type == Types.Station) && (Type == Types.StationResult))
+            {
+               this.MSceneObject.Properties.Add("ParentStationID",this.TaskEditorID.ToString());
+               this.MSceneObject.Properties.Add("ParentStationName",this.name);
+            }
 
             this.MSceneObject.Constraints=this.Constraints;
             //Add the scene object to the scene access
             UnitySceneAccess.AddSceneObject(this.MSceneObject);
         }
 
+        void DrawInitialLocationMarker(TConstraintIndex index)
+        {
+            if (!(index.index<=Constraints.Count && Constraints[index.index].__isset.PathConstraint && index.pathIndex<Constraints[index.index].PathConstraint.PolygonPoints.Count))
+                return;
+            const float axisSize = 0.3f;
+            var p=Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Position.ToVector3();
+            var R=Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Rotation.ToQuaternion();
+            Vector3 origin = this.transform.position + this.transform.rotation*p;
+            Vector3 xaxis = origin + this.transform.rotation*R*(new Vector3(axisSize,0,0));
+            Vector3 yaxis = origin + this.transform.rotation*R*(new Vector3(0,axisSize,0));
+            Vector3 zaxis = origin + this.transform.rotation*R*(new Vector3(0,0,axisSize));
+            Debug.DrawLine(origin, xaxis, Color.red);
+            Debug.DrawLine(origin, yaxis, Color.green);
+            Debug.DrawLine(origin, zaxis, Color.blue);
+        }
+        void DrawConstraintBox(Vector3 Position, Quaternion Rotation, MMIStandard.MInterval3 Limits)
+        {
+            var colortop = Color.red;
+            var color = Color.green;
+            v3FrontTopLeft = new Vector3(Convert.ToSingle(Limits.X.Min), Convert.ToSingle(Limits.Y.Max), Convert.ToSingle(Limits.Z.Min));  // Front top left corner
+            v3FrontTopRight = new Vector3(Convert.ToSingle(Limits.X.Max), Convert.ToSingle(Limits.Y.Max), Convert.ToSingle(Limits.Z.Min));  // Front top right corner
+            v3FrontBottomLeft = new Vector3(Convert.ToSingle(Limits.X.Min), Convert.ToSingle(Limits.Y.Min), Convert.ToSingle(Limits.Z.Min));  // Front bottom left corner
+            v3FrontBottomRight = new Vector3(Convert.ToSingle(Limits.X.Max), Convert.ToSingle(Limits.Y.Min), Convert.ToSingle(Limits.Z.Min));  // Front bottom right corner
+            v3BackTopLeft = new Vector3(Convert.ToSingle(Limits.X.Min),  Convert.ToSingle(Limits.Y.Max), Convert.ToSingle(Limits.Z.Max));  // Back top left corner
+            v3BackTopRight = new Vector3(Convert.ToSingle(Limits.X.Max),  Convert.ToSingle(Limits.Y.Max),  Convert.ToSingle(Limits.Z.Max));  // Back top right corner
+            v3BackBottomLeft = new Vector3(Convert.ToSingle(Limits.X.Min),Convert.ToSingle(Limits.Y.Min), Convert.ToSingle(Limits.Z.Max));  // Back bottom left corner
+            v3BackBottomRight = new Vector3(Convert.ToSingle(Limits.X.Max), Convert.ToSingle(Limits.Y.Min), Convert.ToSingle(Limits.Z.Max));  // Back bottom right corner
+            
+            v3FrontTopLeft = transform.TransformPoint(Rotation * v3FrontTopLeft + Position);
+            v3FrontTopRight = transform.TransformPoint(Rotation * v3FrontTopRight + Position);
+            v3FrontBottomLeft = transform.TransformPoint(Rotation * v3FrontBottomLeft + Position);
+            v3FrontBottomRight = transform.TransformPoint(Rotation * v3FrontBottomRight + Position);
+            v3BackTopLeft = transform.TransformPoint(Rotation * v3BackTopLeft + Position);
+            v3BackTopRight = transform.TransformPoint(Rotation * v3BackTopRight + Position);
+            v3BackBottomLeft = transform.TransformPoint(Rotation * v3BackBottomLeft + Position);
+            v3BackBottomRight = transform.TransformPoint(Rotation * v3BackBottomRight + Position);
+            
+            Debug.DrawLine(v3FrontTopLeft, v3FrontTopRight, colortop);
+            Debug.DrawLine(v3FrontTopRight, v3FrontBottomRight, color);
+            Debug.DrawLine(v3FrontBottomRight, v3FrontBottomLeft, color);
+            Debug.DrawLine(v3FrontBottomLeft, v3FrontTopLeft, color);
+    
+            Debug.DrawLine(v3BackTopLeft, v3BackTopRight, colortop);
+            Debug.DrawLine(v3BackTopRight, v3BackBottomRight, color);
+            Debug.DrawLine(v3BackBottomRight, v3BackBottomLeft, color);
+            Debug.DrawLine(v3BackBottomLeft, v3BackTopLeft, color);
+    
+            Debug.DrawLine(v3FrontTopLeft, v3BackTopLeft, colortop);
+            Debug.DrawLine(v3FrontTopRight, v3BackTopRight, colortop);
+            Debug.DrawLine(v3FrontBottomRight, v3BackBottomRight, color);
+            Debug.DrawLine(v3FrontBottomLeft, v3BackBottomLeft, color);
+        }
+
+
+    public Vector3 MinXYZ = new Vector3(1,0.2f,0.1f);
+    public Vector3 MaxXYZ = new Vector3(1,0.5f,0.1f);
+    public Vector3 Rotation = new Vector3(0, 0, 0);
+
+    private Vector3 v3FrontTopLeft;
+    private Vector3 v3FrontTopRight;
+    private Vector3 v3FrontBottomLeft;
+    private Vector3 v3FrontBottomRight;
+    private Vector3 v3BackTopLeft;
+    private Vector3 v3BackTopRight;
+    private Vector3 v3BackBottomLeft;
+    private Vector3 v3BackBottomRight;
+
+    void CalcPositons()
+    {
+        Vector3 v3Center = new Vector3(0,0,0);
+
+        v3FrontTopLeft = new Vector3(- MinXYZ.x, MaxXYZ.y, - MinXYZ.z);  // Front top left corner
+        v3FrontTopRight = new Vector3(MaxXYZ.x, MaxXYZ.y, - MinXYZ.z);  // Front top right corner
+        v3FrontBottomLeft = new Vector3(- MinXYZ.x, - MinXYZ.y, - MinXYZ.z);  // Front bottom left corner
+        v3FrontBottomRight = new Vector3(MaxXYZ.x, - MinXYZ.y, - MinXYZ.z);  // Front bottom right corner
+        v3BackTopLeft = new Vector3(- MinXYZ.x,  MaxXYZ.y, MaxXYZ.z);  // Back top left corner
+        v3BackTopRight = new Vector3(MaxXYZ.x,  MaxXYZ.y,  MaxXYZ.z);  // Back top right corner
+        v3BackBottomLeft = new Vector3(- MinXYZ.x,- MinXYZ.y, MaxXYZ.z);  // Back bottom left corner
+        v3BackBottomRight = new Vector3(MaxXYZ.x, - MinXYZ.y, MaxXYZ.z);  // Back bottom right corner
+
+        v3FrontTopLeft = Quaternion.Euler(Rotation) * v3FrontTopLeft + v3Center;
+        v3FrontTopRight = Quaternion.Euler(Rotation) * v3FrontTopRight + v3Center;
+        v3FrontBottomLeft = Quaternion.Euler(Rotation) * v3FrontBottomLeft + v3Center;
+        v3FrontBottomRight = Quaternion.Euler(Rotation) * v3FrontBottomRight + v3Center;
+        v3BackTopLeft = Quaternion.Euler(Rotation) * v3BackTopLeft + v3Center;
+        v3BackTopRight = Quaternion.Euler(Rotation) * v3BackTopRight + v3Center;
+        v3BackBottomLeft = Quaternion.Euler(Rotation) * v3BackBottomLeft + v3Center;
+        v3BackBottomRight = Quaternion.Euler(Rotation) * v3BackBottomRight + v3Center;
+      
+        v3FrontTopLeft = transform.TransformPoint(v3FrontTopLeft);
+        v3FrontTopRight = transform.TransformPoint(v3FrontTopRight);
+        v3FrontBottomLeft = transform.TransformPoint(v3FrontBottomLeft);
+        v3FrontBottomRight = transform.TransformPoint(v3FrontBottomRight);
+        v3BackTopLeft = transform.TransformPoint(v3BackTopLeft);
+        v3BackTopRight = transform.TransformPoint(v3BackTopRight);
+        v3BackBottomLeft = transform.TransformPoint(v3BackBottomLeft);
+        v3BackBottomRight = transform.TransformPoint(v3BackBottomRight);
+    }
+
+    void DrawBox()
+    {
+        var colortop = Color.green;
+        var color = Color.red;
+        Debug.DrawLine(v3FrontTopLeft, v3FrontTopRight, colortop);
+        Debug.DrawLine(v3FrontTopRight, v3FrontBottomRight, color);
+        Debug.DrawLine(v3FrontBottomRight, v3FrontBottomLeft, color);
+        Debug.DrawLine(v3FrontBottomLeft, v3FrontTopLeft, color);
+
+        Debug.DrawLine(v3BackTopLeft, v3BackTopRight, colortop);
+        Debug.DrawLine(v3BackTopRight, v3BackBottomRight, color);
+        Debug.DrawLine(v3BackBottomRight, v3BackBottomLeft, color);
+        Debug.DrawLine(v3BackBottomLeft, v3BackTopLeft, color);
+
+        Debug.DrawLine(v3FrontTopLeft, v3BackTopLeft, colortop);
+        Debug.DrawLine(v3FrontTopRight, v3BackTopRight, colortop);
+        Debug.DrawLine(v3FrontBottomRight, v3BackBottomRight, color);
+        Debug.DrawLine(v3FrontBottomLeft, v3BackBottomLeft, color);
+    }
+
+
 
         // Update is called once per frame
         protected virtual void Update()
         {
+            if ((this.Constraints!=null) && (this.Constraints.Count>0))
+            {
+             //CalcPositons();
+             //DrawBox();
+             //for (int selectedConstraint=0; selectedConstraint<Constraints.Count; selectedConstraint++)
+              if ((selectedConstraint>-1) && (selectedConstraint<Constraints.Count))
+                if ((Constraints[selectedConstraint].__isset.GeometryConstraint) &&
+                    (Constraints[selectedConstraint].GeometryConstraint.__isset.TranslationConstraint) &&
+                    (Constraints[selectedConstraint].GeometryConstraint.__isset.ParentToConstraint))
+                 {
+                  var pos = Constraints[selectedConstraint].GeometryConstraint.ParentToConstraint.Position;
+                  var rot = Constraints[selectedConstraint].GeometryConstraint.ParentToConstraint.Rotation;
+                  //var pos = new MVector3(1,0,0);
+                  //var rot = new MQuaternion(1,0,0,0);
+                            DrawConstraintBox(new Vector3(Convert.ToSingle(pos.X),Convert.ToSingle(pos.Y),Convert.ToSingle(pos.Z)),
+                                    new Quaternion(Convert.ToSingle(rot.X),Convert.ToSingle(rot.Y),Convert.ToSingle(rot.Z),Convert.ToSingle(rot.W)), 
+                                    Constraints[selectedConstraint].GeometryConstraint.TranslationConstraint.Limits);
+                        //
+                        //new MInterval3(new MInterval(MinXYZ.x,MaxXYZ.x),new MInterval(MinXYZ.y,MaxXYZ.y),new MInterval(MinXYZ.z,MaxXYZ.z))
+                 }
+             //DrawConstraintBox(new Vector3(1,0,0),Quaternion.Euler(Rotation),new MInterval3(new MInterval(MinXYZ.x,MaxXYZ.x),new MInterval(MinXYZ.y,MaxXYZ.y),new MInterval(MinXYZ.z,MaxXYZ.z)));
+
+              if (ShowConstraints.Count()>0)
+                    for (int i=0; i<ShowConstraints.Count(); i++)
+                    DrawInitialLocationMarker(ShowConstraints.Item(i));
+
+            }
+            /*
+            if (this.Constraints!=null)
+             for (int selectedConstraint=0; selectedConstraint<Constraints.Count; selectedConstraint++)
+             if (Constraints[selectedConstraint].__isset.GeometryConstraint)
+             if ((Constraints[selectedConstraint].GeometryConstraint.__isset.TranslationConstraint) &&
+                            (Constraints[selectedConstraint].GeometryConstraint.__isset.ParentToConstraint))
+                  DrawConstraintBox(Constraints[selectedConstraint].GeometryConstraint.ParentToConstraint.Position.ToVector3(),
+                                    Constraints[selectedConstraint].GeometryConstraint.ParentToConstraint.Rotation.ToQuaternion(), 
+                                    Constraints[selectedConstraint].GeometryConstraint.TranslationConstraint.Limits);
+            */
             if (!Application.isPlaying)
                 return;
             //Handle physics
@@ -365,6 +605,28 @@ namespace MMIUnity.TargetEngine.Scene
         }
 
         /// <summary>
+        /// Returns if returend MTransform is Marker definition. Should be used on results returned from GetInitialLocationConstraint
+        /// </summary>
+        public bool MarkerFound(MTransform searchResult)
+        {
+            return (searchResult.ID!="//notfound//");
+        }
+
+        /// <summary>
+        /// Returns ParentToConstraint of initial location constriant if found
+        /// </summary>
+        
+        public MTransform GetIniitalLocationConstriaint(string ConstraintName)
+        {
+            for (int i=0; i<this.Constraints.Count; i++)
+                if (this.Constraints[i].ID=="InitialLocation")
+                    for (int j=0; j<this.Constraints[i].PathConstraint.PolygonPoints.Count; j++)
+                        if (this.Constraints[i].PathConstraint.PolygonPoints[j].ParentToConstraint.ID==ConstraintName)
+                            return this.Constraints[i].PathConstraint.PolygonPoints[j].ParentToConstraint;
+            return new MTransform("//notfound//",new MVector3(),new MQuaternion());
+        }
+
+        /// <summary>
         /// Returns MMIScenObject represnting parent station or null if such is not found
         /// </summary>
         public MMISceneObject GetParentStation()
@@ -401,6 +663,57 @@ namespace MMIUnity.TargetEngine.Scene
         }
 
         /// <summary>
+        /// Returns Bounds of combined all renderers that are children of the GameObject to which MMISceneObject belongs with respect to the global coordinate system
+        /// </summary>
+        public Bounds GetCompleteBounds()
+        {
+            Bounds response = new Bounds();
+            var renderers = this.gameObject.GetComponentsInChildren<Renderer>();
+            var mf = this.gameObject.GetComponentsInChildren<MeshFilter>();
+            Vector3 boundsmin = new Vector3(float.PositiveInfinity,float.PositiveInfinity,float.PositiveInfinity);
+            Vector3 boundsmax = new Vector3(float.NegativeInfinity,float.NegativeInfinity,float.NegativeInfinity);
+            for (int i=0; i<mf.Length; i++)
+            {
+                var rotation=(mf[i].transform.gameObject!=this.gameObject?mf[i].transform.localRotation:new Quaternion()); 
+                var position=(mf[i].transform.gameObject!=this.gameObject?mf[i].transform.localPosition:new Vector3());
+                Debug.Log("Position "+i.ToString()+": "+position.ToString()+" / "+mf[i].transform.localPosition.ToString());
+                 for (int j=0; j<mf[i].sharedMesh.vertices.Length; j++)
+                 {
+                    var vert=position+rotation*Vector3.Scale(mf[i].sharedMesh.vertices[j],mf[i].transform.localScale);
+                    if (mf[i].transform.gameObject!=this.gameObject)
+                    {
+                        Transform T = mf[i].transform.parent;
+                        while (T.gameObject!=this.gameObject)
+                        {
+                         rotation=T.localRotation; 
+                         position=mf[i].transform.localPosition;
+                         vert=position+rotation*Vector3.Scale(vert,T.localScale);
+                         T=T.transform.parent;
+                        }
+                    }
+                    if (vert.x<boundsmin.x)  boundsmin.x=vert.x;
+                    if (vert.y<boundsmin.y)  boundsmin.y=vert.y;
+                    if (vert.z<boundsmin.z)  boundsmin.z=vert.z;
+
+                    if (vert.x>boundsmax.x)  boundsmax.x=vert.x;
+                    if (vert.y>boundsmax.y)  boundsmax.y=vert.y;
+                    if (vert.z>boundsmax.z)  boundsmax.z=vert.z;
+                 }
+
+                //Debug.Log("Mesh "+i.ToString()+": "+(mf[i].transform.localScale.x*mf[i].sharedMesh.bounds.min.x).ToString()+" ,"+(mf[i].transform.localScale.y*mf[i].sharedMesh.bounds.min.y).ToString()+" ,"+(mf[i].transform.localScale.z*mf[i].sharedMesh.bounds.min.z).ToString()+" | "+
+                //    (mf[i].transform.localScale.x*mf[i].sharedMesh.bounds.max.x).ToString()+" ,"+(mf[i].transform.localScale.y*mf[i].sharedMesh.bounds.max.y).ToString()+" ,"+(mf[i].transform.localScale.z*mf[i].sharedMesh.bounds.max.z).ToString());
+            }
+
+            if (boundsmin!=null)
+            Debug.Log("Bounds: "+boundsmin.x.ToString()+" ,"+boundsmin.y.ToString()+" ,"+boundsmin.z.ToString()+" | "+
+                    boundsmax.x.ToString()+" ,"+boundsmax.y.ToString()+" ,"+boundsmax.z.ToString()+ " | "+
+                    (boundsmax.x-boundsmin.x).ToString()+", "+(boundsmax.y-boundsmin.y).ToString()+", "+(boundsmax.z-boundsmin.z).ToString());
+
+            response.SetMinMax(boundsmin,boundsmax);
+            return response;
+        }
+
+        /// <summary>
         /// Returns MMIScenObject represnting parent MMIScenObject or null if such is not found
         /// </summary>
         public MMISceneObject GetParentMMIScenObject()
@@ -413,7 +726,8 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         public virtual void UpdateTransform(bool raiseEvent = true)
         {
-            string parent = this.MSceneObject.Transform.Parent;
+            //string parent = this.MSceneObject.Transform.Parent;
+            string parent = this.transform.parent.name;
 
             //Set the transform to the current values
             this.MSceneObject.Transform.Position = this.transform.position.ToMVector3();
@@ -445,7 +759,7 @@ namespace MMIUnity.TargetEngine.Scene
         }
 
         /// <summary>
-        /// Function returns true if constraint with the name given as parameter is attached to it
+        /// Function returns true if constraint with the name given as parameter is attached to it (this checks only top level constraints, nested IDS are not checked)
         /// </summary>
         public bool HasConstraint(string constraintID)
         {
@@ -453,6 +767,28 @@ namespace MMIUnity.TargetEngine.Scene
                 if (this.Constraints[i].ID == constraintID)
                     return true;
             return false;
+        }
+
+        /// <summary>
+        /// Method returns true if well defined spawning zones are available as constraints within this object
+        /// </summary>
+        public bool HasSpawningZones()
+        {
+            if (Constraints==null)
+                return false;
+            for (int i=0; i<Constraints.Count; i++)
+                if (isConstraintASpawningZone(i))
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Method returns true if well defined spawning zone constrain is located in constraints at constraintIndex
+        /// </summary>
+        public bool isConstraintASpawningZone(int constraintIndex)
+        {
+            return (Constraints[constraintIndex].ID=="SpawningZone" && Constraints[constraintIndex].__isset.GeometryConstraint && Constraints[constraintIndex].GeometryConstraint.__isset.ParentToConstraint
+                && Constraints[constraintIndex].GeometryConstraint.__isset.TranslationConstraint);
         }
 
         /// <summary>
@@ -569,7 +905,7 @@ namespace MMIUnity.TargetEngine.Scene
             {
                 MMISceneObject parent = this.transform.GetComponentsInParent<MMISceneObject>()[1];
 
-                this.MSceneObject.Transform.Parent = parent.name;
+                this.MSceneObject.Transform.Parent = parent.name; //TODO: should use ID instead of the name
             }
 
             else

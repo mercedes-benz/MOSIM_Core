@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using MMICSharp.Common;					   
 
 namespace MMIUnity.TargetEngine.Scene
 {
@@ -27,12 +28,31 @@ namespace MMIUnity.TargetEngine.Scene
         #region public variables
 
         //task editor dependencies
-        [HideInInspector]
-        public ulong TaskEditorLocalID = 0; //Local ID - unique among avatars, assigned in the Unity
-        [HideInInspector]
-        public ulong TaskEditorID = 0; //Task editor ID - unique among all avatars within single server instance of task editor. 0 indicates default avatar
+        //[HideInInspector]
+        private ulong TaskEditorLocalID = 0; //Local ID - unique among avatars, assigned in the Unity
+        //[HideInInspector]
+        private ulong TaskEditorID = 0; //Task editor ID - unique among all avatars within single server instance of task editor. 0 indicates default avatar
         //end of task editor dependencies
 
+        public ulong getTaskEditorLocalID()
+        {
+            return TaskEditorLocalID;
+        }
+
+        public ulong getTaskEditorID()
+        {
+            return TaskEditorID;
+        }
+
+        public void setTaskEditorLocalID(ulong newTaskEditorLocalID)
+        {
+            TaskEditorLocalID = newTaskEditorLocalID;
+        }
+
+        public void setTaskEditorID(ulong newTaskEditorID)
+        {
+            TaskEditorID = newTaskEditorID;
+        }
         /// <summary>
         /// Flag specifies whether the internal Unity-Cosimulation is utilized or a remotely connected CoSimulation 
         /// </summary>

@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "zadanie-Photobooth",
+      "appliesTo": "Unity/MMIUnity.TargetEngine/MMIUnity.TargetEngine.Editor/Photobooth.cs",
+      "type": "launch"
+    }
+  ]
+}

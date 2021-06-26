@@ -52,6 +52,7 @@ namespace MMIUnity.TargetEngine.Editor
         [Header("Connection properties (use task editor to fill them in)")]
         public string taskEditorWWW = "";
         public string accessToken = "";
+        public string lastSyncConnection=""; //sotres combo of taskEditorWWW and accessToken from the last successful sync connection, it is necessary to identify if user starts syncing to a new project then ids have to be set all to zero
         private bool dataModified = false;
         public bool connectionEstablished;
         [Header("Parts and tools in the scene")]
@@ -78,7 +79,8 @@ namespace MMIUnity.TargetEngine.Editor
         public int PictureUploadProgress = -1; //negative value means there is no upload happening currently, 0-100 is upload percentage, above 100, upload finished.
         public DateTime FinishedPictureUploading;
 
-        
+        private Camera MainCamera;
+        public Photobooth cameraScript;
 
         [Header("Stations in project")]
         public bool stationsLoaded = false;
@@ -137,6 +139,12 @@ namespace MMIUnity.TargetEngine.Editor
 
         public TPortsStruct[] portsToTry = new TPortsStruct[3];
 
+        public enum TSyncStatus
+        {
+            OutOfSync,
+            Synchronizing,
+            InSync
+        }
 
         [Serializable]
         public class TJsonTools
@@ -164,9 +172,10 @@ namespace MMIUnity.TargetEngine.Editor
         {
             public uint id;
             public uint stationid;
-            public uint avatarid;
+            public ulong avatarid;
             public String worker;
             public bool simulate;
+            public TSyncStatus syncstatus;
         }
 
         [Serializable]
@@ -493,6 +502,42 @@ namespace MMIUnity.TargetEngine.Editor
             }
         }
 
+        public async Task SaveWorkerList(string token, string www)
+        {
+            if ((www != "") && (token != ""))
+            {
+                var L_data = new List<KeyValuePair<string, string>>();
+                L_data.Add(new KeyValuePair<string, string>("action", "setWorkerList"));
+                L_data.Add(new KeyValuePair<string, string>("token", token));
+                for (int i=0; i<this.workersJson.Count; i++)
+                 if (this.workersJson[i].syncstatus==TSyncStatus.OutOfSync)
+                 {
+                    this.workersJson[i].syncstatus = TSyncStatus.Synchronizing;
+                    L_data.Add(new KeyValuePair<string, string>("workerid[]", this.workersJson[i].id.ToString()));
+                    L_data.Add(new KeyValuePair<string, string>("simulate[]", this.workersJson[i].simulate.ToString()));
+                    L_data.Add(new KeyValuePair<string, string>("avatarid[]", this.workersJson[i].avatarid.ToString()));
+                 }
+                var post_data = new FormUrlEncodedContent(L_data);
+                var content = await client.PostAsync(www, post_data);
+                string html = content.Content.ReadAsStringAsync().Result;
+                if (html.IndexOf("<result>OK</result>") >= 0)
+                {
+                    for (int i = 0; i < this.workersJson.Count; i++)
+                        if (this.workersJson[i].syncstatus == TSyncStatus.Synchronizing)
+                            this.workersJson[i].syncstatus = TSyncStatus.InSync;
+                    Debug.Log("Worker list changes have been uploaded to task list editor");
+                }
+                else
+                {
+                    for (int i = 0; i < this.workersJson.Count; i++)
+                        if (this.workersJson[i].syncstatus == TSyncStatus.Synchronizing)
+                            this.workersJson[i].syncstatus = TSyncStatus.OutOfSync;
+                    Debug.Log("Worker list could not be synchronized: " + html);
+                    Debug.Log("Worker list could not be synchronized: " + GetTagValue(html, "result"));
+                }
+            }
+        }
+
         public async Task LoadWorkerList(string token, string www)
         {
             if ((www != "") && (token != ""))
@@ -511,7 +556,10 @@ namespace MMIUnity.TargetEngine.Editor
                 {
                     TJsonWorkers[] workerData = JsonHelper.FromJson<TJsonWorkers>(html);
                     for (int i = 0; i < workerData.Length; i++)
+                    {
+                        workerData[i].syncstatus = TSyncStatus.InSync;
                         this.workersJson.Add(workerData[i]);
+                    }
                 }
 
                 Debug.Log("Worker list has been reloaded from task list editor");
@@ -559,9 +607,13 @@ namespace MMIUnity.TargetEngine.Editor
             int UploadSize = 0;
             bool abort = false;
             ulong partid = 0;
-            string picturePath = Application.dataPath + "/../" + "/Screenshots/";
+            string picturePath = Application.dataPath + "/../" + "Screenshots/";
 
-            List<MMISceneObject> Scene = this.GetComponentsInChildren<MMISceneObject>().ToList();
+            if (cameraScript != null)
+                if (cameraScript.shotpath != "")
+                    picturePath = cameraScript.shotpath;
+
+            List <MMISceneObject> Scene = this.GetComponentsInChildren<MMISceneObject>().ToList();
             for (var i = 0; i < Scene.Count; i++) //gathering total size of part pictures.
             {
                 if (Scene[i].Type == MMISceneObject.Types.Part)
@@ -573,7 +625,7 @@ namespace MMIUnity.TargetEngine.Editor
                         pngfile.Dispose();
                     }
             }
-
+            Debug.Log("Uploading pictures for " + Scene.Count.ToString() + " scene objects from: "+ picturePath);
             for (var j = 0; (j < Scene.Count) && (!abort); j++)
                 if ((Scene[j].Type == MMISceneObject.Types.Part) && (File.Exists(picturePath + Scene[j].TaskEditorLocalID.ToString() + ".png")))
                 { //main loop
@@ -607,10 +659,11 @@ namespace MMIUnity.TargetEngine.Editor
                             UploadSize += readSize;
                             PictureUploadProgress = UploadSize * 100 / TotalSize;
                         }
+                        Debug.Log("Uploaded part " + partid.ToString() + " fsize: " + partSize.ToString());
                     }
                     else
                     {
-                        if (result == "ERR")
+                        if ((result == "ERR") || (result == "ERR-FATAL"))
                             Debug.Log("Task editor picture (partid=" + partid.ToString() + ") upload error: " + GetTagValue(html, "msg"));
                         if (result == "ERR-FATAL")
                             abort = true;
@@ -641,7 +694,7 @@ namespace MMIUnity.TargetEngine.Editor
 
         ulong UpdateUniqueLocalID(MMIAvatar obj)
         {
-            if (obj.TaskEditorLocalID == 0)
+            if (obj.getTaskEditorLocalID() == 0)
             {
                 LocalMaxMMIAvatarId++;
                 return LocalMaxMMIAvatarId;
@@ -649,12 +702,12 @@ namespace MMIUnity.TargetEngine.Editor
 
             List<MMIAvatar> Scene = this.GetComponentsInChildren<MMIAvatar>().ToList();
             foreach (MMIAvatar avatar in Scene)
-                if ((avatar != obj) && (avatar.TaskEditorLocalID == obj.TaskEditorLocalID))
+                if ((avatar != obj) && (avatar.getTaskEditorLocalID() == obj.getTaskEditorLocalID()))
                 {
                     LocalMaxMMIAvatarId++;
                     return LocalMaxMMIAvatarId;
                 }
-            return obj.TaskEditorLocalID;
+            return obj.getTaskEditorLocalID();
         }
 
         public void updateAvatarList()
@@ -664,10 +717,10 @@ namespace MMIUnity.TargetEngine.Editor
             foreach (MMIAvatar avatar in Scene)
             {
                 TJsonAvatars item = new TJsonAvatars();
-                item.id=avatar.TaskEditorID;
+                item.id=avatar.getTaskEditorID();
                 item.avatar=avatar.name;
-                avatar.TaskEditorLocalID=UpdateUniqueLocalID(avatar);
-                item.localID=avatar.TaskEditorLocalID;
+                avatar.setTaskEditorLocalID(UpdateUniqueLocalID(avatar));
+                item.localID=avatar.getTaskEditorLocalID();
                 MMISceneObject station = avatar.GetParentStation();
                  if (station!=null)
                  item.stationid = station.TaskEditorID;
@@ -718,6 +771,8 @@ namespace MMIUnity.TargetEngine.Editor
             var L_data = new List<KeyValuePair<string, string>>();
             L_data.Add(new KeyValuePair<string, string>("action", "syncScene"));
             L_data.Add(new KeyValuePair<string, string>("token", accessToken));
+            bool resetids=(lastSyncConnection!=taskEditorWWW+accessToken);
+             
             foreach (MMISceneObject product in Scene)
             {               
               string parentID = "0";
@@ -730,7 +785,7 @@ namespace MMIUnity.TargetEngine.Editor
                parentStationID = parentStation.TaskEditorLocalID.ToString();
               L_data.Add(new KeyValuePair<string, string>("names[]", product.name));
               L_data.Add(new KeyValuePair<string, string>("MMIIDs[]", product.TaskEditorLocalID.ToString()));
-              L_data.Add(new KeyValuePair<string, string>("IDs[]", product.TaskEditorID.ToString())); //<-should this at all be transmitted in this direction?
+              L_data.Add(new KeyValuePair<string, string>("IDs[]", (resetids?"0":product.TaskEditorID.ToString()))); //<-should this at all be transmitted in this direction?
               L_data.Add(new KeyValuePair<string, string>("types[]", MMISceneObject.TypesToString(product.Type)));
               L_data.Add(new KeyValuePair<string, string>("parents[]", parentID));
               L_data.Add(new KeyValuePair<string, string>("stations[]", parentStationID));
@@ -738,6 +793,7 @@ namespace MMIUnity.TargetEngine.Editor
             var post_data = new FormUrlEncodedContent(L_data);
             var content = await client.PostAsync(taskEditorWWW, post_data);
             var html = content.Content.ReadAsStringAsync().Result;
+            lastSyncConnection=taskEditorWWW+accessToken;
             Debug.Log("Syncing Scene with task editor: " + html); //TODO: add TaskEditor to Scene syncing, currently it is one way Unity->TaskEditor
         }
 
@@ -906,6 +962,7 @@ namespace MMIUnity.TargetEngine.Editor
                             if (product.Type == MMISceneObject.Types.Station && product.TaskEditorLocalID == TaskEditorStations[i].engineid)
                             {
                                 found = true;
+                                product.TaskEditorID=TaskEditorStations[i].id; //update ID from task editor to Unity
                                 break;
                             }
                         if (!found)
@@ -928,6 +985,16 @@ namespace MMIUnity.TargetEngine.Editor
             };
         }
 
+        private void UpdateAvatar(ref MMIAvatar avatar)
+        {
+            for (int i=0; i<avatarJson.Count; i++)
+                if ((avatar.getTaskEditorLocalID()!=0) && (avatarJson[i].localID==avatar.getTaskEditorLocalID()))
+                {
+                    avatar.setTaskEditorID(avatarJson[i].id);
+                    return;
+                }
+        }
+
         public async Task syncAvatarsToTaskEditor() //currenlty one direction synchronization, but should become two way in near future
         {
             Debug.Log("Syncing avatars with task editor");
@@ -942,14 +1009,29 @@ namespace MMIUnity.TargetEngine.Editor
                if (parentStation != null)
                  parentID=parentStation.TaskEditorID.ToString();
                L_data.Add(new KeyValuePair<string, string>("avatarsNames[]", avatar.name));
-               L_data.Add(new KeyValuePair<string, string>("avatarsMMIIDs[]", avatar.TaskEditorLocalID.ToString()));
-               L_data.Add(new KeyValuePair<string, string>("avatarsIDs[]", avatar.TaskEditorID.ToString()));
+               L_data.Add(new KeyValuePair<string, string>("avatarsMMIIDs[]", avatar.getTaskEditorLocalID().ToString()));
+               L_data.Add(new KeyValuePair<string, string>("avatarsIDs[]", avatar.getTaskEditorID().ToString()));
                L_data.Add(new KeyValuePair<string, string>("avatarsStation[]", parentID));
             }
             var post_data = new FormUrlEncodedContent(L_data);
             var content = await client.PostAsync(taskEditorWWW, post_data);
             var html = content.Content.ReadAsStringAsync().Result;
             Debug.Log("Syncing avatars with task editor: "+html); //TODO: add TaskEditor to Scene syncing, currently it is one way Unity->TaskEditor
+            if ((html.IndexOf("id") > 0) && (html.IndexOf("localID") > 0))
+            {
+                html = "{\"Items\":" + html + "}";
+                //TJsonAvatars[] avatarData = JsonHelper.FromJson<TJsonAvatars>(html);               
+                avatarJson = JsonHelper.FromJson<TJsonAvatars>(html).ToList();
+                for (int j = 0; j < Scene.Count; j++)
+                    for (int i = 0; i < avatarJson.Count; i++)
+                        if ((avatarJson[i].localID != 0) && (avatarJson[i].localID == Scene[j].getTaskEditorLocalID()))
+                        {
+                            Scene[j].setTaskEditorID(avatarJson[i].id);
+                            //Debug.Log("Changing taskeditorid of avatar " + avatarJson[i].localID.ToString() + " to " + avatarJson[i].id);
+                        }
+            }
+            else
+                Debug.Log("Syncing avatars: response not compatible with the current script version");
         }
 
         public async Task sendDataToTaskEditor() //sending parts and tools
@@ -997,20 +1079,27 @@ namespace MMIUnity.TargetEngine.Editor
             var html = content.Content.ReadAsStringAsync().Result;
             Debug.Log(html);
             html = "{\"Items\":" + html + "}";
-            PartData[] partData = JsonHelper.FromJson<PartData>(html);
-            for (int i = 0; i < partData.Length; i++)
-                for (int j = 0; j < parts.Count; j++)
-                    if (partData[i].engineid == parts[j].localid)
-                    {
-                        parts[j].id = partData[i].id;
-                        parts[j].name = partData[i].name;
-                        foreach (MMISceneObject product in Scene)
-                            if (product.TaskEditorLocalID == partData[i].engineid)
-                            {
-                                product.TaskEditorID = partData[i].id;
-                                product.name = partData[i].name;
-                            }
-                    }
+            try
+            {
+                PartData[] partData = JsonHelper.FromJson<PartData>(html);
+                for (int i = 0; i < partData.Length; i++)
+                    for (int j = 0; j < parts.Count; j++)
+                        if (partData[i].engineid == parts[j].localid)
+                        {
+                            parts[j].id = partData[i].id;
+                            parts[j].name = partData[i].name;
+                            foreach (MMISceneObject product in Scene)
+                                if (product.TaskEditorLocalID == partData[i].engineid)
+                                {
+                                    product.TaskEditorID = partData[i].id;
+                                    product.name = partData[i].name;
+                                }
+                        }
+            }
+            catch
+            {
+                Debug.LogWarning("Part synchronization - reciving data failed data not in proper json format" + html);
+            }
             connectionEstablished = (html.IndexOf("engineid") > 0);
             if (connectionEstablished)
             {
@@ -1041,7 +1130,18 @@ namespace MMIUnity.TargetEngine.Editor
         public async void ReloadStations()
         {
             await LoadStationList(accessToken, taskEditorWWW);
+            await SaveWorkerList(accessToken, taskEditorWWW);
             await LoadWorkerList(accessToken, taskEditorWWW);
+        }
+
+        public int AvatarIDToIndex(ulong avatarid, bool withDefault) //takes taskeditor avatar id and returns index in the avatarsJson structure
+        {
+            for (int i=0; i<avatarJson.Count; i++)
+            {
+                if ((avatarJson[i].id!=0) && (avatarJson[i].id == avatarid))
+                    return i+(withDefault?1:0); //if default value should be counted as well, then the result needs to be offset by 1
+            }
+            return 0;
         }
 
         public void SetDefaultAvatarByLocalId(ulong AvatarsLocalID)
@@ -1096,9 +1196,28 @@ namespace MMIUnity.TargetEngine.Editor
         {
 
         }
-
+        
+        private void AddCameraScript()
+        {
+            Camera[] Cameras = GameObject.FindObjectsOfType<Camera>();
+            for (int i = 0; i < Cameras.Length; i++)
+             if (Cameras[i].tag == "MainCamera")
+             {
+                MainCamera = Cameras[i];
+                cameraScript = Cameras[i].GetComponent<Photobooth>();
+                    if (cameraScript==null)
+                    {
+                        cameraScript = MainCamera.gameObject.AddComponent<Photobooth>();
+                        cameraScript.MainCamera = MainCamera;
+                    }
+                break;
+             }
+        }
+        
         private async void OnEnable()
         {
+            if (cameraScript==null)
+            AddCameraScript();
             PictureUploadProgress = 101;
             FinishedPictureUploading = DateTime.Now;
             if (Application.isEditor)

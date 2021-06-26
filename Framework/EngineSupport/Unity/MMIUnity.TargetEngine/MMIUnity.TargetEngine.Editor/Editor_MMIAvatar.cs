@@ -39,14 +39,15 @@ namespace MMIUnity.TargetEngine.Editor
         {
             if ((HLTE!=null) && (HLTE.defaultAvatar < HLTE.avatarJson.Count))
             {
-                bool _isDefault = (HLTE.avatarJson[HLTE.defaultAvatar].localID == (target as MMIAvatar).TaskEditorLocalID);
+                bool _isDefault = (HLTE.avatarJson[HLTE.defaultAvatar].localID == (target as MMIAvatar).getTaskEditorLocalID());
                 bool  _isDefaultnew = EditorGUILayout.Toggle("Use as default avatar", _isDefault);
                 if (_isDefaultnew)
-                    HLTE.SetDefaultAvatarByLocalId((target as MMIAvatar).TaskEditorLocalID);
+                    HLTE.SetDefaultAvatarByLocalId((target as MMIAvatar).getTaskEditorLocalID());
                 else
                  if (_isDefault)
                     HLTE.defaultAvatar = 0;
             }
+            EditorGUILayout.LabelField(new GUIContent("IDs: "+(target as MMIAvatar).getTaskEditorID().ToString()+"/"+ (target as MMIAvatar).getTaskEditorLocalID().ToString()));
             base.OnInspectorGUI();
         }
 
@@ -57,8 +58,8 @@ namespace MMIUnity.TargetEngine.Editor
             if (HLTE != null)
             {
                 MMIAvatar target = Selection.activeGameObject.GetComponent<MMIAvatar>();
-                Debug.Log("Changing default avatar to: "+ target.name+" (" +target.TaskEditorLocalID.ToString()+")");
-                HLTE.SetDefaultAvatarByLocalId(target.TaskEditorLocalID);
+                Debug.Log("Changing default avatar to: "+ target.name+" (" +target.getTaskEditorLocalID().ToString()+")");
+                HLTE.SetDefaultAvatarByLocalId(target.getTaskEditorLocalID());
             }
            /* else
                 Debug.Log("No high level task editor script attached");*/

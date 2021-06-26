@@ -135,7 +135,12 @@ namespace MMIUnity.TargetEngine.Editor
             if (m_connectionEstablished.boolValue && (HLTE.tasEditorProjectName != ""))
                 EditorGUILayout.LabelField(new GUIContent("Project: " + HLTE.tasEditorProjectName));
 
-            GUILayout.BeginHorizontal();
+            if (!Application.isPlaying)
+             if (HLTE.cameraScript!=null)
+              if (GUILayout.Button("Generate part thumbnails"))
+                        HLTE.cameraScript.StartPhotoSessionFromEditorMode();
+
+                GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reload tools and stations"))
             {
                 HLTE.ReloadTools();
@@ -169,6 +174,16 @@ namespace MMIUnity.TargetEngine.Editor
             else
                 EditorGUILayout.LabelField(new GUIContent("Tasks:  No connection"));
 
+            List<string> _avatarsWithDefault = new List<string>();
+            _avatarsWithDefault.Add("Default (0)");
+            List<string> _avatars = new List<string>();
+            if (HLTE.defaultAvatar >= HLTE.avatarJson.Count)
+                HLTE.defaultAvatar = 0;
+            for (int i = 0; i < HLTE.avatarJson.Count; i++)
+            {
+                _avatars.Add(HLTE.avatarJson[i].avatar + " (" + (i + 1).ToString() + ")");
+                _avatarsWithDefault.Add(HLTE.avatarJson[i].avatar+" ("+(i+1).ToString()+")"+(HLTE.avatarJson[i].localID==0?"*":""));
+            }
 
             if (m_stationsLoaded.boolValue)
             {
@@ -178,6 +193,7 @@ namespace MMIUnity.TargetEngine.Editor
                     EditorGUILayout.LabelField(new GUIContent("Station:  No stations defined"));
                 else
                 {
+
                     for (int i = 0; i < HLTE.stationsJson.Count; i++)
                     {
                         _stations.Add(HLTE.stationsJson[i].station);
@@ -189,17 +205,22 @@ namespace MMIUnity.TargetEngine.Editor
                     EditorGUILayout.LabelField(new GUIContent("Workers to simulate:"));
                     EditorGUI.indentLevel++;
                     for (int j = 0; j < HLTE.workersJson.Count; j++)
-                        if (HLTE.workersJson[j].stationid==HLTE.stationID)
-                            HLTE.workersJson[j].simulate=EditorGUILayout.Toggle(HLTE.workersJson[j].worker,HLTE.workersJson[j].simulate);
+                        if (HLTE.workersJson[j].stationid == HLTE.stationID)
+                        {
+                            ulong ss = HLTE.workersJson[j].avatarid;
+                            EditorGUILayout.BeginHorizontal();
+                            HLTE.workersJson[j].simulate = EditorGUILayout.Toggle(HLTE.workersJson[j].worker, HLTE.workersJson[j].simulate);
+                            int avatarselected=EditorGUILayout.Popup("- Avatar", HLTE.AvatarIDToIndex(HLTE.workersJson[j].avatarid,true), _avatarsWithDefault.ToArray());
+                            HLTE.workersJson[j].avatarid = (avatarselected == 0 ? 0 : HLTE.avatarJson[avatarselected-1].id);
+                            EditorGUILayout.EndHorizontal();
+                            if (ss != HLTE.workersJson[j].avatarid)
+                                HLTE.workersJson[j].syncstatus = HighLevelTaskEditor.TSyncStatus.OutOfSync;
+                            //Debug.Log(j.ToString() + ": " + ss.ToString()+" -> "+avatarselected.ToString() + ", " + HLTE.workersJson[j].avatarid.ToString());
+                        }
                     EditorGUI.indentLevel--;
                 }
             }
 
-            List<string> _avatars = new List<string>();
-            if (HLTE.defaultAvatar>=HLTE.avatarJson.Count)
-                HLTE.defaultAvatar=0;
-            for (int i=0; i<HLTE.avatarJson.Count; i++)
-                _avatars.Add(HLTE.avatarJson[i].avatar);
             HLTE.defaultAvatar = EditorGUILayout.Popup("Default avatar", HLTE.defaultAvatar, _avatars.ToArray());
 
 
