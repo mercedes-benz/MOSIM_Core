@@ -62,7 +62,7 @@ namespace CoSimulationStandalone
             Data.SessionData = new SessionData();
 
             //Create a new adapter controller
-            using (AdapterController adapterController = new AdapterController(Data.SessionData, Data.AdapterDescription, new MIPAddress("127.0.0.1", 9009), new DescriptionBasedMMUProvider(Data.CoSimMMUDescription), new CosimInstantiator()))
+            using (AdapterController adapterController = new AdapterController(Data.SessionData, Data.AdapterDescription, new MIPAddress("127.0.0.1", 9009), new DescriptionBasedMMUProvider(Data.CoSimMMUDescription), new CosimInstantiator(Data.AdapterDescription.Addresses[0], new MIPAddress("127.0.0.1", 9009))))
             {
                 adapterController.Start();
 
@@ -78,11 +78,20 @@ namespace CoSimulationStandalone
     /// </summary>
     public class CosimInstantiator : IMMUInstantiation
     {
+
+        private MIPAddress adapterAddress;
+        private MIPAddress registryAddress;
+        public CosimInstantiator(MIPAddress adapterAddress, MIPAddress registryAddress)
+        {
+            this.adapterAddress = adapterAddress;
+            this.registryAddress = registryAddress;
+        }
+
         public IMotionModelUnitDev InstantiateMMU(MMULoadingProperty mmuLoadingProperty)
         {
             if (mmuLoadingProperty.Description.ID  == Data.CoSimMMUDescription.ID)
             {
-                CoSimulationMMUImpl instance = new CoSimulationMMUImpl();
+                CoSimulationMMUImpl instance = new CoSimulationMMUImpl(adapterAddress, registryAddress);
 
                 return instance;
             }
