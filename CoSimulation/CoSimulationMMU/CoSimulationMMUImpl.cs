@@ -210,19 +210,6 @@ namespace CoSimulationMMU
                 //Initialize all MMUs
                 bool initialized = this.mmuAccess.InitializeMMUs(TimeSpan.FromSeconds(10), avatarDescription.AvatarID);
 
-                if (!initialized)
-                {
-                    Console.WriteLine("Problem at initializing MMUs");
-
-                    return new MBoolResponse(false)
-                    {
-                        LogData = new List<string>()
-                         {
-                            {"Problem at initializing MMUs" }
-                         }
-                    };
-                }
-
                 //Instantiate the cosimulator
                 this.coSimulator = new MMICoSimulator(mmuAccess.MotionModelUnits)
                 {
@@ -230,7 +217,6 @@ namespace CoSimulationMMU
                 };
                 //Set the priorities of the motions
                 this.coSimulator.SetPriority(priorities);
-
 
                 //Create and add the solvers (by default we usa an ik solver)
                 coSimulator.Solvers = new List<ICoSimulationSolver>
@@ -252,6 +238,19 @@ namespace CoSimulationMMU
                     }
                     this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
                     this.cosimaccess.Start();
+                }
+
+                if (!initialized)
+                {
+                    Console.WriteLine("Problem at initializing MMUs");
+
+                    return new MBoolResponse(false)
+                    {
+                        LogData = new List<string>()
+                         {
+                            {"Problem at initializing MMUs" }
+                         }
+                    };
                 }
 
                 return new MBoolResponse(true);
