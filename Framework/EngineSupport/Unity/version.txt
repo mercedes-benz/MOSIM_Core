@@ -1,5 +1,10 @@
 MMI Framework:5
 Core/CoSim/TargetEngine: 5.2.1.1
+12.07.2021
+ - glTFExporter script and its editor are added providing basic glTF file format export of MMISceneObjects and their children.
+ - Newtonsoft.json.dll has been added to the Framework\SharedLibraries folder (required for glTF support)
+
+26.06.2021
  - Photobooth script is integrated
  - Objects Spawner script is integrated
  - Photobooth allows background color selection
