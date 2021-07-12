@@ -79,6 +79,7 @@ namespace MMIUnity.TargetEngine.Editor
         public int PictureUploadProgress = -1; //negative value means there is no upload happening currently, 0-100 is upload percentage, above 100, upload finished.
         public DateTime FinishedPictureUploading;
 
+        private GLTFExport gltfexporter;
         private Camera MainCamera;
         public Photobooth cameraScript;
 
@@ -1197,6 +1198,13 @@ namespace MMIUnity.TargetEngine.Editor
 
         }
         
+        private void AddGLTFExporter()
+        {
+            gltfexporter = GameObject.FindObjectOfType<GLTFExport>();
+            if (gltfexporter == null)
+                gltfexporter=this.gameObject.AddComponent<GLTFExport>();
+        }
+
         private void AddCameraScript()
         {
             Camera[] Cameras = GameObject.FindObjectsOfType<Camera>();
@@ -1218,6 +1226,7 @@ namespace MMIUnity.TargetEngine.Editor
         {
             if (cameraScript==null)
             AddCameraScript();
+            AddGLTFExporter();
             PictureUploadProgress = 101;
             FinishedPictureUploading = DateTime.Now;
             if (Application.isEditor)
