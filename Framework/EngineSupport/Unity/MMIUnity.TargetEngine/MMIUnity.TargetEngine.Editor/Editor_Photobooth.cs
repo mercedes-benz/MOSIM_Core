@@ -1,4 +1,8 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// The content of this file has been developed in the context of the MOSIM research project.
+// Original author(s): Adam Kłodowski
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

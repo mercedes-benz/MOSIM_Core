@@ -16,6 +16,7 @@ namespace MMIUnity.TargetEngine.Scene
     /// This is fundamental component for the synchronization with he MMI framework.
     /// It needs to be added to a root GameObject. All MMISceneObject which should be considered must be below this object in hierarchy.
     /// </summary>
+    [ExecuteInEditMode]
     [RequireComponent(typeof(MMISettings))]
     public class UnitySceneAccess : MonoBehaviour, MSceneAccess.Iface, MSynchronizableScene.Iface
     {
@@ -32,9 +33,15 @@ namespace MMIUnity.TargetEngine.Scene
             }
         }
 
-     
+
         #region public properties
 
+        /// <summary>
+        /// Max AvatarID, it is constantly incremented so when avatar is deleted its id will not be reused in future in the same scene
+        /// </summary>
+        [HideInInspector]
+        public ulong LocalMaxMMIAvatarId = 0;
+        
         /// <summary>
         /// The current frame id
         /// </summary>
@@ -80,6 +87,8 @@ namespace MMIUnity.TargetEngine.Scene
         /// <summary>
         /// Mutex for accessing scene related elements
         /// </summary>
+        private static Mutex avatarLocalIDMutex = new Mutex();  
+
         private static Mutex sceneMutex = new Mutex();
         private static Mutex sceneObjectIDMutex = new Mutex();
         private static Mutex avatarIDMutex = new Mutex();
@@ -87,6 +96,9 @@ namespace MMIUnity.TargetEngine.Scene
         public static int currentSceneObjectID = 1; //changed to public so that it becomes persistant between edit and play mode
         [HideInInspector]
         public static int currentAvatarID = 1;
+
+        private List<TObjectRegister> AvatarsRegister = new List<TObjectRegister>(); //Avatar register for tracking changes of avatars in the scene
+
         #endregion
 
         #region protected fields for storing the data
@@ -134,7 +146,20 @@ namespace MMIUnity.TargetEngine.Scene
 
         #endregion
 
+        //Data storage class
+        public class TObjectRegister
+        {
+            public int unityid;
+            public ulong localID;
+            public ulong remoteID;
 
+            public TObjectRegister(int unity, ulong local, ulong remote)
+            {
+                this.unityid = unity;
+                this.localID = local;
+                this.remoteID = remote;
+            }
+        }
 
 
         /// <summary>
@@ -143,7 +168,9 @@ namespace MMIUnity.TargetEngine.Scene
         private void Awake()
         {
             //Set the singleton instance
+            if (Instance==null)
             Instance = this;
+            //Debug.Log("SceneAccess is Awake in " + (Application.isPlaying ? "Play mode" : "Edit mode")+(Instance!=null?" - Instantiated":" - not instantiated"));
         }
 
         /// <summary>
@@ -151,6 +178,8 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         private void Start()
         {
+            if (!Application.isPlaying)
+                return;
             MMISettings settings = this.GetComponent<MMISettings>();
             if (settings.AllowRemoteSceneConnections)
             {
@@ -168,6 +197,16 @@ namespace MMIUnity.TargetEngine.Scene
             }
         }
 
+        private void OnEnable()
+        {
+            /*
+            string s = "";
+            for (int i = 0; i < AvatarsRegister.Count; i++)
+                s += AvatarsRegister[i].unityid.ToString() + " / " + AvatarsRegister[i].localID.ToString() + " / " + AvatarsRegister[i].remoteID.ToString() + "\r\n";
+            Debug.Log("Scene Access:\r\n" + s);*/
+            AutoRegisterAvatars();
+        }
+
         /// <summary>
         /// Method is executed if the application is terminated
         /// </summary>
@@ -180,6 +219,81 @@ namespace MMIUnity.TargetEngine.Scene
                 this.remoteSceneManipulationServer.Dispose();
         }
 
+        /// <summary>
+        /// In case MaxMMIAvatarID is reset and scene contains avatars, the LocalMaxMMIAvatarID has to be set to the largest localID from the avatars in the scene,
+        /// otherwise duplicating an avatar would result in assinging it duplicate localID at some point
+        /// </summary>
+        private void UpdateLocalMaxMMIAvatarId()
+        {
+            var a = GameObject.FindObjectsOfType<MMIAvatar>();
+            for (int i = 0; i < a.Length; i++)
+                if (a[i].getTaskEditorLocalID() > LocalMaxMMIAvatarId)
+                    LocalMaxMMIAvatarId = a[i].getTaskEditorLocalID();
+        }
+
+        /// <summary>
+        /// Every avatar registers here in OnEnable event, however, if UnitySceneAccess script at that time is not yet awaken, then such avatar
+        /// will not be registered. To handle random order of scripts initialization, once UnitySceneAccess gets the OnEnable event, it queries scene
+        /// for all the avatars and autoregisters them (including inactive avatars). The volunary avatar registration is mostly usefull as event receiving mechanism
+        /// for registering duplication of programatic creation of the avatars in the scene, once the SceneAccessScript is already enabled.
+        /// </summary>
+        private void AutoRegisterAvatars()
+        {
+            var a = GameObject.FindObjectsOfType<MMIAvatar>();
+            for (int i = 0; i < a.Length; i++)
+                a[i].RegisterAvatar();
+        }
+
+        public int RegisterAvatar(int UnityID, int registerID, ref ulong TaskEditorID, ref ulong TaskEditorLocalID)
+        {
+            avatarLocalIDMutex.WaitOne();
+            if (AvatarsRegister.Count == 0)
+                UpdateLocalMaxMMIAvatarId();
+            avatarLocalIDMutex.ReleaseMutex();
+            string s = "";
+            for (int i = 0; i < AvatarsRegister.Count; i++)
+                s += AvatarsRegister[i].unityid.ToString() + " / " + AvatarsRegister[i].localID.ToString() + " / " + AvatarsRegister[i].remoteID.ToString()+"\r\n";
+            Debug.Log("RegisterAvatar: " + UnityID.ToString() + " / " + registerID.ToString() + " = (" + TaskEditorID.ToString() + ", " + TaskEditorLocalID.ToString() + ")\r\n"+ s);
+        
+            if ((registerID == -1) || (registerID >= AvatarsRegister.Count)) //new object, or has invalid registerid = treat as new object
+            {
+                avatarLocalIDMutex.WaitOne();
+
+                for (int i = 0; i < AvatarsRegister.Count; i++)
+                    if (AvatarsRegister[i].unityid==UnityID)
+                    {
+                        avatarLocalIDMutex.ReleaseMutex();
+                        return i;
+                    }
+                //not found on the list then if localid is zero a new one is created otherwise the one provided by avatar is used
+                if (TaskEditorLocalID == 0)
+                {
+                    LocalMaxMMIAvatarId++;
+                    TaskEditorLocalID = LocalMaxMMIAvatarId;
+                    TaskEditorID = 0; //reset taskEditorid if local id was zero
+                }
+                else
+                    for (int i = 0; i < AvatarsRegister.Count; i++)
+                        if (AvatarsRegister[i].localID == TaskEditorLocalID)
+                        {
+                            LocalMaxMMIAvatarId++;
+                            TaskEditorLocalID = LocalMaxMMIAvatarId;
+                            TaskEditorID = 0; //reset taskEditorid 
+                            break; 
+                        }
+                AvatarsRegister.Add(new TObjectRegister(UnityID, TaskEditorLocalID, TaskEditorID));
+
+                avatarLocalIDMutex.ReleaseMutex();
+                return AvatarsRegister.Count - 1;
+            }
+
+            if (TaskEditorLocalID != AvatarsRegister[registerID].localID)
+                TaskEditorLocalID=AvatarsRegister[registerID].localID; //update avatar, as for some reason local id was locally changed which should never happen
+            if (TaskEditorID != AvatarsRegister[registerID].remoteID)
+                AvatarsRegister[registerID].remoteID = TaskEditorID; //update register, as avatar sync was most probably performed
+
+            return registerID;
+        }
 
         /// <summary>
         /// Creates a new UUI for arbitrary objects within the scene 

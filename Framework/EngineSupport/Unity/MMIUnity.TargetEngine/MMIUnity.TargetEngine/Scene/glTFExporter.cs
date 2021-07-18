@@ -682,7 +682,6 @@ namespace MMIUnity.TargetEngine.Scene
     public class GLTFExport : MonoBehaviour
     {
         public MMISceneObject ObjectToExport;
-        public String ExportPath;
         public String ExportFileName;
         [HideInInspector]
         public glTF_JSON gltf = new glTF_JSON();
@@ -768,13 +767,15 @@ namespace MMIUnity.TargetEngine.Scene
             JsonSerializer serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
             serializer.Formatting = Formatting.Indented;
-            if (ExportPath == "")
-                ExportPath = Application.dataPath + "/gltf_exports";
+            string ExportPath = MMISettings.BasePath() + MMISettings.Instance.glTFFolder;
+            if (!(ExportPath.EndsWith("/") || ExportPath.EndsWith("\\")))
+                ExportPath += "/";
+            
             if (!Directory.Exists(ExportPath))
                 Directory.CreateDirectory(ExportPath);
             if (fname != "")
                 ExportFileName = fname;
-            using (StreamWriter sw = new StreamWriter(ExportPath + "/" + ExportFileName + ".gltf"))
+            using (StreamWriter sw = new StreamWriter(ExportPath + ExportFileName + ".gltf"))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
                 serializer.Serialize(writer, gltf);
@@ -789,8 +790,6 @@ namespace MMIUnity.TargetEngine.Scene
 
         private void OnEnable()
         {
-            if (ExportPath == "")
-                ExportPath = Application.dataPath + "/gltf_exports";
             if (ExportFileName == "" && ObjectToExport != null)
                 GenerateFileName();
         }

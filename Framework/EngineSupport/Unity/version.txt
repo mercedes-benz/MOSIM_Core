@@ -1,5 +1,14 @@
 MMI Framework:5
 Core/CoSim/TargetEngine: 5.2.1.1
+18.07.2021
+ - UnitySceneAccess is now providing a function to give uniqe constantly growing ID for avatars.
+ - Task editor fix to handle avatar to worker assignment persietnetly between edit and play mode
+ - Task editor supports singleton access through HighLevelTaskEditor.Instance
+ - Task editor uploads glTFs to Task Editor Web service
+ - gltf export path and png (thumbnail) paths are setup in MMISettings script
+ - MMISettings script supports singleton access to its properties through MMISettings.Instance
+ - Reduction of exposed parameters for Photobooth script
+ 
 12.07.2021
  - glTFExporter script and its editor are added providing basic glTF file format export of MMISceneObjects and their children.
  - Newtonsoft.json.dll has been added to the Framework\SharedLibraries folder (required for glTF support)

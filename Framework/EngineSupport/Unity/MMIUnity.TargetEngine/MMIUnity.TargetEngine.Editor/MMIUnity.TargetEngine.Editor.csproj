@@ -57,8 +57,9 @@
     <Compile Include="Photobooth.cs" />
     <Compile Include="Editor_Photobooth.cs" />
     <Compile Include="HighLevelTaskEditorBase.cs" />
-    <Compile Include="Editor_HighLevelTaskEditor.cs" />
+    <Compile Include="Editor_HighLevelTaskEditor.cs" /> 
     <Compile Include="Editor_glTFExporter.cs" />
+    <Compile Include="Editor_MMISettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\CoSimulation\MMICoSimulation\MMICoSimulation.csproj">

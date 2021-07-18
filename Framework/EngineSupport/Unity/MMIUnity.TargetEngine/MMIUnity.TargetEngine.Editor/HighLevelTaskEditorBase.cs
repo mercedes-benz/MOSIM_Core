@@ -34,6 +34,18 @@ namespace MMIUnity.TargetEngine.Editor
     [ExecuteInEditMode]
     public class HighLevelTaskEditor : MonoBehaviour
     {
+        private static object hlteLock = new object();
+        public static HighLevelTaskEditor Instance;
+
+        public HighLevelTaskEditor()
+        {
+            lock (hlteLock)
+            {
+                if (Instance==null)
+                    Instance=this;
+            }
+        }
+
         public int defaultAvatar = 0;
         [Header("Local host configuration")]
         public string port = "80";
@@ -75,13 +87,15 @@ namespace MMIUnity.TargetEngine.Editor
         private string taskEditorURL = "";
         public string tasEditorProjectName = "";
         private ulong LocalMaxMMIId = 0;
-        private ulong LocalMaxMMIAvatarId = 0;
+        //public ulong LocalMaxMMIAvatarId = 0;
         public int PictureUploadProgress = -1; //negative value means there is no upload happening currently, 0-100 is upload percentage, above 100, upload finished.
         public DateTime FinishedPictureUploading;
 
-        private GLTFExport gltfexporter;
+        public GLTFExport gltfexporter;
         private Camera MainCamera;
         public Photobooth cameraScript;
+
+        //private List<TObjectRegister> AvatarsRegister = new List<TObjectRegister>();
 
         [Header("Stations in project")]
         public bool stationsLoaded = false;
@@ -137,14 +151,45 @@ namespace MMIUnity.TargetEngine.Editor
                 throw new ArgumentException("Object is not a TPortStruct");
             }
         }
-
-        public TPortsStruct[] portsToTry = new TPortsStruct[3];
-
-        public enum TSyncStatus
+/*
+        public int RegisterAvatar(ref MMIAvatar avatar)
         {
-            OutOfSync,
-            Synchronizing,
-            InSync
+            if ((avatar.getRegisterID()==-1) || (avatar.getRegisterID() >= AvatarsRegister.Count)) //new object, or has invalid registerid = treat as new object
+            {
+                LocalMaxMMIAvatarId++;
+                avatar.setTaskEditorLocalID(LocalMaxMMIAvatarId);
+                avatar.setTaskEditorID(0);
+                AvatarsRegister.Add(new TObjectRegister(LocalMaxMMIAvatarId,0));
+                return AvatarsRegister.Count - 1;
+            }
+
+            if (avatar.getTaskEditorLocalID()!=AvatarsRegister[avatar.getRegisterID()].localID)
+                avatar.setTaskEditorLocalID(AvatarsRegister[avatar.getRegisterID()].localID); //update avatar, as for some reason local id was locally changed which should never happen
+            if (avatar.getTaskEditorID() != AvatarsRegister[avatar.getRegisterID()].remoteID)
+                AvatarsRegister[avatar.getRegisterID()].remoteID = avatar.getTaskEditorID(); //update register, as avatar sync was most probably performed
+
+            return avatar.getRegisterID();
+        }
+*/
+        public TPortsStruct[] portsToTry = new TPortsStruct[3];
+        /*
+        public class TObjectRegister
+        {
+            public ulong localID;
+            public ulong remoteID;
+
+            public TObjectRegister(ulong local, ulong remote)
+            {
+                this.localID = local;
+                this.remoteID = remote;
+            }
+        }
+        */
+        public static class TSyncStatus
+        {
+            public const int OutOfSync = 0;
+            public const int Synchronizing = 1;
+            public const int InSync = 2;
         }
 
         [Serializable]
@@ -176,7 +221,7 @@ namespace MMIUnity.TargetEngine.Editor
             public ulong avatarid;
             public String worker;
             public bool simulate;
-            public TSyncStatus syncstatus;
+            public int syncstatus;
         }
 
         [Serializable]
@@ -608,30 +653,52 @@ namespace MMIUnity.TargetEngine.Editor
             int UploadSize = 0;
             bool abort = false;
             ulong partid = 0;
-            string picturePath = Application.dataPath + "/../" + "Screenshots/";
+            string picturePath = MMISettings.BasePath()+MMISettings.Instance.ShotFolder;
+             if (!(picturePath.EndsWith("/") || picturePath.EndsWith("\\")))
+                picturePath+="/";
+            string gltfPath = MMISettings.BasePath()+MMISettings.Instance.glTFFolder;
+             if (!(gltfPath.EndsWith("/") || gltfPath.EndsWith("\\")))
+                gltfPath+="/";
 
-            if (cameraScript != null)
+            /*if (cameraScript != null)
                 if (cameraScript.shotpath != "")
-                    picturePath = cameraScript.shotpath;
+                    picturePath = cameraScript.shotpath;*/
 
             List <MMISceneObject> Scene = this.GetComponentsInChildren<MMISceneObject>().ToList();
             for (var i = 0; i < Scene.Count; i++) //gathering total size of part pictures.
             {
                 if (Scene[i].Type == MMISceneObject.Types.Part)
-                    if (File.Exists(picturePath + Scene[i].TaskEditorLocalID.ToString() + ".png"))
+                {
+                    if (File.Exists(gltfPath + Scene[i].TaskEditorLocalID.ToString() + ".gltf"))
                     {
+                        var gltffile = new FileStream(gltfPath + Scene[i].TaskEditorLocalID.ToString() + ".gltf", FileMode.Open);
+                        TotalSize += Convert.ToInt32(gltffile.Length);
+                        gltffile.Close();
+                        gltffile.Dispose();
+                    }
+                    else
+                     if (File.Exists(picturePath + Scene[i].TaskEditorLocalID.ToString() + ".png"))
+                     {
                         var pngfile = new FileStream(picturePath + Scene[i].TaskEditorLocalID.ToString() + ".png", FileMode.Open);
                         TotalSize += Convert.ToInt32(pngfile.Length);
                         pngfile.Close();
                         pngfile.Dispose();
-                    }
+                     }
+                }
             }
             Debug.Log("Uploading pictures for " + Scene.Count.ToString() + " scene objects from: "+ picturePath);
             for (var j = 0; (j < Scene.Count) && (!abort); j++)
-                if ((Scene[j].Type == MMISceneObject.Types.Part) && (File.Exists(picturePath + Scene[j].TaskEditorLocalID.ToString() + ".png")))
+                if (Scene[j].Type == MMISceneObject.Types.Part) 
                 { //main loop
-                    partid = Scene[j].TaskEditorID;
                     string inputFile = picturePath + Scene[j].TaskEditorLocalID.ToString() + ".png";
+
+                    if (File.Exists(gltfPath + Scene[j].TaskEditorLocalID.ToString() + ".gltf"))
+                        inputFile = gltfPath + Scene[j].TaskEditorLocalID.ToString() + ".gltf";
+                    else
+                      if (!File.Exists(picturePath + Scene[j].TaskEditorLocalID.ToString() + ".png"))
+                        continue;
+                    partid = Scene[j].TaskEditorID;
+                    
                     Dictionary<string, string> PostData = new Dictionary<string, string>();
                     PostData.Add("action", "addPartPicture");
                     PostData.Add("token", accessToken);
@@ -647,7 +714,7 @@ namespace MMIUnity.TargetEngine.Editor
                     var FormData = new MultipartFormDataContent(CreateBoundaryString());
                     for (int i = 0; i < PostData.Keys.Count; i++)
                         FormData.Add(new StringContent(PostData.Values.ElementAt<string>(i)), String.Format("\"{0}\"", PostData.Keys.ElementAt<string>(i)));
-                    FormData.Add(new StreamContent(new MemoryStream(buffer, 0, readSize)), "part", partid.ToString() + ".png");
+                    FormData.Add(new StreamContent(new MemoryStream(buffer, 0, readSize)), "part", partid.ToString() + Path.GetExtension(inputFile));
 
                     var content = await client.PostAsync(taskEditorWWW, FormData);
                     var html = content.Content.ReadAsStringAsync().Result;
@@ -692,7 +759,7 @@ namespace MMIUnity.TargetEngine.Editor
                 }
             return obj.TaskEditorLocalID;
         }
-
+        /*
         ulong UpdateUniqueLocalID(MMIAvatar obj)
         {
             if (obj.getTaskEditorLocalID() == 0)
@@ -710,7 +777,7 @@ namespace MMIUnity.TargetEngine.Editor
                 }
             return obj.getTaskEditorLocalID();
         }
-
+        */
         public void updateAvatarList()
         {
             List<MMIAvatar> Scene = this.GetComponentsInChildren<MMIAvatar>().ToList();
@@ -720,7 +787,7 @@ namespace MMIUnity.TargetEngine.Editor
                 TJsonAvatars item = new TJsonAvatars();
                 item.id=avatar.getTaskEditorID();
                 item.avatar=avatar.name;
-                avatar.setTaskEditorLocalID(UpdateUniqueLocalID(avatar));
+                //avatar.setTaskEditorLocalID(UpdateUniqueLocalID(avatar)); //TODO: check if it is necessary here once ScaneAccess takes care of local ids
                 item.localID=avatar.getTaskEditorLocalID();
                 MMISceneObject station = avatar.GetParentStation();
                  if (station!=null)
@@ -1198,6 +1265,20 @@ namespace MMIUnity.TargetEngine.Editor
 
         }
         
+        public async Task GenerateGLTFsForParts()
+        {
+            if (gltfexporter == null)
+                return;
+
+            List<MMISceneObject> Scene = this.GetComponentsInChildren<MMISceneObject>().ToList();
+            for (int i=0; i<Scene.Count; i++)
+            if (Scene[i].Type == MMISceneObject.Types.Part)
+            {
+                gltfexporter.ObjectToExport = Scene[i];
+                gltfexporter.ExportglTF(Scene[i].TaskEditorLocalID.ToString());
+            }
+        }
+
         private void AddGLTFExporter()
         {
             gltfexporter = GameObject.FindObjectOfType<GLTFExport>();
