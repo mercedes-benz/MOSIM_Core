@@ -1,0 +1,125 @@
+
+
+using MMICSharp.Common;
+using MMIStandard;
+using MMIUnity;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class CLASS_NAME : UnityMMUBase
+{
+    public Dictionary<string,MJointType> BoneTypeMapping = new Dictionary<string,MJointType>();
+
+    protected override void Awake()
+    {
+        //Assign the name of the MMU
+        this.Name = "CLASS_NAME";
+
+        //Assign the motion type of the MMU
+        this.MotionType = "MOTION_TYPE";
+
+        //@BoneTypeMapping To do -> The bone type mapping must be done manually. (this.BoneTypeMapping = new Dictionary<string,MJointType<()...) [can be done automatically]
+
+        //@BoneAssignment To do -> The bones must be assigned (this.RootBone = "", this. RootTransform ="") [can be done automatically]
+
+		//It is important that the bone assignment is done before the base class awake is called
+		base.Awake();
+    }
+
+
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+        //All required scripts should be added in here
+
+        //@AddScripts To do -> All required scripts should be added in here [can be done automatically]
+
+		base.Start();
+
+    }
+
+    /// <summary>
+    /// Basic initialize routine. This routine is called when the MMU is initialized. 
+    /// The method must be implemented by the MMU developer.
+    /// </summary>
+    /// <param name="avatarDescription"></param>
+    /// <param name="properties"></param>
+    /// <returns></returns>
+    public override MBoolResponse Initialize(MAvatarDescription avatarDescription, Dictionary<string, string> properties)
+    {
+		//Execute instructions on main thread
+        this.ExecuteOnMainThread(() =>
+        {
+			//Call the base class initialization
+            base.Initialize(avatarDescription, properties);
+
+
+            //To do -> insert your initialization code in here
+
+        });
+
+        return new MBoolResponse(true);
+    }
+
+    /// <summary>
+    /// Method to assign a MInstriction to the MMU:
+    /// The method must be provided by the MMU developer.
+    /// </summary>
+    /// <param name="motionCommand"></param>
+    /// <param name="avatarState"></param>
+    /// <returns></returns>
+    public override MBoolResponse AssignInstruction(MInstruction instruction, MSimulationState state)
+    {
+	    //To do -> insert your assignment code in here
+
+        throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// Basic do step routine. This method must be implemented by the MMU developer.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="avatarState"></param>
+    /// <returns></returns>
+    public override MSimulationResult DoStep(double time, MSimulationState state)
+    {
+        //Create a new simulation result
+        MSimulationResult result = new MSimulationResult()
+        {
+            Posture = state.Current,
+            Constraints = state.Constraints!=null ? state.Constraints: new List<MConstraint>(),
+            Events = state.Events !=null? state.Events: new List<MSimulationEvent>(),
+            SceneManipulations = state.SceneManipulations!=null ? state.SceneManipulations: new List<MSceneManipulation>(),
+        };
+
+
+
+		//To do -> insert your do step code in here
+
+        return result;
+    }
+
+
+    /// <summary>
+    /// Method to return the boundary constraints.
+    /// Method can be optionally implemented by the developers.
+    /// </summary>
+    /// <param name="instruction"></param>
+    /// <returns></returns>
+    public override List<MConstraint> GetBoundaryConstraints(MInstruction instruction)
+    {
+        return new List<MConstraint>();
+    }
+
+    /// <summary>
+    /// Method checks if the prerequisites for starting the instruction are fulfilled.
+    /// </summary>
+    /// <param name="instruction"></param>
+    /// <returns></returns>
+    public override MBoolResponse CheckPrerequisites(MInstruction instruction)
+    {
+        return new MBoolResponse(true);
+    }
+
+}

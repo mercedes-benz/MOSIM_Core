@@ -1,0 +1,3 @@
+MMI Framework:5
+Core/CS/MMUGenerator: 5.1.1
+Basic side step MMU that can move only full steps toward walk point given as a parameter. Walk point position does not have to lie perfectly in line with the avatar, as the projection of the walk point on the arm streaching line is done by the MMU in the initialization step.
