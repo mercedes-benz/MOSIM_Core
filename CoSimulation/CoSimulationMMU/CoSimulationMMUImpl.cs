@@ -100,7 +100,9 @@ namespace CoSimulationMMU
                 Dictionary<string, float> priorities = new Dictionary<string, float>();
 
                 //Select the MMUs to load if explictely specified by the user
-                if (properties != null && properties.Count > 0)
+                // Added by Stephan: Properties.ContainsKey("Default") check to distinguish between 
+                // properties for priorizing the MMUs and the accessPort setting
+                if (properties != null && properties.Count > 0 && properties.ContainsKey("Default"))
                 {
                     for (int i = loadableMMUs.Count - 1; i >= 0; i--)
                     {                       
@@ -236,7 +238,28 @@ namespace CoSimulationMMU
                         System.Threading.Thread.Sleep(1000);
                         System.Threading.Thread.Yield();
                     }
-                    this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
+
+                    // added by Stephan Adam:
+                    // implemented a properties key for changing the access port of the CoSimulationAccess
+                    // this is required, if the CoSimulationMMU is instantiated more than once,
+                    // e.g. if several avatars are applied
+                    if (properties != null && properties.Count > 0)
+                    {
+                        if (properties.ContainsKey("AccessPort"))
+                        {
+                            this.accessAddress.Port = Int32.Parse(properties["AccessPort"]);
+                            this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
+                        }
+                        else
+                        {
+                            this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
+                        }
+                    }
+                    else
+                    {
+                        this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
+                    }
+                    Console.WriteLine("CoSimulationAccess Listens on Port: " + this.accessAddress.Port.ToString());
                     this.cosimaccess.Start();
                 }
 
