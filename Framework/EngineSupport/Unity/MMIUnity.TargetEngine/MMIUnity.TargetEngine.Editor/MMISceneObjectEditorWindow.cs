@@ -119,6 +119,7 @@ namespace MMIUnity.TargetEngine.Editor
         SerializedProperty m_InitialLocation;
         SerializedProperty m_FinalLocation;
         SerializedProperty m_IsLocatedAt;
+        SerializedProperty m_RDF;
         SerializedProperty m_toolType;
 
         private string _newTool = "";
@@ -147,6 +148,7 @@ namespace MMIUnity.TargetEngine.Editor
             m_InitialLocation = serializedObject.FindProperty("InitialLocation");
             m_FinalLocation = serializedObject.FindProperty("FinalLocation");
             m_IsLocatedAt = serializedObject.FindProperty("IsLocatedAt");
+            m_RDF = serializedObject.FindProperty("RDF");
             HLTE = GameObject.FindObjectOfType<HighLevelTaskEditor>();
         
             if (HLTE!=null)
@@ -601,6 +603,10 @@ namespace MMIUnity.TargetEngine.Editor
              InitialAndFinalLocationEditor();   
 
             EditorGUILayout.PropertyField(m_IsLocatedAt, new GUIContent("IsLocatedAt"));
+        }
+        if ((instance.Type == MMISceneObject.Types.Part))
+        {
+            EditorGUILayout.PropertyField(m_RDF, new GUIContent("RDF"));
         }
         if ((instance.Type == MMISceneObject.Types.InitialLocation) || (instance.Type == MMISceneObject.Types.FinalLocation) || (instance.Type == MMISceneObject.Types.WalkTarget))
         {
