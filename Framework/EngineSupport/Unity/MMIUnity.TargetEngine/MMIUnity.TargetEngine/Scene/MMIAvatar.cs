@@ -17,6 +17,7 @@ namespace MMIUnity.TargetEngine.Scene
     /// <summary>
     /// Basic class which represents an avatar and the underlaying functionality (e.g. behavior, co-sim)
     /// </summary>
+    [ExecuteInEditMode]
     public class MMIAvatar : UnityAvatarBase
     {
 
@@ -28,11 +29,18 @@ namespace MMIUnity.TargetEngine.Scene
         #region public variables
 
         //task editor dependencies
-        //[HideInInspector]
-        private ulong TaskEditorLocalID = 0; //Local ID - unique among avatars, assigned in the Unity
-        //[HideInInspector]
-        private ulong TaskEditorID = 0; //Task editor ID - unique among all avatars within single server instance of task editor. 0 indicates default avatar
+        [HideInInspector]
+        public ulong TaskEditorLocalID = 0; //Local ID - unique among avatars, assigned in the Unity
+        [HideInInspector]
+        public ulong TaskEditorID = 0; //Task editor ID - unique among all avatars within single server instance of task editor. 0 indicates default avatar
+
+        private int registerID = -1;
         //end of task editor dependencies
+        
+        public int getRegisterID()
+        {
+            return registerID;
+        }
 
         public ulong getTaskEditorLocalID()
         {
@@ -172,8 +180,8 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         protected override void Awake()
         {
+            if (!Application.isPlaying) return;
             //Call the awake of the base class
-            Debug.Log("Awake");
             base.Awake();
         }
 
@@ -181,6 +189,7 @@ namespace MMIUnity.TargetEngine.Scene
         // Use this for initialization
         protected override void Start()
         {
+            if (!Application.isPlaying) return;
             base.Start();
 
             //Assign the behavior
@@ -203,12 +212,24 @@ namespace MMIUnity.TargetEngine.Scene
 
         }
 
+        public void RegisterAvatar()
+        {
+            if (UnitySceneAccess.Instance!=null)
+            this.registerID=UnitySceneAccess.Instance.RegisterAvatar(this.GetInstanceID(), registerID, ref this.TaskEditorID, ref this.TaskEditorLocalID);
+        }
+
+        private void OnEnable()
+        {
+            Debug.Log("Enabling Avatar "+this.name);
+            RegisterAvatar();
+        }
 
         /// <summary>
         /// Update routine which is called for each frame
         /// </summary>
         protected virtual void Update()
         {
+            if (!Application.isPlaying) return;
             //Check if avatar instance is already created (should be the case)
             if (this.MAvatar != null)
             {
@@ -494,6 +515,7 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         protected virtual void OnGUI()
         {
+            if (!Application.isPlaying) return;
             ///Display the status text if not initialized
             if (this.MMUAccess == null ||!this.MMUAccess.IsInitialized)
             {
@@ -506,7 +528,7 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         protected virtual void OnApplicationQuit()
         {
-
+            if (!Application.isPlaying) return;
             //Close the MMUAccess if the application is quit
             if(this.MMUAccess!=null)
                 this.MMUAccess.Dispose();

@@ -35,8 +35,7 @@ namespace MMIUnity.TargetEngine.Editor
         private int CurrentIndex = -1;
         private int CapturedIndex = -1;
         private int countdown = 2;
-        public string shotfolder = "../Screenshots";
-        public string shotpath = "";
+        private string shotpath;
 
         public void DisableMMIScenObject(int index)
         {
@@ -241,21 +240,16 @@ namespace MMIUnity.TargetEngine.Editor
 
         public void CreateShotDirectory()
         {
-            shotpath = Application.dataPath;
-            if (!(Application.dataPath.EndsWith("/") || Application.dataPath.EndsWith("\\")))
-                shotpath = shotpath + "/";
-
-            if (shotfolder.EndsWith("\\"))
-                shotfolder = shotfolder.Substring(0, shotfolder.Length - 1);
-
-            shotpath += shotfolder+(shotfolder.EndsWith("/")?"":"/");
+            shotpath = MMISettings.BasePath()+MMISettings.Instance.ShotFolder;
+            if (!(shotpath.EndsWith("/") || shotpath.EndsWith("\\")))
+                shotpath+="/";
 
             if (!Directory.Exists(shotpath))
                 Directory.CreateDirectory(shotpath);
         }
 
         public void OnEnable()
-        {
+        {             
             if (!Application.isPlaying)
             {
                 ReenableScripts();

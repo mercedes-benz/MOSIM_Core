@@ -135,16 +135,27 @@ namespace MMIUnity.TargetEngine.Editor
             if (m_connectionEstablished.boolValue && (HLTE.tasEditorProjectName != ""))
                 EditorGUILayout.LabelField(new GUIContent("Project: " + HLTE.tasEditorProjectName));
 
+            if (!Application.isPlaying && HLTE.cameraScript != null && HLTE.gltfexporter != null)
+            GUILayout.BeginHorizontal();
+
             if (!Application.isPlaying)
              if (HLTE.cameraScript!=null)
               if (GUILayout.Button("Generate part thumbnails"))
                         HLTE.cameraScript.StartPhotoSessionFromEditorMode();
 
-                GUILayout.BeginHorizontal();
+            if (HLTE.gltfexporter!=null)
+              if (GUILayout.Button("Generate glTFs"))
+                        HLTE.GenerateGLTFsForParts();
+
+            if (!Application.isPlaying && HLTE.cameraScript != null && HLTE.gltfexporter != null)
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Reload tools and stations"))
             {
                 HLTE.ReloadTools();
                 HLTE.ReloadStations();
+                if (!Application.isPlaying)
                 UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
             }
 
@@ -157,7 +168,8 @@ namespace MMIUnity.TargetEngine.Editor
                     var result = HLTE.sendDataToTaskEditor();
                     var result1 = HLTE.syncMarkersToTaskEditor();
                     var result3 = HLTE.UploadPictures();
-                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    if (!Application.isPlaying)
+                        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
                 }
 
             GUILayout.EndHorizontal();

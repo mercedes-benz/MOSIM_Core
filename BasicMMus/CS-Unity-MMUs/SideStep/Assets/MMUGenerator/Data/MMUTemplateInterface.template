@@ -1,0 +1,105 @@
+using MMICSharp.Common;
+using MMIStandard;
+using MMIUnity;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+
+
+/// <summary>
+/// This class was auto-generated. Please implement the respective functions within this class in order to represent your business logic.
+/// </summary>
+public class CLASS_NAME: MonoBehaviour, IMotionModelUnitDev
+{
+    /// <summary>
+    /// Variable is automatically provided and set by the responsible adapter.
+    /// </summary>
+    [HideInInspector]
+    public IServiceAccess ServiceAccess
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Variable is automatically provided and set by the responsible adapter.
+    /// </summary>
+    [HideInInspector]
+    public ISceneAccess SceneAccess
+    {
+        get;
+        set;
+    }
+
+
+    /// <summary>
+    /// Variable is automatically provided and set by the responsible adapter
+    /// </summary>
+    [HideInInspector]
+    public AdapterEndpoint AdapterEndpoint
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Variable must be set in here.
+    /// </summary>
+    [HideInInspector]
+    public string Name
+    {
+        get;
+        set;
+    }
+
+
+    public bool Initialize(MAvatarDescription avatarDescription, Dictionary<string, string> properties)
+    {
+        this.Name = "CLASS_NAME";
+
+        //Add all scripts in here for initialization (e.g. this.gameObject.AddComponent<TestScript>();)
+
+        throw new System.NotImplementedException();
+    }
+
+    public bool AssignInstruction(MInstruction MInstruction, AvatarState avatarState)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public SimulationResult DoStep(float time, AvatarState avatarState)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public List<MConstraint> GetPrerequisites(MInstruction motionCommand)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool IsMotionSupported(MInstruction MInstruction)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool Abort()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool Dispose()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public byte[] CreateCheckpoint()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool RestoreCheckpoint(byte[] data)
+    {
+        throw new System.NotImplementedException();
+    }
+}

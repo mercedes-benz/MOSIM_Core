@@ -12,6 +12,16 @@ if not defined DEVENV (
   ECHO DEVENV defined as: "%DEVENV%"
 )
 
+if not defined MSBUILD (
+  ECHO [31mMSBUILD Environment variable pointing to the Visual Studio 2017 MSBuild.exe is missing.[0m
+  ECHO    e.g. "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
+  pause
+  exit /b 1
+) else (
+  ECHO MSBUILD defined as: "%MSBUILD%"
+)
+)
+
 SET mode=Debug
 
 if "%~1"=="" (
@@ -26,6 +36,9 @@ if "%~1"=="" (
     )
   )
 )
+
+REM restoring nuget
+"%MSBUILD%" -t:restore -flp:logfile=restore.log
 
 REM Build the Visual Studio Project
 "%DEVENV%" /Log build.log .\MMICSharp.sln /Build %mode%

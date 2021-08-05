@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MMICoSimulation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MMICoSimulation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,6 +48,10 @@
     <Content Include="MMICoSimulation.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\CoSimulation\MMICoSimulation\MMICoSimulation.csproj">
+      <Project>{50aaa4c3-3627-4dcd-8249-e93200f67ba9}</Project>
+      <Name>MMICoSimulation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Framework\LanguageSupport\cs\MMICSharp\MMICSharp.csproj">
       <Project>{de1d9a38-8343-4f73-a411-40b14d5271cb}</Project>
       <Name>MMICSharp</Name>

@@ -1,0 +1,202 @@
+﻿using MMICSharp.Common;
+using MMIStandard;
+using MMIUnity;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+/// <summary>
+/// Auto-generated MMU class which utilizes the Unity Animator as main source for the motion generation. 
+/// </summary>
+public class CLASS_NAME : UnityMMUBase
+{
+    public Dictionary<string,MJointType> BoneTypeMapping = new Dictionary<string,MJointType>();
+
+    /// <summary>
+    /// The animator component
+    /// </summary>
+    private Animator animator;
+
+    /// <summary>
+    /// The assigned instruction
+    /// </summary>
+    private MInstruction instruction;
+
+
+    protected override void Awake()
+    {
+        //Assign the name of the MMU
+        this.Name = "CLASS_NAME";
+
+        //Assign the motion type of the MMU
+        this.MotionType = "MOTION_TYPE";
+
+        //@BoneTypeMapping To do -> The bone type mapping must be done manually. (this.BoneTypeMapping = new Dictionary<string,MJointType<()...) [can be done automatically]
+
+        //@BoneAssignment To do -> The bones must be assigned (this.Pelvis = "", this. RootTransform ="") [can be done automatically]
+
+
+        //Get the animator (needs to be added in before)
+        this.animator = this.GetComponent<Animator>();
+        
+        //Disable the animator at the beginning (otherwise retargeting won't work)
+        this.animator.enabled = false;
+
+		//It is important that the bone assignment is done before the base class awake is called
+		base.Awake();
+    }
+
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+	    //All required scripts should be added in here
+
+        //@AddScripts To do -> All required scripts should be added in here [can be done automatically]
+
+        base.Start();
+    }
+
+    /// <summary>
+    /// Basic initialize routine. This routine is called when the MMU is initialized. 
+    /// The method must be implemented by the MMU developer.
+    /// </summary>
+    /// <param name="avatarDescription"></param>
+    /// <param name="properties"></param>
+    /// <returns></returns>
+    public override MBoolResponse Initialize(MAvatarDescription avatarDescription, Dictionary<string, string> properties)
+    {
+        //Execute the instruction on the main thread (required in order to access unity functionality)
+        this.ExecuteOnMainThread(() =>
+        {
+            //Call the base class initialization (important)
+            base.Initialize(avatarDescription, properties);
+
+            //Set culling mode to always animate (in adapter the mesh might be invisible)
+            this.animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+
+            //Deactivate the animator we want to trigger it manually in the dostep
+            this.animator.enabled = false;
+        });
+
+        //Setup other specific properties
+
+		//Return success
+        return new MBoolResponse(true);
+    }
+
+    /// <summary>
+    /// Method to assign a MInstriction to the MMU:
+    /// The method must be provided by the MMU developer.
+    /// </summary>
+    /// <param name="motionCommand"></param>
+    /// <param name="avatarState"></param>
+    /// <returns></returns>
+    public override MBoolResponse AssignInstruction(MInstruction instruction, MSimulationState state)
+    {
+        //Assign the instruction to the class variable
+        this.instruction = instruction;
+
+
+        //Execute the instruction on the main thread (required in order to access unity functionality)
+        this.ExecuteOnMainThread(() =>
+        {
+            //Assign the posture
+            this.AssignPostureValues(state.Current);
+
+            this.animator.SetBool("AnimationDone", false);
+
+            //To do parameterize the animator based on the given instruction and avatarState
+        });
+
+        //To do insert custom code heere
+
+        return new MBoolResponse(true);
+    }
+
+    /// <summary>
+    /// Basic do step routine. This method must be implemented by the MMU developer.
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="avatarState"></param>
+    /// <returns></returns>
+    public override MSimulationResult DoStep(double time, MSimulationState state)
+    {
+
+        //Create a new simulation result
+        MSimulationResult result = new MSimulationResult()
+        {
+            Posture = state.Current,
+            Constraints = state.Constraints!=null ? state.Constraints: new List<MConstraint>(),
+            Events = state.Events !=null? state.Events: new List<MSimulationEvent>(),
+            SceneManipulations = state.SceneManipulations!=null ? state.SceneManipulations: new List<MSceneManipulation>(),
+        };
+
+        //Execute the instruction on the main thread (required in order to access unity functionality)
+        this.ExecuteOnMainThread(() =>
+        {
+            //Update the animator
+            this.animator.Update((float)time);
+
+            //Get the current posture of the after in the intermediate skeleton representation
+            result.Posture = this.GetRetargetedPosture();
+
+            //To do -> Process the events and return it as result
+            if (this.animator.GetBool("AnimationDone"))
+            {
+                result.Events.Add(new MSimulationEvent()
+                {
+                    Name = "Animation finished",
+                    Reference = this.instruction.ID,
+                    Type = mmiConstants.MSimulationEvent_End
+                });
+            }
+        });
+
+        //Finally, add the end event at the end of the motion
+        //result.Events.Add(new MSimulationEvent(this.instruction.Name, mmiConstants.MSimulationEvent_End, this.instruction.ID));
+
+        //Return the result
+        return result;
+    }
+
+
+    /// <summary>
+    /// Method to return the boundary constraints.
+    /// Method can be optionally implemented by the developers.
+    /// </summary>
+    /// <param name="motionCommand"></param>
+    /// <returns></returns>
+    public override List<MConstraint> GetBoundaryConstraints(MInstruction motionCommand)
+    {
+        List<MConstraint> firstPose = new List<MConstraint>();
+        this.ExecuteOnMainThread(() =>
+        {
+            //Update the animator
+            this.animator.Update((float)0.01);
+
+            //Get the current posture of the after in the intermediate skeleton representation
+            MAvatarPostureValues posture = this.GetRetargetedPosture();
+
+            MConstraint mConstraint = new MConstraint()
+            {
+                ID = MInstructionFactory.GenerateID(),
+                PostureConstraint = new MPostureConstraint(posture)
+            };
+            firstPose.Add(mConstraint);
+        });
+        return firstPose;
+    }
+
+    /// <summary>
+    /// Method checks if the prerequisites for starting the instruction are fulfilled.
+    /// </summary>
+    /// <param name="instruction"></param>
+    /// <returns></returns>
+    public override MBoolResponse CheckPrerequisites(MInstruction instruction)
+    {
+        return new MBoolResponse(true);
+    }
+
+
+
+}
