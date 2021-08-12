@@ -383,13 +383,6 @@ namespace MMIUnity.TargetEngine.Scene
                     this.MSceneObject.Properties.Add("isLocatedAt", IsLocatedAt.MSceneObject.ID);
                 }
             }
-            if ((Type == Types.Part))
-            {
-                if (RDF != null)
-                {
-                    this.MSceneObject.Properties.Add("RDF", RDF);
-                }
-            }
             if ((Type == Types.Station) && (Type == Types.StationResult))
             {
                 MMISceneObject parentStation = this.GetParentStation();
