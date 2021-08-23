@@ -16,7 +16,7 @@ namespace MMIUnity.Retargeting
 
         // Hard reference to human bones if possible. In case of the spine, this will be null. 
         //private HumanBodyBones referenceBone { get; }
-        public Transform reference { get; private set; }
+        public Transform reference { get; set; }
 
 
         // Base rotations of human bones with respect to the reference bone. 
