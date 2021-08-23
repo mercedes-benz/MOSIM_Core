@@ -133,10 +133,16 @@ namespace MMIUnity.TargetEngine
                     walkTarget.transform.position = new Vector3(hit.point.x, walkTarget.transform.position.y, hit.point.z);
                     walkTarget.GetComponent<MMISceneObject>().UpdateTransform();
 
+                    
 
                     MInstruction walkInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Walk", "Locomotion/Walk")
                     {
                         Properties = PropertiesCreator.Create("TargetName", "WalkTarget", "UseTargetOrientation", false.ToString())
+                    };
+                    MInstruction idleConcurrentInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "Pose/Idle")
+                    {
+                        //Start idle after walk has been finished
+                        EndCondition = walkInstruction.ID + ":" + mmiConstants.MSimulationEvent_End //synchronization constraint similar to bml "id:End"  (bml original: <bml start="id:End"/>
                     };
 
                     MInstruction idleInstruction = new MInstruction(MInstructionFactory.GenerateID(), "Idle", "Pose/Idle")
@@ -152,6 +158,7 @@ namespace MMIUnity.TargetEngine
 
                     //Assign walk and idle instruction
                     this.CoSimulator.AssignInstruction(walkInstruction, currentState);
+                    this.CoSimulator.AssignInstruction(idleConcurrentInstruction, currentState);
                     this.CoSimulator.AssignInstruction(idleInstruction, currentState);
 
                 }

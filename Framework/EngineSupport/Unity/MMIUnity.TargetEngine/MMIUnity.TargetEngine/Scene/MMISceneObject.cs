@@ -246,6 +246,7 @@ namespace MMIUnity.TargetEngine.Scene
         public MMISceneObject FinalLocation;
         public string FinalLocationConstraint;
         public MMISceneObject IsLocatedAt;
+        public string RDF;
         public ulong StationRef = 0; //if StationResult is used as type, then those two fields are used to point to which station and which result from such station should be inserted into the object
         public ulong GroupRef = 0;
 
@@ -380,6 +381,26 @@ namespace MMIUnity.TargetEngine.Scene
             if(this.TransferMesh)
                 this.SetupMesh();
 
+            if (this.transform.childCount > 0)
+            {
+                List<string> children = new List<string>();
+                if (transform.childCount > 0)
+                {
+                    foreach (Transform child in transform)
+                    {
+                        MMISceneObject co = child.gameObject.GetComponent<MMISceneObject>();
+                        if (co != null)
+                        {
+                            children.Add(co.MSceneObject.ID);
+                        }
+                    }
+                    if (children.Count > 0)
+                    {
+                        this.MSceneObject.Properties.Add("hasChildren", string.Join(",", children));
+                    }
+                }
+            }
+
             if ((Type == Types.Part) || (Type == Types.Tool) || (Type == Types.Group))
             {
                 if (InitialLocation != null)
@@ -395,8 +416,10 @@ namespace MMIUnity.TargetEngine.Scene
                         this.MSceneObject.Properties.Add("finalLocationConstraint", FinalLocationConstraint);
                 }
                 if (IsLocatedAt != null)
+                {
                     this.MSceneObject.Properties.Add("isLocatedAt", IsLocatedAt.MSceneObject.ID);
-            } 
+                }
+            }
             if ((Type == Types.Station) && (Type == Types.StationResult))
             {
                 MMISceneObject parentStation = this.GetParentStation();

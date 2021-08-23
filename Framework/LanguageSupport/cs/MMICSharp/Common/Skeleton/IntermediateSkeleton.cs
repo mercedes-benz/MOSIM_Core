@@ -4,6 +4,7 @@
 
 using MMIStandard;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace MMICSharp.Common
 {
@@ -31,7 +32,7 @@ namespace MMICSharp.Common
         /// <summary>
         /// Dictionary storing the animated joints for each avatar, if set globally (via SetAnimatedJoints)
         /// </summary>
-        private Dictionary<string, List<MJointType>> animatedJoints = new Dictionary<string, List<MJointType>>();
+        private ConcurrentDictionary<string, List<MJointType>> animatedJoints = new ConcurrentDictionary<string, List<MJointType>>();
 
 
         /// <summary>
@@ -551,6 +552,7 @@ namespace MMICSharp.Common
 
         public virtual MBoolResponse Setup(MAvatarDescription avatar, Dictionary<string, string> properties)
         {
+            InitializeAnthropometry(avatar);
             return new MBoolResponse(true);
         }
 

@@ -57,6 +57,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="MainThreadDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retargeting\IJointAlignment.cs" />
     <Compile Include="Retargeting\SkeletonVisualization.cs" />
     <Compile Include="Retargeting\VisualizationJoint.cs" />
     <Compile Include="TransformExtensions.cs" />

@@ -217,12 +217,14 @@ namespace MMICSharp.Common
                 MVector3 shoulder = getJointPosition(globalTarget, joint_map[MJointType.LeftShoulder]);
                 MVector3 leftupleg = getJointPosition(globalTarget, joint_map[MJointType.LeftHip]);
 
+                // initialize Root at 0, 0, 0
+                ((RJoint)this.parentJoint).SetOffsets(new MVector3(0,0,0));
+
                 // find the average z axis position of shoulders and hips to find initial position of hip
                 hips.Z = (shoulder.Z + leftupleg.Z) / 2;
                 // raise hip to the hight of the target avatars hip height. 
                 hips.Y = leftupleg.Y;
-                MVector3 root = new MVector3(hips.X, 0, hips.Z);
-                ((RJoint)this.parentJoint).SetOffsets(root);
+                //MVector3 root = new MVector3(hips.X, 0, hips.Z);
                 hips.X = 0;
                 hips.Z = 0;
                 this.SetOffsets(hips);

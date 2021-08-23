@@ -237,7 +237,15 @@ namespace MMICSharp.Common
                     }
                 }
             }
-            this.children.Add(id, _children);
+            if (this.children.ContainsKey(id))
+            {
+                this.children[id] = _children;
+            }
+            else
+            {
+                this.children.Add(id, _children);
+            }
+            
             if(joint_mappings.ContainsKey(id))
             {
                 Console.WriteLine("Warning: Skeleton alread existing under ID " + id);

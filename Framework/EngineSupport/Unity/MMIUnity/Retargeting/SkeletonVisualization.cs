@@ -28,6 +28,9 @@ namespace MMIUnity.Retargeting
 
         private RetargetingService retargetingService;
 
+        // potential alignment addon. This functionality was moved to the skeleton configurator tool. 
+        public IJointAlignment alignment;
+
         public SkeletonVisualization(IntermediateSkeleton skeleton, RetargetingService retargetingService, Transform RootBone, Dictionary<string, MJointType> bonenameMap, string AvatarID, GameObject gameJointPrefab)
         {
             //this.anim = anim;
@@ -41,14 +44,15 @@ namespace MMIUnity.Retargeting
             this.retargetingService = retargetingService;
 
             root = new ISVisualizationJoint((RJoint)skeleton.GetRoot(this.AvatarID), RootBone, this.bonenameMap);
-            //root.AlignAvatar(anim);
             root.CreateGameObjSkel(gameJointPrefab);
-            //root.SetToZero(this.AvatarID);
         }
 
         public void AlignAvatar()
         {
-            root.AlignAvatar();
+            if (this.alignment != null)
+            {
+                this.alignment.AlignAvatar(this.root);
+            }
         }
 
         public void AssignPostureValues()
@@ -58,7 +62,7 @@ namespace MMIUnity.Retargeting
 
         public void SetZeroPosture()
         {
-            root.SetToZero(this.AvatarID); 
+            root.SetToZero(this.AvatarID);
         }
 
         public MAvatarPostureValues GetZeroPosture()
