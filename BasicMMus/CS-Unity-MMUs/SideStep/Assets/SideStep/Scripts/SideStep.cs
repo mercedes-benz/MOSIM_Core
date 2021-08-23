@@ -18,6 +18,7 @@ public class SideStep : UnityMMUBase
     private MTransform targetLocation;
     private Vector3 initialLocation;
     private const float stepLength = 0.387765f;
+    private const float stepLengthShort = 0.12889f;
     private int stepsToGo = 0;
     private float motionScale = 1;
 
@@ -182,14 +183,19 @@ public class SideStep : UnityMMUBase
                 var targetZ = Vector3.Scale(this.initialRotationInverse * (targetLocation.Position.ToVector3() - this.initialLocation),new Vector3(1,0,0));
                 this.animator.SetBool("WalkRight", targetZ.x > 0);
                 var D = Mathf.Abs(targetZ.x);
-                stepsToGo = Mathf.RoundToInt(D / stepLength);
+                if (D < stepLengthShort)
+                    stepsToGo = 0;
+                else
+                    stepsToGo = Mathf.CeilToInt(D / stepLength);
+
                 if (stepsToGo > 0)
-                    this.motionScale = D / stepsToGo / stepLength;
+                    this.motionScale = (D/stepsToGo - stepLengthShort)/(stepLength-stepLengthShort);
                 else
                     this.motionScale = 1;
                 Debug.Log("StepsToGo: " + stepsToGo.ToString() + ", motionscale: " + motionScale);
             }
             this.animator.SetBool("AnimationDone", false);
+            this.animator.SetFloat("Blend", this.motionScale);
         });
 
         //To do insert custom code heere

@@ -22,6 +22,9 @@ namespace MMIUnity.TargetEngine.Scene
     public class MMISceneObject : MonoBehaviour
     {
         #region extra types
+
+        
+
         public class TConstraintIndex
         {
             public TConstraintIndex(int i, int j)
@@ -164,6 +167,32 @@ namespace MMIUnity.TargetEngine.Scene
         [Header("Flag indicates whether the meshes should be transferred")]
         public bool TransferMesh = false;
 
+        //mesh integrating all the visible MMI Scene Object's elemenst that do not belong to other MMISceneObjects
+        public Mesh ghostMesh;
+        public List<TGhosts> initialLocationGhosts;
+        public List<TGhosts> finalLocationGhosts;
+
+        public float editorSceneZoom = 10;
+
+        //Visibility of initial and final locations ghosts
+        public class TGhosts
+        {
+            public MMISceneObject sceneObject;
+            public bool visible;
+
+            public TGhosts()
+            {
+                sceneObject = null;
+                visible = true;
+            }
+
+            public TGhosts(MMISceneObject targetObject)
+            {
+                sceneObject = targetObject;
+                visible = true;
+            }
+        }
+
         /// Following public fields are used to specify the MMISceneObject depending on the selected type
         public enum Types
         {
@@ -230,7 +259,7 @@ namespace MMIUnity.TargetEngine.Scene
 
 #endregion
 
-#region private variables
+        #region private variables
 
         /// <summary>
         /// A tracker which monitors potential changes related to physics
@@ -258,7 +287,7 @@ namespace MMIUnity.TargetEngine.Scene
         /// </summary>
         private static readonly float threshold = 1e-6f;
 
-#endregion
+        #endregion
 
 
 
@@ -308,11 +337,19 @@ namespace MMIUnity.TargetEngine.Scene
         private void OnEnable()
         {
             LoadConstraints();
+
+            if (initialLocationGhosts == null)
+                initialLocationGhosts = new List<TGhosts>();
+
+            if (finalLocationGhosts == null)
+                finalLocationGhosts = new List<TGhosts>();
         }
 
         // Use this for initialization
         protected virtual void Start()
         {
+            
+
             if (!Application.isPlaying)
                 return;
             //Setup the transforms of the MSceneObject
@@ -396,21 +433,45 @@ namespace MMIUnity.TargetEngine.Scene
             UnitySceneAccess.AddSceneObject(this.MSceneObject);
         }
 
+        /*
+        bool DrawWalkPointMarker(TConstraintIndex index) //moved to editor gizmos
+        {
+            if (!(index.index<=Constraints.Count && Constraints[index.index].__isset.PathConstraint && index.pathIndex<Constraints[index.index].PathConstraint.PolygonPoints.Count))
+                return false;
+
+            if (Constraints[index.index].ID!="WalkTarget")
+                return false;
+
+            if (!TWalkPointGizmo.isReady)
+                if (!TWalkPointGizmo.LoadTexture())
+                    return false;
+
+            var p = Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Position.ToVector3();     //rotation of the sprite
+            var r = Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Rotation.ToQuaternion() * Quaternion.Euler(90,0,0);
+            
+            var matrix = Matrix4x4.TRS(this.transform.position + this.transform.rotation * p, this.transform.rotation* r, TWalkPointGizmo.scale);
+            Graphics.DrawMesh(TWalkPointGizmo.myMesh, matrix, TWalkPointGizmo.material, 0, null, 0, TWalkPointGizmo.mpb);            
+            return true;
+        }
+        */
+
         void DrawInitialLocationMarker(TConstraintIndex index)
         {
             if (!(index.index<=Constraints.Count && Constraints[index.index].__isset.PathConstraint && index.pathIndex<Constraints[index.index].PathConstraint.PolygonPoints.Count))
                 return;
-            const float axisSize = 0.3f;
+            float axisSize = 0.3f* (1+3*editorSceneZoom);
             var p=Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Position.ToVector3();
             var R=Constraints[index.index].PathConstraint.PolygonPoints[index.pathIndex].ParentToConstraint.Rotation.ToQuaternion();
             Vector3 origin = this.transform.position + this.transform.rotation*p;
             Vector3 xaxis = origin + this.transform.rotation*R*(new Vector3(axisSize,0,0));
             Vector3 yaxis = origin + this.transform.rotation*R*(new Vector3(0,axisSize,0));
             Vector3 zaxis = origin + this.transform.rotation*R*(new Vector3(0,0,axisSize));
+
             Debug.DrawLine(origin, xaxis, Color.red);
             Debug.DrawLine(origin, yaxis, Color.green);
             Debug.DrawLine(origin, zaxis, Color.blue);
         }
+
         void DrawConstraintBox(Vector3 Position, Quaternion Rotation, MMIStandard.MInterval3 Limits)
         {
             var colortop = Color.red;
@@ -520,6 +581,7 @@ namespace MMIUnity.TargetEngine.Scene
         // Update is called once per frame
         protected virtual void Update()
         {
+            TWalkPointGizmo.Draw(this); //visualization of walk point 
             if ((this.Constraints!=null) && (this.Constraints.Count>0))
             {
              //CalcPositons();
@@ -544,9 +606,36 @@ namespace MMIUnity.TargetEngine.Scene
 
               if (ShowConstraints.Count()>0)
                     for (int i=0; i<ShowConstraints.Count(); i++)
-                    DrawInitialLocationMarker(ShowConstraints.Item(i));
+                        if (TWalkPointGizmo.Draw(this, ShowConstraints.Item(i)))
+                        //if (!DrawWalkPointMarker(ShowConstraints.Item(i)))
+                        DrawInitialLocationMarker(ShowConstraints.Item(i));
 
             }
+
+            if (this.Type == Types.FinalLocation)
+                for (int i = finalLocationGhosts.Count() - 1; i >= 0; i--)
+                    if (finalLocationGhosts[i].visible)
+                        if (finalLocationGhosts[i].sceneObject != null)
+                        {
+                            if (finalLocationGhosts[i].sceneObject.ghostMesh == null)
+                                finalLocationGhosts[i].sceneObject.ghostMesh = Utils3D.ObjectGhoster(finalLocationGhosts[i].sceneObject);
+                            Utils3D.ShowGhosts(finalLocationGhosts[i].sceneObject.ghostMesh, this);
+                        }
+                        else
+                            finalLocationGhosts.RemoveAt(i);
+
+            if (this.Type == Types.InitialLocation)
+                for (int i = initialLocationGhosts.Count() - 1; i >= 0; i--)
+                    if (initialLocationGhosts[i].visible)
+                        if (initialLocationGhosts[i].sceneObject != null)
+                        {
+                            if (initialLocationGhosts[i].sceneObject.ghostMesh == null)
+                                initialLocationGhosts[i].sceneObject.ghostMesh = Utils3D.ObjectGhoster(initialLocationGhosts[i].sceneObject);
+                            Utils3D.ShowGhosts(initialLocationGhosts[i].sceneObject.ghostMesh, this);
+                        }
+                        else
+                            initialLocationGhosts.RemoveAt(i);
+
             /*
             if (this.Constraints!=null)
              for (int selectedConstraint=0; selectedConstraint<Constraints.Count; selectedConstraint++)
@@ -1037,7 +1126,7 @@ namespace MMIUnity.TargetEngine.Scene
             }
 
         }
-
+        
 #endregion
 
 

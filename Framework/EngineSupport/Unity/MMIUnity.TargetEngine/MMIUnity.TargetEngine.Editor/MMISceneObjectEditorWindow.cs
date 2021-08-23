@@ -16,7 +16,37 @@ namespace MMIUnity.TargetEngine.Editor
     [CustomEditor(typeof(MMISceneObject))]
     public class MMISceneObjectEditorWindow : UnityEditor.Editor
     {
-        // Add a menu item named "Do Something" to MyMenu in the menu bar.
+        // Add a menu item named for creating walk target object directly
+        [MenuItem("GameObject/MMI/New Walk target", false, 0)]
+        static void AddMMISceneObjectsWalkTarget()
+        {
+            var newMarker = new GameObject("WalkTarget");
+            newMarker.transform.parent = Selection.activeTransform;
+            var newMMISceneObject = newMarker.AddComponent<MMISceneObject>();
+            newMMISceneObject.Type = MMISceneObject.Types.WalkTarget;
+        }
+
+        // Add a menu item named for creating initial location marker directly
+        [MenuItem("GameObject/MMI/New Initial location", false, 0)]
+        static void AddMMISceneObjectsIntialLocation()
+        {
+            var newMarker = new GameObject("InitialLocation");
+            newMarker.transform.parent = Selection.activeTransform;
+            var newMMISceneObject = newMarker.AddComponent<MMISceneObject>();
+            newMMISceneObject.Type = MMISceneObject.Types.InitialLocation;
+        }
+
+        // Add a menu item named for creating final location marker directly
+        [MenuItem("GameObject/MMI/New Final location", false, 0)]
+        static void AddMMISceneObjectsFinalLocation()
+        {
+            var newMarker = new GameObject("FinalLocation");
+            newMarker.transform.parent = Selection.activeTransform;
+            var newMMISceneObject = newMarker.AddComponent<MMISceneObject>();
+            newMMISceneObject.Type = MMISceneObject.Types.FinalLocation;
+        }
+
+        // Add a menu item named for adding MMISceneObjects recursively to all children nodes
         [MenuItem("GameObject/MMI/Add MMISceneObjects (recursive)", false, 0)]
         static void AddMMISceneObjectsRecursive()
         {
@@ -27,7 +57,7 @@ namespace MMIUnity.TargetEngine.Editor
             }
         }
 
-        // Add a menu item named "Do Something" to MyMenu in the menu bar.
+        // Add a menu item named for adding MMISceneObjects recursively to all children nodes that have mesh
         [MenuItem("GameObject/MMI/Add MMISceneObjects (recursive, mesh only)", false, 0)]
         static void AddMMISceneObjectsRecursiveMeshOnly()
         {
@@ -38,7 +68,7 @@ namespace MMIUnity.TargetEngine.Editor
             }
         }
 
-        // Add a menu item named "Do Something" to MyMenu in the menu bar.
+        // Add a menu item named for synchronizing MSceneObject with the MMISceneObject properties (works only in play mode)
         [MenuItem("GameObject/MMI/Synchronize (recursive)", false, 0)]
         static void SynchronizeRecursive()
         {
@@ -93,10 +123,10 @@ namespace MMIUnity.TargetEngine.Editor
         {
             if (Selection.activeGameObject.GetComponent<MMISceneObject>() != null)
             {
-                var bounds=Selection.activeGameObject.GetComponent<MMISceneObject>().GetCompleteBounds();
-                Debug.Log("Bounds center/min/max: "+bounds.center.x.ToString()+", "+bounds.center.y.ToString()+", "+bounds.center.z.ToString()+" / "+
-                          bounds.min.x.ToString()+", "+bounds.min.y.ToString()+", "+bounds.min.z.ToString() + " / "+
-                          bounds.max.x.ToString()+", "+bounds.max.y.ToString()+", "+bounds.max.z.ToString());
+                var bounds = Selection.activeGameObject.GetComponent<MMISceneObject>().GetCompleteBounds();
+                Debug.Log("Bounds center/min/max: " + bounds.center.x.ToString() + ", " + bounds.center.y.ToString() + ", " + bounds.center.z.ToString() + " / " +
+                          bounds.min.x.ToString() + ", " + bounds.min.y.ToString() + ", " + bounds.min.z.ToString() + " / " +
+                          bounds.max.x.ToString() + ", " + bounds.max.y.ToString() + ", " + bounds.max.z.ToString());
             }
             else
             {
@@ -110,7 +140,7 @@ namespace MMIUnity.TargetEngine.Editor
         SerializedProperty m_OverrideColor;
         SerializedProperty m_Color;
         SerializedProperty m_TransferMesh;
-	    SerializedProperty m_Constraint;
+        SerializedProperty m_Constraint;
         SerializedProperty m_StationRef;
         SerializedProperty m_GroupRef;
 
@@ -125,7 +155,7 @@ namespace MMIUnity.TargetEngine.Editor
         HighLevelTaskEditor HLTE;
         public int selectedIndex = 0;
         public int toolTypeIndex = 0;
-	    private int selectedConstraint = -1;
+        private int selectedConstraint = -1;
         private bool selectedConstraintEdit = false;
         private string newID = "";
 
@@ -148,13 +178,13 @@ namespace MMIUnity.TargetEngine.Editor
             m_FinalLocation = serializedObject.FindProperty("FinalLocation");
             m_IsLocatedAt = serializedObject.FindProperty("IsLocatedAt");
             HLTE = GameObject.FindObjectOfType<HighLevelTaskEditor>();
-        
-            if (HLTE!=null)
-            if (!HLTE.tasksLoaded)
-            {
-                Debug.Log("Tasks are loaded: " + HLTE.tasksLoaded);
-                await HLTE.LoadToolListU(HLTE.accessToken, HLTE.taskEditorWWW);
-            }  
+
+            if (HLTE != null)
+                if (!HLTE.tasksLoaded)
+                {
+                    Debug.Log("Tasks are loaded: " + HLTE.tasksLoaded);
+                    await HLTE.LoadToolListU(HLTE.accessToken, HLTE.taskEditorWWW);
+                }
         }
 
 
@@ -180,105 +210,105 @@ namespace MMIUnity.TargetEngine.Editor
                 return;
 
             if (!(target as MMISceneObject).Constraints[constIndex].__isset.Properties)
-                (target as MMISceneObject).Constraints[constIndex].Properties=new Dictionary<string, string>();
+                (target as MMISceneObject).Constraints[constIndex].Properties = new Dictionary<string, string>();
 
-            foreach( KeyValuePair<string, string> newitem in newConst.Properties )
+            foreach (KeyValuePair<string, string> newitem in newConst.Properties)
                 if ((target as MMISceneObject).Constraints[constIndex].Properties.ContainsKey(newitem.Key))
-                    (target as MMISceneObject).Constraints[constIndex].Properties[newitem.Key]=newitem.Value; //update existing keys
+                    (target as MMISceneObject).Constraints[constIndex].Properties[newitem.Key] = newitem.Value; //update existing keys
                 else
-                    (target as MMISceneObject).Constraints[constIndex].Properties.Add(newitem.Key,newitem.Value); //add new keys
+                    (target as MMISceneObject).Constraints[constIndex].Properties.Add(newitem.Key, newitem.Value); //add new keys
         }
 
         private bool compareAccelerationConstraint(MMIStandard.MAccelerationConstraint constA, MMIStandard.MAccelerationConstraint constB)
         {
-               if (constA.__isset.ParentToConstraint && constB.__isset.ParentToConstraint)
-                {
-                    if (!((constA.ParentToConstraint.Position==constB.ParentToConstraint.Position) &&
-                         (constA.ParentToConstraint.Rotation==constB.ParentToConstraint.Rotation) &&
-                         (constA.ParentToConstraint.Parent==constB.ParentToConstraint.Parent)))
-                        return false;
-                }
-                else
-                 return false;
-                if (constA.__isset.RotationalAcceleration && constB.__isset.RotationalAcceleration)
-                {
-                    if (constA.RotationalAcceleration!=constB.RotationalAcceleration)
-                      return false;
-                }
-                else
-                 return false;
-                if (constA.__isset.TranslationalAcceleration && constB.__isset.TranslationalAcceleration)
-                {
-                    if (constA.TranslationalAcceleration!=constB.TranslationalAcceleration)
-                        return false;
-                }
-                else
-                 return false;
-                if (constA.__isset.WeightingFactor && constB.__isset.WeightingFactor)
-                {
-                    if (constA.WeightingFactor!=constB.WeightingFactor)
-                        return false;
-                }
-                else
-                 return false;
+            if (constA.__isset.ParentToConstraint && constB.__isset.ParentToConstraint)
+            {
+                if (!((constA.ParentToConstraint.Position == constB.ParentToConstraint.Position) &&
+                     (constA.ParentToConstraint.Rotation == constB.ParentToConstraint.Rotation) &&
+                     (constA.ParentToConstraint.Parent == constB.ParentToConstraint.Parent)))
+                    return false;
+            }
+            else
+                return false;
+            if (constA.__isset.RotationalAcceleration && constB.__isset.RotationalAcceleration)
+            {
+                if (constA.RotationalAcceleration != constB.RotationalAcceleration)
+                    return false;
+            }
+            else
+                return false;
+            if (constA.__isset.TranslationalAcceleration && constB.__isset.TranslationalAcceleration)
+            {
+                if (constA.TranslationalAcceleration != constB.TranslationalAcceleration)
+                    return false;
+            }
+            else
+                return false;
+            if (constA.__isset.WeightingFactor && constB.__isset.WeightingFactor)
+            {
+                if (constA.WeightingFactor != constB.WeightingFactor)
+                    return false;
+            }
+            else
+                return false;
             return true;
         }
 
         private bool compareGeometryConstraint(MMIStandard.MGeometryConstraint constA, MMIStandard.MGeometryConstraint constB)
         {
-            if (constA.ParentObjectID!=constB.ParentObjectID)
+            if (constA.ParentObjectID != constB.ParentObjectID)
                 return false;
             if (constA.__isset.ParentToConstraint && constB.__isset.ParentToConstraint)
             {
-                if ((constA.ParentToConstraint.Parent!=constB.ParentToConstraint.Parent) ||
-                    (constA.ParentToConstraint.Position!=constB.ParentToConstraint.Position) ||
-                    (constA.ParentToConstraint.Rotation!=constB.ParentToConstraint.Rotation))
-                   return false;
-            }
-            else
-             return false;
-            if (constA.__isset.RotationConstraint && constB.__isset.RotationConstraint)
-            {
-                if (constA.RotationConstraint.Limits!=constB.RotationConstraint.Limits)
-                   return false;
-            }
-            else
-             return false;
-
-            if (constA.__isset.TranslationConstraint && constB.__isset.TranslationConstraint)
-            {
-                if (constA.TranslationConstraint.Limits!=constB.TranslationConstraint.Limits)
+                if ((constA.ParentToConstraint.Parent != constB.ParentToConstraint.Parent) ||
+                    (constA.ParentToConstraint.Position != constB.ParentToConstraint.Position) ||
+                    (constA.ParentToConstraint.Rotation != constB.ParentToConstraint.Rotation))
                     return false;
             }
             else
-             return false;
+                return false;
+            if (constA.__isset.RotationConstraint && constB.__isset.RotationConstraint)
+            {
+                if (constA.RotationConstraint.Limits != constB.RotationConstraint.Limits)
+                    return false;
+            }
+            else
+                return false;
+
+            if (constA.__isset.TranslationConstraint && constB.__isset.TranslationConstraint)
+            {
+                if (constA.TranslationConstraint.Limits != constB.TranslationConstraint.Limits)
+                    return false;
+            }
+            else
+                return false;
 
             if (constA.__isset.WeightingFactor && constB.__isset.WeightingFactor)
             {
-                if (constA.WeightingFactor!=constB.WeightingFactor)
-                return false;
+                if (constA.WeightingFactor != constB.WeightingFactor)
+                    return false;
             }
             else
-             return false;
+                return false;
 
             return true;
         }
 
         private bool compareParentToConstraint(MMIStandard.MTransform constA, MMIStandard.MTransform constB)
         {
-            if (constA.ID!=constB.ID)
+            if (constA.ID != constB.ID)
                 return false;
 
-            if (constA.__isset.Parent!=constB.__isset.Parent)
+            if (constA.__isset.Parent != constB.__isset.Parent)
                 return false;
 
-            if (constA.__isset.Parent && constA.Parent!=constB.Parent)
+            if (constA.__isset.Parent && constA.Parent != constB.Parent)
                 return false;
 
-            if (constA.Position!=constB.Position)
+            if (constA.Position != constB.Position)
                 return false;
 
-            if (constA.Rotation!=constB.Rotation)
+            if (constA.Rotation != constB.Rotation)
                 return false;
 
             return true;
@@ -286,26 +316,26 @@ namespace MMIUnity.TargetEngine.Editor
 
         private bool compareVelocityConstraint(MMIStandard.MVelocityConstraint constA, MMIStandard.MVelocityConstraint constB)
         {
-            if ((constA.__isset.ParentToConstraint!=constB.__isset.ParentToConstraint) ||
-                (constA.__isset.RotationalVelocity!=constB.__isset.RotationalVelocity) ||
-                (constA.__isset.TranslationalVelocity!=constB.__isset.TranslationalVelocity) ||
-                (constA.__isset.WeightingFactor!=constB.__isset.WeightingFactor))
+            if ((constA.__isset.ParentToConstraint != constB.__isset.ParentToConstraint) ||
+                (constA.__isset.RotationalVelocity != constB.__isset.RotationalVelocity) ||
+                (constA.__isset.TranslationalVelocity != constB.__isset.TranslationalVelocity) ||
+                (constA.__isset.WeightingFactor != constB.__isset.WeightingFactor))
                 return false;
 
             if (constA.__isset.ParentToConstraint)
-                if (!compareParentToConstraint(constA.ParentToConstraint,constB.ParentToConstraint))
+                if (!compareParentToConstraint(constA.ParentToConstraint, constB.ParentToConstraint))
                     return false;
 
             if (constA.__isset.RotationalVelocity)
-                if (constA.RotationalVelocity!=constB.RotationalVelocity)
+                if (constA.RotationalVelocity != constB.RotationalVelocity)
                     return false;
 
             if (constA.__isset.TranslationalVelocity)
-                if (constA.TranslationalVelocity!=constB.TranslationalVelocity)
+                if (constA.TranslationalVelocity != constB.TranslationalVelocity)
                     return false;
 
             if (constA.__isset.WeightingFactor)
-                if (constA.WeightingFactor!=constB.WeightingFactor)
+                if (constA.WeightingFactor != constB.WeightingFactor)
                     return false;
 
             return true;
@@ -313,24 +343,24 @@ namespace MMIUnity.TargetEngine.Editor
 
         private bool compareJointConstraint(MMIStandard.MJointConstraint constA, MMIStandard.MJointConstraint constB)
         {
-            if ((constA.__isset.AccelerationConstraint!=constB.__isset.AccelerationConstraint) ||
-                (constA.__isset.GeometryConstraint!=constB.__isset.GeometryConstraint) ||
-                (constA.__isset.VelocityConstraint!=constB.__isset.VelocityConstraint))
-               return false;
+            if ((constA.__isset.AccelerationConstraint != constB.__isset.AccelerationConstraint) ||
+                (constA.__isset.GeometryConstraint != constB.__isset.GeometryConstraint) ||
+                (constA.__isset.VelocityConstraint != constB.__isset.VelocityConstraint))
+                return false;
 
-            if (constA.JointType!=constB.JointType)
+            if (constA.JointType != constB.JointType)
                 return false;
 
             if (constA.__isset.GeometryConstraint)
-                if (!compareGeometryConstraint(constA.GeometryConstraint,constB.GeometryConstraint))
+                if (!compareGeometryConstraint(constA.GeometryConstraint, constB.GeometryConstraint))
                     return false;
 
             if (constA.__isset.AccelerationConstraint)
-                if (!compareAccelerationConstraint(constA.AccelerationConstraint,constB.AccelerationConstraint))
+                if (!compareAccelerationConstraint(constA.AccelerationConstraint, constB.AccelerationConstraint))
                     return false;
 
             if (constA.__isset.VelocityConstraint)
-               if (!compareVelocityConstraint(constA.VelocityConstraint,constB.VelocityConstraint))
+                if (!compareVelocityConstraint(constA.VelocityConstraint, constB.VelocityConstraint))
                     return false;
 
             return true;
@@ -338,19 +368,19 @@ namespace MMIUnity.TargetEngine.Editor
 
         private bool comparePathConstraint(MMIStandard.MPathConstraint constA, MMIStandard.MPathConstraint constB)
         {
-            if (constA.__isset.WeightingFactor!=constB.__isset.WeightingFactor)
+            if (constA.__isset.WeightingFactor != constB.__isset.WeightingFactor)
                 return false;
 
-            if (constA.__isset.WeightingFactor && constA.WeightingFactor!=constB.WeightingFactor)
+            if (constA.__isset.WeightingFactor && constA.WeightingFactor != constB.WeightingFactor)
                 return false;
 
-            if (constA.PolygonPoints!=null && constB.PolygonPoints!=null)
+            if (constA.PolygonPoints != null && constB.PolygonPoints != null)
             {
-                if (constA.PolygonPoints.Count!=constB.PolygonPoints.Count)
+                if (constA.PolygonPoints.Count != constB.PolygonPoints.Count)
                     return false;
 
-                for (int i=0; i<constA.PolygonPoints.Count; i++)
-                    if (!compareGeometryConstraint(constA.PolygonPoints[i],constB.PolygonPoints[i]))
+                for (int i = 0; i < constA.PolygonPoints.Count; i++)
+                    if (!compareGeometryConstraint(constA.PolygonPoints[i], constB.PolygonPoints[i]))
                         return false;
             }
 
@@ -359,88 +389,88 @@ namespace MMIUnity.TargetEngine.Editor
 
         private bool comparePostureConstraint(MMIStandard.MAvatarPostureValues constA, MMIStandard.MAvatarPostureValues constB)
         {
-            if (constA.AvatarID!=constB.AvatarID)
+            if (constA.AvatarID != constB.AvatarID)
                 return false;
-            
-            if (constA.__isset.PartialJointList!=constB.__isset.PartialJointList)
+
+            if (constA.__isset.PartialJointList != constB.__isset.PartialJointList)
                 return false;
 
             if (constA.__isset.PartialJointList)
             {
-                if (constA.PartialJointList.Count!=constB.PartialJointList.Count)
+                if (constA.PartialJointList.Count != constB.PartialJointList.Count)
                     return false;
-                for (int i=0; i<constA.PartialJointList.Count; i++)
-                    if (constA.PartialJointList[i]!=constB.PartialJointList[i])
+                for (int i = 0; i < constA.PartialJointList.Count; i++)
+                    if (constA.PartialJointList[i] != constB.PartialJointList[i])
                         return false;
             }
 
-            if (constA.PostureData.Count!=constB.PostureData.Count)
+            if (constA.PostureData.Count != constB.PostureData.Count)
                 return false;
 
-            for (int i=0; i<constA.PostureData.Count; i++)
-                if (constA.PostureData[i]!=constB.PostureData[i])
+            for (int i = 0; i < constA.PostureData.Count; i++)
+                if (constA.PostureData[i] != constB.PostureData[i])
                     return false;
-            
+
             return true;
         }
 
         private bool compareConstraints(MMIStandard.MConstraint constA, MMIStandard.MConstraint constB)
         {
-            if   ( (constA.__isset.AccelerationConstraint!=constB.__isset.AccelerationConstraint) ||
-                   (constA.__isset.GeometryConstraint!=constB.__isset.GeometryConstraint) ||
-                   (constA.__isset.JointConstraint!=constB.__isset.JointConstraint) ||
-                   (constA.__isset.JointPathConstraint!=constB.__isset.JointPathConstraint) ||
-                   (constA.__isset.PathConstraint!=constB.__isset.PathConstraint) ||
-                   (constA.__isset.PostureConstraint!=constB.__isset.PostureConstraint) ||
+            if ((constA.__isset.AccelerationConstraint != constB.__isset.AccelerationConstraint) ||
+                   (constA.__isset.GeometryConstraint != constB.__isset.GeometryConstraint) ||
+                   (constA.__isset.JointConstraint != constB.__isset.JointConstraint) ||
+                   (constA.__isset.JointPathConstraint != constB.__isset.JointPathConstraint) ||
+                   (constA.__isset.PathConstraint != constB.__isset.PathConstraint) ||
+                   (constA.__isset.PostureConstraint != constB.__isset.PostureConstraint) ||
                    //(constA.__isset.Properties!=constB.__isset.Properties) ||
-                   (constA.__isset.VelocityConstraint!=constB.__isset.VelocityConstraint))
+                   (constA.__isset.VelocityConstraint != constB.__isset.VelocityConstraint))
                 return false;
 
             if (constB.__isset.AccelerationConstraint)
-                if (!compareAccelerationConstraint(constA.AccelerationConstraint,constB.AccelerationConstraint))
+                if (!compareAccelerationConstraint(constA.AccelerationConstraint, constB.AccelerationConstraint))
                     return false;
 
             if (constB.__isset.GeometryConstraint)
-                if (!compareGeometryConstraint(constA.GeometryConstraint,constB.GeometryConstraint))
+                if (!compareGeometryConstraint(constA.GeometryConstraint, constB.GeometryConstraint))
                     return false;
 
             if (constB.__isset.JointConstraint)
-                if (!compareJointConstraint(constA.JointConstraint,constB.JointConstraint))
-                    return false;
-            
-            if (constB.__isset.JointPathConstraint)
-            {
-                if (constA.JointPathConstraint.JointType!=constA.JointPathConstraint.JointType)
+                if (!compareJointConstraint(constA.JointConstraint, constB.JointConstraint))
                     return false;
 
-                if (!comparePathConstraint(constA.JointPathConstraint.PathConstraint,constB.JointPathConstraint.PathConstraint))
+            if (constB.__isset.JointPathConstraint)
+            {
+                if (constA.JointPathConstraint.JointType != constA.JointPathConstraint.JointType)
+                    return false;
+
+                if (!comparePathConstraint(constA.JointPathConstraint.PathConstraint, constB.JointPathConstraint.PathConstraint))
                     return false;
             }
 
             if (constB.__isset.PathConstraint)
-                if (!comparePathConstraint(constA.PathConstraint,constB.PathConstraint))
+                if (!comparePathConstraint(constA.PathConstraint, constB.PathConstraint))
                     return false;
 
             if (constB.__isset.PostureConstraint)
             {
-               if (constA.PostureConstraint.__isset.JointConstraints!=constB.PostureConstraint.__isset.JointConstraints)
+                if (constA.PostureConstraint.__isset.JointConstraints != constB.PostureConstraint.__isset.JointConstraints)
                     return false;
 
-               if (constA.PostureConstraint.__isset.JointConstraints)
-               {
-                    if (constA.PostureConstraint.JointConstraints.Count!=constB.PostureConstraint.JointConstraints.Count)
+                if (constA.PostureConstraint.__isset.JointConstraints)
+                {
+                    if (constA.PostureConstraint.JointConstraints.Count != constB.PostureConstraint.JointConstraints.Count)
                         return false;
-                    for (int i=0; i<constA.PostureConstraint.JointConstraints.Count; i++)
-                      if (!compareJointConstraint(constA.PostureConstraint.JointConstraints[i],constB.PostureConstraint.JointConstraints[i]))
-                        return false;
+                    for (int i = 0; i < constA.PostureConstraint.JointConstraints.Count; i++)
+                        if (!compareJointConstraint(constA.PostureConstraint.JointConstraints[i], constB.PostureConstraint.JointConstraints[i]))
+                            return false;
                 }
 
-               if (!comparePostureConstraint(constA.PostureConstraint.Posture,constB.PostureConstraint.Posture))
+                if (!comparePostureConstraint(constA.PostureConstraint.Posture, constB.PostureConstraint.Posture))
                     return false;
             }
 
             if (constB.__isset.VelocityConstraint)
-                if (!compareVelocityConstraint(constA.VelocityConstraint,constB.VelocityConstraint))
+                if (!compareVelocityConstraint(constA.VelocityConstraint, constB.VelocityConstraint))
                     return false;
 
             return true;
@@ -448,73 +478,73 @@ namespace MMIUnity.TargetEngine.Editor
 
         private bool compareMarkers(MMIStandard.MPathConstraint constA, MMIStandard.MTransform constB)
         {
-            for (int j=0; j<constA.PolygonPoints.Count; j++)
-                if ((constA.PolygonPoints[j].ParentToConstraint.Position.X==constB.Position.X) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Position.Y==constB.Position.Y) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Position.Z==constB.Position.Z) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.X==constB.Rotation.X) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.Y==constB.Rotation.Y) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.Z==constB.Rotation.Z) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.W==constB.Rotation.W) &&
-                    (constA.PolygonPoints[j].ParentToConstraint.ID==constB.ID))
+            for (int j = 0; j < constA.PolygonPoints.Count; j++)
+                if ((constA.PolygonPoints[j].ParentToConstraint.Position.X == constB.Position.X) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Position.Y == constB.Position.Y) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Position.Z == constB.Position.Z) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.X == constB.Rotation.X) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.Y == constB.Rotation.Y) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.Z == constB.Rotation.Z) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.Rotation.W == constB.Rotation.W) &&
+                    (constA.PolygonPoints[j].ParentToConstraint.ID == constB.ID))
                     return true;
             return false;
         }
 
         private bool compareSpawningZones(MMIStandard.MConstraint constA, MMIStandard.MConstraint constB)
         {
-          return   (constA.__isset.GeometryConstraint && constB.__isset.GeometryConstraint) &&
-                   (constA.GeometryConstraint.__isset.ParentToConstraint && constB.GeometryConstraint.__isset.ParentToConstraint) &&
-                   (constA.GeometryConstraint.__isset.TranslationConstraint && constB.GeometryConstraint.__isset.TranslationConstraint) &&
-                   (constA.GeometryConstraint.ParentToConstraint.Position.X==constB.GeometryConstraint.ParentToConstraint.Position.X) &&
-                   (constA.GeometryConstraint.ParentToConstraint.Position.Y==constB.GeometryConstraint.ParentToConstraint.Position.Y) &&
-                   (constA.GeometryConstraint.ParentToConstraint.Position.Z==constB.GeometryConstraint.ParentToConstraint.Position.Z) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.X.Min==constB.GeometryConstraint.TranslationConstraint.Limits.X.Min) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.Y.Min==constB.GeometryConstraint.TranslationConstraint.Limits.Y.Min) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.Z.Min==constB.GeometryConstraint.TranslationConstraint.Limits.Z.Min) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.X.Max==constB.GeometryConstraint.TranslationConstraint.Limits.X.Max) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.Y.Max==constB.GeometryConstraint.TranslationConstraint.Limits.Y.Max) &&
-                   (constA.GeometryConstraint.TranslationConstraint.Limits.Z.Max==constB.GeometryConstraint.TranslationConstraint.Limits.Z.Max);
+            return (constA.__isset.GeometryConstraint && constB.__isset.GeometryConstraint) &&
+                     (constA.GeometryConstraint.__isset.ParentToConstraint && constB.GeometryConstraint.__isset.ParentToConstraint) &&
+                     (constA.GeometryConstraint.__isset.TranslationConstraint && constB.GeometryConstraint.__isset.TranslationConstraint) &&
+                     (constA.GeometryConstraint.ParentToConstraint.Position.X == constB.GeometryConstraint.ParentToConstraint.Position.X) &&
+                     (constA.GeometryConstraint.ParentToConstraint.Position.Y == constB.GeometryConstraint.ParentToConstraint.Position.Y) &&
+                     (constA.GeometryConstraint.ParentToConstraint.Position.Z == constB.GeometryConstraint.ParentToConstraint.Position.Z) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.X.Min == constB.GeometryConstraint.TranslationConstraint.Limits.X.Min) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.Y.Min == constB.GeometryConstraint.TranslationConstraint.Limits.Y.Min) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.Z.Min == constB.GeometryConstraint.TranslationConstraint.Limits.Z.Min) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.X.Max == constB.GeometryConstraint.TranslationConstraint.Limits.X.Max) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.Y.Max == constB.GeometryConstraint.TranslationConstraint.Limits.Y.Max) &&
+                     (constA.GeometryConstraint.TranslationConstraint.Limits.Z.Max == constB.GeometryConstraint.TranslationConstraint.Limits.Z.Max);
         }
 
         private int isNewConstraint(MMIStandard.MConstraint newConstraint)
         {
-            if (newConstraint.ID=="SpawningZone") //special handling of spawning zones
+            if (newConstraint.ID == "SpawningZone") //special handling of spawning zones
             {
-             for (int i=0; i<(target as MMISceneObject).Constraints.Count; i++)
-                if ((target as MMISceneObject).Constraints[i].ID=="SpawningZone")
-                 if (compareSpawningZones(newConstraint, (target as MMISceneObject).Constraints[i]))
-                 {
-                   integrateConstraintProperties(i,newConstraint);
-                   return i;
-                 }
-             return -1;
+                for (int i = 0; i < (target as MMISceneObject).Constraints.Count; i++)
+                    if ((target as MMISceneObject).Constraints[i].ID == "SpawningZone")
+                        if (compareSpawningZones(newConstraint, (target as MMISceneObject).Constraints[i]))
+                        {
+                            integrateConstraintProperties(i, newConstraint);
+                            return i;
+                        }
+                return -1;
             }
             //checking markers and adding straight away those that are not repeating - in case the marker goups are existing twice with same ID, then constraints will be added twice, but this should not happen due to consolidation routine run afterwards
-            if (((newConstraint.ID=="FinalLocation") || (newConstraint.ID=="InitialLocation") || (newConstraint.ID=="WalkTarget")) && (newConstraint.__isset.PathConstraint && newConstraint.PathConstraint.PolygonPoints.Count>0))
+            if (((newConstraint.ID == "FinalLocation") || (newConstraint.ID == "InitialLocation") || (newConstraint.ID == "WalkTarget")) && (newConstraint.__isset.PathConstraint && newConstraint.PathConstraint.PolygonPoints.Count > 0))
             {
-             int integratedNewOnes = -1;
-              for (int i=0; i<(target as MMISceneObject).Constraints.Count; i++)
-                if (((target as MMISceneObject).Constraints[i].ID=="FinalLocation") || ((target as MMISceneObject).Constraints[i].ID=="InitialLocation") || ((target as MMISceneObject).Constraints[i].ID=="WalkTarget"))
-                    if ((target as MMISceneObject).Constraints[i].__isset.PathConstraint)
-                    { 
-                       if ((target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints==null)
-                        (target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints=new List<MMIStandard.MGeometryConstraint>();
-                        integratedNewOnes=i;
+                int integratedNewOnes = -1;
+                for (int i = 0; i < (target as MMISceneObject).Constraints.Count; i++)
+                    if (((target as MMISceneObject).Constraints[i].ID == "FinalLocation") || ((target as MMISceneObject).Constraints[i].ID == "InitialLocation") || ((target as MMISceneObject).Constraints[i].ID == "WalkTarget"))
+                        if ((target as MMISceneObject).Constraints[i].__isset.PathConstraint)
+                        {
+                            if ((target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints == null)
+                                (target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints = new List<MMIStandard.MGeometryConstraint>();
+                            integratedNewOnes = i;
 
-                        for (int j=0; j<newConstraint.PathConstraint.PolygonPoints.Count; j++)
-                         if (newConstraint.PathConstraint.PolygonPoints[j].__isset.ParentToConstraint && !compareMarkers((target as MMISceneObject).Constraints[i].PathConstraint,newConstraint.PathConstraint.PolygonPoints[j].ParentToConstraint))
-                          (target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints.Add(newConstraint.PathConstraint.PolygonPoints[j]);
+                            for (int j = 0; j < newConstraint.PathConstraint.PolygonPoints.Count; j++)
+                                if (newConstraint.PathConstraint.PolygonPoints[j].__isset.ParentToConstraint && !compareMarkers((target as MMISceneObject).Constraints[i].PathConstraint, newConstraint.PathConstraint.PolygonPoints[j].ParentToConstraint))
+                                    (target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints.Add(newConstraint.PathConstraint.PolygonPoints[j]);
 
-                        integrateConstraintProperties(i,newConstraint);
-                    }
-              return integratedNewOnes;
-             }
+                            integrateConstraintProperties(i, newConstraint);
+                        }
+                return integratedNewOnes;
+            }
             //handling all general constraints (not special ones)
-            for (int i=0; i<(target as MMISceneObject).Constraints.Count; i++)
-              if ((target as MMISceneObject).Constraints[i].ID==newConstraint.ID)
-                if (compareConstraints((target as MMISceneObject).Constraints[i],newConstraint))
-                return i;
+            for (int i = 0; i < (target as MMISceneObject).Constraints.Count; i++)
+                if ((target as MMISceneObject).Constraints[i].ID == newConstraint.ID)
+                    if (compareConstraints((target as MMISceneObject).Constraints[i], newConstraint))
+                        return i;
             return -1;
         }
 
@@ -529,35 +559,35 @@ namespace MMIUnity.TargetEngine.Editor
             //Call the base inspector
             //base.OnInspectorGUI();
 
-        //The variables and GameObject from the MyGameObject script are displayed in the Inspector with appropriate labels
-        EditorGUILayout.PropertyField(m_ShowCoordinateSystem, new GUIContent("ShowCoordinateSystem"));
-        EditorGUILayout.PropertyField(m_Velocity, new GUIContent("Velocity"));
-        EditorGUILayout.PropertyField(m_OverrideColor, new GUIContent("OverrideColor"));
-        EditorGUILayout.PropertyField(m_Color, new GUIContent("Color"));
-        //EditorGUILayout.PropertyField(m_PhysicsEnabled, new GUIContent("PhysicsEnabled"));
-        EditorGUILayout.PropertyField(m_TransferMesh, new GUIContent("TransferMesh"));
+            //The variables and GameObject from the MyGameObject script are displayed in the Inspector with appropriate labels
+            EditorGUILayout.PropertyField(m_ShowCoordinateSystem, new GUIContent("ShowCoordinateSystem"));
+            EditorGUILayout.PropertyField(m_Velocity, new GUIContent("Velocity"));
+            EditorGUILayout.PropertyField(m_OverrideColor, new GUIContent("OverrideColor"));
+            EditorGUILayout.PropertyField(m_Color, new GUIContent("Color"));
+            //EditorGUILayout.PropertyField(m_PhysicsEnabled, new GUIContent("PhysicsEnabled"));
+            EditorGUILayout.PropertyField(m_TransferMesh, new GUIContent("TransferMesh"));
 
-        // Horizontal line in inspector
-        EditorGUILayout.Space();
-        var rect = EditorGUILayout.BeginHorizontal();
-        Handles.color = Color.gray;
-        Handles.DrawLine(new Vector2(rect.x, rect.y), new Vector2(rect.width + 13, rect.y));
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
+            // Horizontal line in inspector
+            EditorGUILayout.Space();
+            var rect = EditorGUILayout.BeginHorizontal();
+            Handles.color = Color.gray;
+            Handles.DrawLine(new Vector2(rect.x, rect.y), new Vector2(rect.width + 13, rect.y));
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
 
-        // Type related input fields
-        EditorGUILayout.PropertyField(m_Type, new GUIContent("Type"));
-        EditorGUI.indentLevel++;
-        var instance = (MMISceneObject)this.target;
-        
-        if (instance.Type == MMISceneObject.Types.Tool)
-        {
+            // Type related input fields
+            EditorGUILayout.PropertyField(m_Type, new GUIContent("Type"));
+            EditorGUI.indentLevel++;
+            var instance = (MMISceneObject)this.target;
+
+            if (instance.Type == MMISceneObject.Types.Tool)
+            {
                 if (_newTool == "")
                 {
                     _newTool = instance.Tool;
                 }
-                if ((HLTE==null) || (!HLTE.tasksLoaded))
-                    EditorGUILayout.PropertyField(m_toolType, new GUIContent("Tool","Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
+                if ((HLTE == null) || (!HLTE.tasksLoaded))
+                    EditorGUILayout.PropertyField(m_toolType, new GUIContent("Tool", "Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
                 else
                 {
                     toolTypeIndex = -1;
@@ -574,13 +604,13 @@ namespace MMIUnity.TargetEngine.Editor
                             m_toolType.stringValue = "";
                     }
                 }
-            //EditorGUILayout.PropertyField(m_InitialLocation, new GUIContent("InitialLocation"));
-            //EditorGUILayout.PropertyField(m_FinalLocation, new GUIContent("FinalLocation"));
-            //EditorGUILayout.PropertyField(m_IsLocatedAt, new GUIContent("IsLocatedAt"));
-        }
+                //EditorGUILayout.PropertyField(m_InitialLocation, new GUIContent("InitialLocation"));
+                //EditorGUILayout.PropertyField(m_FinalLocation, new GUIContent("FinalLocation"));
+                //EditorGUILayout.PropertyField(m_IsLocatedAt, new GUIContent("IsLocatedAt"));
+            }
 
-        if (instance.Type == MMISceneObject.Types.StationResult)
-        {
+            if (instance.Type == MMISceneObject.Types.StationResult)
+            {
                 if ((HLTE == null) || (!HLTE.tasksLoaded))
                 {
                     EditorGUILayout.PropertyField(m_StationRef, new GUIContent("Station ID", "Add High Level Task Editor script to the scene object and connect to a project to use station references"));
@@ -588,23 +618,23 @@ namespace MMIUnity.TargetEngine.Editor
                 }
                 else
                     StationResultReferenceEditor();
-        }
-    
-        if ((instance.Type == MMISceneObject.Types.Part) || (instance.Type == MMISceneObject.Types.Group) || (instance.Type == MMISceneObject.Types.Tool))
-        {
-            if (HLTE==null) //|| (!HLTE.tasksLoaded)
-            {
-            EditorGUILayout.PropertyField(m_InitialLocation, new GUIContent("InitialLocation","Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
-            EditorGUILayout.PropertyField(m_FinalLocation, new GUIContent("FinalLocation","Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
             }
-            else
-             InitialAndFinalLocationEditor();   
 
-            EditorGUILayout.PropertyField(m_IsLocatedAt, new GUIContent("IsLocatedAt"));
-        }
-        if ((instance.Type == MMISceneObject.Types.InitialLocation) || (instance.Type == MMISceneObject.Types.FinalLocation) || (instance.Type == MMISceneObject.Types.WalkTarget))
-        {
-             MMISceneObject parentObject = instance.gameObject.transform.parent.GetComponent<MMISceneObject>();
+            if ((instance.Type == MMISceneObject.Types.Part) || (instance.Type == MMISceneObject.Types.Group) || (instance.Type == MMISceneObject.Types.Tool))
+            {
+                if (HLTE == null) //|| (!HLTE.tasksLoaded)
+                {
+                    EditorGUILayout.PropertyField(m_InitialLocation, new GUIContent("InitialLocation", "Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
+                    EditorGUILayout.PropertyField(m_FinalLocation, new GUIContent("FinalLocation", "Add High Level Task Editor script to the scene object and connect to a project to use tools from the project"));
+                }
+                else
+                    InitialAndFinalLocationEditor();
+
+                EditorGUILayout.PropertyField(m_IsLocatedAt, new GUIContent("IsLocatedAt"));
+            }
+            if ((instance.Type == MMISceneObject.Types.InitialLocation) || (instance.Type == MMISceneObject.Types.FinalLocation) || (instance.Type == MMISceneObject.Types.WalkTarget))
+            {
+                MMISceneObject parentObject = instance.gameObject.transform.parent.GetComponent<MMISceneObject>();
                 if (parentObject != null)
                 {
                     ConsolidatePathConstraints(parentObject);
@@ -639,7 +669,7 @@ namespace MMIUnity.TargetEngine.Editor
                                 }
                         if (Marker == null)
                         {
-                            Debug.Log("Creating new constraints in parent ("+parentObject.name+")");
+                            Debug.Log("Creating new constraints in parent (" + parentObject.name + ")");
                             Marker = new MMIStandard.MConstraint(constType);
                             Marker.PathConstraint = new MMIStandard.MPathConstraint();
                             Marker.PathConstraint.PolygonPoints = new List<MMIStandard.MGeometryConstraint>();
@@ -651,16 +681,16 @@ namespace MMIUnity.TargetEngine.Editor
                         parentObject.SaveConstraints();
                     }
                 }
-        }
+            }
 
-        EditorGUI.indentLevel--;
+            EditorGUI.indentLevel--;
 
-        //MConstraints editor/display
-        EditorGUILayout.Space();
+            //MConstraints editor/display
+            EditorGUILayout.Space();
 
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Constraint set", GUILayout.MaxWidth(100));
-        GUILayout.FlexibleSpace();    
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Constraint set", GUILayout.MaxWidth(100));
+            GUILayout.FlexibleSpace();
 
             if (GUILayout.Button("Reload"))
             {
@@ -673,21 +703,21 @@ namespace MMIUnity.TargetEngine.Editor
                 if (jsonfile.Length != 0)
                 {
                     try
-                        {
-                           var constrs=Serialization.FromJsonString<List<MMIStandard.MConstraint>>(File.ReadAllText(jsonfile));
-                            for (int i=0; i<constrs.Count; i++) //fix for missing default posture values that crashes thrift if not present
-                             if (constrs[i].__isset.PostureConstraint)
-                                if (constrs[i].PostureConstraint.Posture==null)
-                                    constrs[i].PostureConstraint.Posture=new MMIStandard.MAvatarPostureValues("",new List<double>());
+                    {
+                        var constrs = Serialization.FromJsonString<List<MMIStandard.MConstraint>>(File.ReadAllText(jsonfile));
+                        for (int i = 0; i < constrs.Count; i++) //fix for missing default posture values that crashes thrift if not present
+                            if (constrs[i].__isset.PostureConstraint)
+                                if (constrs[i].PostureConstraint.Posture == null)
+                                    constrs[i].PostureConstraint.Posture = new MMIStandard.MAvatarPostureValues("", new List<double>());
                                 else
-                                    if (constrs[i].PostureConstraint.Posture.PostureData==null)
+                                    if (constrs[i].PostureConstraint.Posture.PostureData == null)
                                     constrs[i].PostureConstraint.Posture.PostureData = new List<double>();
-                           (target as MMISceneObject).Constraints=constrs;
-                           (target as MMISceneObject).SaveConstraints();
-                            if (!Application.isPlaying)
-                           UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-                        }
-                    catch 
+                        (target as MMISceneObject).Constraints = constrs;
+                        (target as MMISceneObject).SaveConstraints();
+                        if (!Application.isPlaying)
+                            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    }
+                    catch
                     {
                         Debug.LogWarning("Loading constraints error: Wrong file format");
                     }
@@ -700,29 +730,29 @@ namespace MMIUnity.TargetEngine.Editor
                 if (jsonfile.Length != 0)
                 {
                     try
-                        {
-                           var constrs=Serialization.FromJsonString<List<MMIStandard.MConstraint>>(File.ReadAllText(jsonfile));
-                            for (int i=0; i<constrs.Count; i++) //fix for missing default posture values that crashes thrift if not present
-                             if (constrs[i].__isset.PostureConstraint)
-                                if (constrs[i].PostureConstraint.Posture==null)
-                                    constrs[i].PostureConstraint.Posture=new MMIStandard.MAvatarPostureValues("",new List<double>());
+                    {
+                        var constrs = Serialization.FromJsonString<List<MMIStandard.MConstraint>>(File.ReadAllText(jsonfile));
+                        for (int i = 0; i < constrs.Count; i++) //fix for missing default posture values that crashes thrift if not present
+                            if (constrs[i].__isset.PostureConstraint)
+                                if (constrs[i].PostureConstraint.Posture == null)
+                                    constrs[i].PostureConstraint.Posture = new MMIStandard.MAvatarPostureValues("", new List<double>());
                                 else
-                                    if (constrs[i].PostureConstraint.Posture.PostureData==null)
+                                    if (constrs[i].PostureConstraint.Posture.PostureData == null)
                                     constrs[i].PostureConstraint.Posture.PostureData = new List<double>();
-                            
-                            for (int i=0; i<constrs.Count; i++)
-                            {
-                             int foundAt = isNewConstraint(constrs[i]);
-                             if (foundAt==-1)
-                              (target as MMISceneObject).Constraints.Add(constrs[i]);
-                             else
-                               integrateConstraintProperties(foundAt, constrs[i]); 
-                             }
-                           (target as MMISceneObject).SaveConstraints();
-                            if (!Application.isPlaying)
-                           UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+
+                        for (int i = 0; i < constrs.Count; i++)
+                        {
+                            int foundAt = isNewConstraint(constrs[i]);
+                            if (foundAt == -1)
+                                (target as MMISceneObject).Constraints.Add(constrs[i]);
+                            else
+                                integrateConstraintProperties(foundAt, constrs[i]);
                         }
-                    catch 
+                           (target as MMISceneObject).SaveConstraints();
+                        if (!Application.isPlaying)
+                            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    }
+                    catch
                     {
                         Debug.LogWarning("Loading constraints error: Wrong file format");
                     }
@@ -731,315 +761,343 @@ namespace MMIUnity.TargetEngine.Editor
 
             if (GUILayout.Button("Save"))
             {
-                string jsonfile = EditorUtility.SaveFilePanel("Save constraints","",(target as MMISceneObject).TaskEditorLocalID + ".json","json");
+                string jsonfile = EditorUtility.SaveFilePanel("Save constraints", "", (target as MMISceneObject).TaskEditorLocalID + ".json", "json");
                 if (jsonfile.Length != 0)
                 {
                     if (!jsonfile.EndsWith(".json"))
-                        jsonfile+=".json";
+                        jsonfile += ".json";
                     System.IO.File.WriteAllText(jsonfile, Serialization.ToJsonString((target as MMISceneObject).Constraints));
                 }
             }
 
-            GUILayout.FlexibleSpace();    
-        if ((target as MMISceneObject).Constraints.Count > 0)
-            if (GUILayout.Button("Clear"))
-            { 
-                if (EditorUtility.DisplayDialog("Clearing constraints", "Do you want to clear completely the constraints associated with the selected object?", "Yes", "No"))
+            GUILayout.FlexibleSpace();
+            if ((target as MMISceneObject).Constraints.Count > 0)
+                if (GUILayout.Button("Clear"))
                 {
-                    (target as MMISceneObject).Constraints.Clear();
-                    (target as MMISceneObject).SaveConstraints();
-                    if (!Application.isPlaying)
-                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-                }
-            }
-
-        EditorGUILayout.EndHorizontal();
-        
-        EditorGUILayout.BeginHorizontal();
-
-        EditorGUILayout.LabelField("Add constraint", GUILayout.MaxWidth(100));
-        GUILayout.FlexibleSpace();
-
-        if (GUILayout.Button("geometrical"))
-        {
-            if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
-            {
-                MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
-                w.GeometryConstraint = new MMIStandard.MGeometryConstraint();
-                w.GeometryConstraint.RotationConstraint = new MMIStandard.MRotationConstraint();
-                w.GeometryConstraint.RotationConstraint.Limits = new MMIStandard.MInterval3();
-                w.GeometryConstraint.RotationConstraint.Limits.X = new MMIStandard.MInterval(-1, 1);
-                w.GeometryConstraint.RotationConstraint.Limits.Y = new MMIStandard.MInterval(-10, 10);
-                w.GeometryConstraint.RotationConstraint.Limits.Z = new MMIStandard.MInterval(-30, 23);
-                w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint();
-                w.GeometryConstraint.TranslationConstraint.Type = MMIStandard.MTranslationConstraintType.BOX;
-                w.GeometryConstraint.TranslationConstraint.Limits = new MMIStandard.MInterval3();
-                w.GeometryConstraint.TranslationConstraint.Limits.X = new MMIStandard.MInterval(0, 0);
-                w.GeometryConstraint.TranslationConstraint.Limits.Y = new MMIStandard.MInterval(-50, 50);
-                w.GeometryConstraint.TranslationConstraint.Limits.Z = new MMIStandard.MInterval(12, 15);
-            }
-            else
-                selectedConstraint = -1;
-
-            if (selectedConstraint == -1)
-            {
-                MMIStandard.MConstraint w = new MMIStandard.MConstraint("Geometrical constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
-                w.GeometryConstraint = new MMIStandard.MGeometryConstraint();
-                w.GeometryConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
-                w.GeometryConstraint.RotationConstraint = new MMIStandard.MRotationConstraint();
-                w.GeometryConstraint.RotationConstraint.Limits = new MMIStandard.MInterval3();
-                w.GeometryConstraint.RotationConstraint.Limits.X = new MMIStandard.MInterval(-1, 1);
-                w.GeometryConstraint.RotationConstraint.Limits.Y = new MMIStandard.MInterval(-10, 10);
-                w.GeometryConstraint.RotationConstraint.Limits.Z = new MMIStandard.MInterval(-30, 23);
-                w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint();
-                w.GeometryConstraint.TranslationConstraint.Type = MMIStandard.MTranslationConstraintType.BOX;
-                w.GeometryConstraint.TranslationConstraint.Limits = new MMIStandard.MInterval3();
-                w.GeometryConstraint.TranslationConstraint.Limits.X = new MMIStandard.MInterval(0, 0);
-                w.GeometryConstraint.TranslationConstraint.Limits.Y = new MMIStandard.MInterval(-50, 50);
-                w.GeometryConstraint.TranslationConstraint.Limits.Z = new MMIStandard.MInterval(12, 15);
-                (target as MMISceneObject).Constraints.Add(w);
-            }
-            (target as MMISceneObject).SaveConstraints();
-            if (!Application.isPlaying)
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-        }
-
-        if (GUILayout.Button("velocity"))
-        {
-            if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
-            {
-                MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
-                w.VelocityConstraint = new MMIStandard.MVelocityConstraint();
-                w.VelocityConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
-                w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3();
-                w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3();
-                w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3(0, 0, 0);
-                w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3(0, 0, 0);
-            }
-            else
-                selectedConstraint = -1;
-
-            if (selectedConstraint == -1)
-            {
-                MMIStandard.MConstraint w = new MMIStandard.MConstraint("Velocity constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
-                w.VelocityConstraint = new MMIStandard.MVelocityConstraint();
-                w.VelocityConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
-                w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3();
-                w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3();
-                w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3(0, 0, 0);
-                w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3(0, 0, 0);
-                (target as MMISceneObject).Constraints.Add(w);
-            }
-            (target as MMISceneObject).SaveConstraints();
-            if (!Application.isPlaying)
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-        }
-
-        if (GUILayout.Button("acceleration"))
-        {
-            if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
-            {
-                MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
-                w.AccelerationConstraint = new MMIStandard.MAccelerationConstraint();
-                w.AccelerationConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
-                w.AccelerationConstraint.RotationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
-                w.AccelerationConstraint.TranslationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
-            }
-            else
-                selectedConstraint = -1;
-
-            if (selectedConstraint == -1)
-            {
-                MMIStandard.MConstraint w = new MMIStandard.MConstraint("Acceleration constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
-                w.AccelerationConstraint = new MMIStandard.MAccelerationConstraint();
-                w.AccelerationConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
-                w.AccelerationConstraint.RotationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
-                w.AccelerationConstraint.TranslationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
-                (target as MMISceneObject).Constraints.Add(w);
-            }
-            (target as MMISceneObject).SaveConstraints();
-            if (!Application.isPlaying)
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-        }      
-
-        EditorGUILayout.EndHorizontal();
-        EditorGUI.indentLevel++;
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("spawning zone"))
-        {
-            MMIStandard.MConstraint w = new MMIStandard.MConstraint("SpawningZone");
-            w.GeometryConstraint=new MMIStandard.MGeometryConstraint("1"); //this should be standardized somehow
-            w.GeometryConstraint.ParentToConstraint = new MMIStandard.MTransform(UnitySceneAccess.CreateSceneObjectID(),new MMIStandard.MVector3(),new MMIStandard.MQuaternion());
-            w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint(0,new MMIStandard.MInterval3(new MMIStandard.MInterval(-0.1,0.1),new MMIStandard.MInterval(-0.1,0.1),new MMIStandard.MInterval(-0.1,0.1)));
-            (target as MMISceneObject).Constraints.Add(w);
-            (target as MMISceneObject).SaveConstraints();
-            if (!Application.isPlaying)
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-        }
-        EditorGUILayout.EndHorizontal();
-        EditorGUI.indentLevel--;
-            
-
-        GUIStyle styleOn = new GUIStyle();
-        styleOn.richText = true;
-
-        EditorGUILayout.Space();
-        bool ConstraintsChanged = false;
-        int deleteConstraint = -1;
-        //displaying all the constraints                        
-        for (int i = 0; i < (target as MMISceneObject).Constraints.Count; i++)
-        {
-            string header = "<size=12><color=white>" +(selectedConstraint == i?"<b>":"") + (target as MMISceneObject).Constraints[i].ID + (selectedConstraint == i ? "</b>" : "") + "</color></size>";
-            EditorGUILayout.BeginHorizontal();
-            if (!((selectedConstraint == i) && (selectedConstraintEdit)))
-                if (GUILayout.Button(header,styleOn))
-                {
-                    if (selectedConstraint == i)
+                    if (EditorUtility.DisplayDialog("Clearing constraints", "Do you want to clear completely the constraints associated with the selected object?", "Yes", "No"))
                     {
-                        selectedConstraint = -1;
-                        selectedConstraintEdit = false;
-                    }
-                    else
-                        selectedConstraint = i;
-                    if ((target as MMISceneObject).selectedConstraint!=selectedConstraint)
-                    {
-                        (target as MMISceneObject).selectedConstraint=selectedConstraint;
-                        UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-                        UnityEditor.SceneView.RepaintAll();
-                    }
-                }
-            if (selectedConstraint == i)
-                if (selectedConstraintEdit)
-                {
-                    EditorGUILayout.LabelField("Name", GUILayout.MaxWidth(100));
-                    GUILayout.FlexibleSpace();
-
-                    newID = EditorGUILayout.TextField(newID, GUILayout.MaxWidth(200));
-                    if (GUILayout.Button("OK"))
-                    {
-                        (target as MMISceneObject).Constraints[i].ID = newID;
-                        selectedConstraintEdit = false;
+                        (target as MMISceneObject).Constraints.Clear();
                         (target as MMISceneObject).SaveConstraints();
                         if (!Application.isPlaying)
-                        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
                     }
-                    if (GUILayout.Button("Cancel"))
-                        selectedConstraintEdit = false;
+                }
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.LabelField("Add constraint", GUILayout.MaxWidth(100));
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("geometrical"))
+            {
+                if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
+                {
+                    MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
+                    w.GeometryConstraint = new MMIStandard.MGeometryConstraint();
+                    w.GeometryConstraint.RotationConstraint = new MMIStandard.MRotationConstraint();
+                    w.GeometryConstraint.RotationConstraint.Limits = new MMIStandard.MInterval3();
+                    w.GeometryConstraint.RotationConstraint.Limits.X = new MMIStandard.MInterval(-1, 1);
+                    w.GeometryConstraint.RotationConstraint.Limits.Y = new MMIStandard.MInterval(-10, 10);
+                    w.GeometryConstraint.RotationConstraint.Limits.Z = new MMIStandard.MInterval(-30, 23);
+                    w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint();
+                    w.GeometryConstraint.TranslationConstraint.Type = MMIStandard.MTranslationConstraintType.BOX;
+                    w.GeometryConstraint.TranslationConstraint.Limits = new MMIStandard.MInterval3();
+                    w.GeometryConstraint.TranslationConstraint.Limits.X = new MMIStandard.MInterval(0, 0);
+                    w.GeometryConstraint.TranslationConstraint.Limits.Y = new MMIStandard.MInterval(-50, 50);
+                    w.GeometryConstraint.TranslationConstraint.Limits.Z = new MMIStandard.MInterval(12, 15);
                 }
                 else
+                    selectedConstraint = -1;
+
+                if (selectedConstraint == -1)
                 {
-                    if (GUILayout.Button("Edit"))
-                    {
-                        selectedConstraintEdit = true;
-                        newID = (target as MMISceneObject).Constraints[i].ID;
-                    }
-                    if (GUILayout.Button("Delete"))
-                        deleteConstraint =i;
+                    MMIStandard.MConstraint w = new MMIStandard.MConstraint("Geometrical constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
+                    w.GeometryConstraint = new MMIStandard.MGeometryConstraint();
+                    w.GeometryConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
+                    w.GeometryConstraint.RotationConstraint = new MMIStandard.MRotationConstraint();
+                    w.GeometryConstraint.RotationConstraint.Limits = new MMIStandard.MInterval3();
+                    w.GeometryConstraint.RotationConstraint.Limits.X = new MMIStandard.MInterval(-1, 1);
+                    w.GeometryConstraint.RotationConstraint.Limits.Y = new MMIStandard.MInterval(-10, 10);
+                    w.GeometryConstraint.RotationConstraint.Limits.Z = new MMIStandard.MInterval(-30, 23);
+                    w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint();
+                    w.GeometryConstraint.TranslationConstraint.Type = MMIStandard.MTranslationConstraintType.BOX;
+                    w.GeometryConstraint.TranslationConstraint.Limits = new MMIStandard.MInterval3();
+                    w.GeometryConstraint.TranslationConstraint.Limits.X = new MMIStandard.MInterval(0, 0);
+                    w.GeometryConstraint.TranslationConstraint.Limits.Y = new MMIStandard.MInterval(-50, 50);
+                    w.GeometryConstraint.TranslationConstraint.Limits.Z = new MMIStandard.MInterval(12, 15);
+                    (target as MMISceneObject).Constraints.Add(w);
                 }
-        
-             EditorGUILayout.EndHorizontal();  
-
-            //EditorGUILayout.LabelField("<size=12><color=white><b>" + (target as MMISceneObject).Constraints[i].ID + "</b></color></size>", styleOn);
-            if ((target as MMISceneObject).Constraints[i].__isset.AccelerationConstraint)
-            {
-                if ((target as MMISceneObject).Constraints[i].AccelerationConstraint.__isset.TranslationalAcceleration)
-                (target as MMISceneObject).Constraints[i].AccelerationConstraint.TranslationalAcceleration =
-                Vector3Editor((target as MMISceneObject).Constraints[i].AccelerationConstraint.TranslationalAcceleration, "Translational A",ref ConstraintsChanged);
-                if ((target as MMISceneObject).Constraints[i].AccelerationConstraint.__isset.RotationalAcceleration)
-                (target as MMISceneObject).Constraints[i].AccelerationConstraint.RotationalAcceleration =
-                Vector3Editor((target as MMISceneObject).Constraints[i].AccelerationConstraint.RotationalAcceleration, "Rotational A", ref ConstraintsChanged);
-              
+                (target as MMISceneObject).SaveConstraints();
+                if (!Application.isPlaying)
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
             }
 
-            if ((target as MMISceneObject).Constraints[i].__isset.VelocityConstraint)
+            if (GUILayout.Button("velocity"))
             {
-                if ((target as MMISceneObject).Constraints[i].VelocityConstraint.__isset.TranslationalVelocity)
-                (target as MMISceneObject).Constraints[i].VelocityConstraint.TranslationalVelocity =
-                Vector3Editor((target as MMISceneObject).Constraints[i].VelocityConstraint.TranslationalVelocity, "Translational V", ref ConstraintsChanged);
-                if ((target as MMISceneObject).Constraints[i].VelocityConstraint.__isset.RotationalVelocity)
-                (target as MMISceneObject).Constraints[i].VelocityConstraint.RotationalVelocity =
-                Vector3Editor((target as MMISceneObject).Constraints[i].VelocityConstraint.RotationalVelocity, "Rotational V", ref ConstraintsChanged);
-                
-            }
-
-            if ((target as MMISceneObject).Constraints[i].__isset.GeometryConstraint)
-            {
-                if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.ParentToConstraint)
+                if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
                 {
-                 (target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Position =
-                  Vector3Editor((target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Position, "Position", ref ConstraintsChanged);
-                 (target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Rotation=MMIStandard.MQuaternionExtensions.FromEuler(
-                  Vector3Editor(MMIStandard.MQuaternionExtensions.ToEuler((target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Rotation), "Rotation", ref ConstraintsChanged));
+                    MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
+                    w.VelocityConstraint = new MMIStandard.MVelocityConstraint();
+                    w.VelocityConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
+                    w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3();
+                    w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3();
+                    w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3(0, 0, 0);
+                    w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3(0, 0, 0);
                 }
-
-                if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.TranslationConstraint)
-                (target as MMISceneObject).Constraints[i].GeometryConstraint.TranslationConstraint.Limits =
-                LimitEditor((target as MMISceneObject).Constraints[i].GeometryConstraint.TranslationConstraint.Limits, "Translation limits", ref ConstraintsChanged);
-                if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.RotationConstraint)
-                (target as MMISceneObject).Constraints[i].GeometryConstraint.RotationConstraint.Limits =
-                LimitEditor((target as MMISceneObject).Constraints[i].GeometryConstraint.RotationConstraint.Limits, "Rotation limits", ref ConstraintsChanged);
-            }
-
-            if ((target as MMISceneObject).Constraints[i].__isset.PathConstraint)
-            {
-                if ((target as MMISceneObject).Constraints[i].ID=="InitialLocation" || (target as MMISceneObject).Constraints[i].ID=="FinalLocation" || (target as MMISceneObject).Constraints[i].ID=="WalkTarget")
-                MarkerEditor((target as MMISceneObject).Constraints[i].PathConstraint,i, ref ConstraintsChanged);
                 else
-                PathEditor((target as MMISceneObject).Constraints[i].PathConstraint, ref ConstraintsChanged);
+                    selectedConstraint = -1;
+
+                if (selectedConstraint == -1)
+                {
+                    MMIStandard.MConstraint w = new MMIStandard.MConstraint("Velocity constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
+                    w.VelocityConstraint = new MMIStandard.MVelocityConstraint();
+                    w.VelocityConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
+                    w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3();
+                    w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3();
+                    w.VelocityConstraint.RotationalVelocity = new MMIStandard.MVector3(0, 0, 0);
+                    w.VelocityConstraint.TranslationalVelocity = new MMIStandard.MVector3(0, 0, 0);
+                    (target as MMISceneObject).Constraints.Add(w);
+                }
+                (target as MMISceneObject).SaveConstraints();
+                if (!Application.isPlaying)
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
             }
 
-            if ((target as MMISceneObject).Constraints[i].__isset.PostureConstraint)
+            if (GUILayout.Button("acceleration"))
             {
-                if ((target as MMISceneObject).Constraints[i].PostureConstraint.__isset.JointConstraints)
+                if ((selectedConstraint != -1) && (selectedConstraint < (target as MMISceneObject).Constraints.Count))
                 {
-                  EditorGUI.indentLevel++;
-                    for (int j=0; j<(target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints.Count; j++)
+                    MMIStandard.MConstraint w = (target as MMISceneObject).Constraints[selectedConstraint];
+                    w.AccelerationConstraint = new MMIStandard.MAccelerationConstraint();
+                    w.AccelerationConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
+                    w.AccelerationConstraint.RotationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
+                    w.AccelerationConstraint.TranslationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
+                }
+                else
+                    selectedConstraint = -1;
+
+                if (selectedConstraint == -1)
+                {
+                    MMIStandard.MConstraint w = new MMIStandard.MConstraint("Acceleration constraint " + ((target as MMISceneObject).Constraints.Count + 1).ToString());
+                    w.AccelerationConstraint = new MMIStandard.MAccelerationConstraint();
+                    w.AccelerationConstraint.ParentObjectID = (target as MMISceneObject).MSceneObject.ID;
+                    w.AccelerationConstraint.RotationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
+                    w.AccelerationConstraint.TranslationalAcceleration = new MMIStandard.MVector3(0, 0, 0);
+                    (target as MMISceneObject).Constraints.Add(w);
+                }
+                (target as MMISceneObject).SaveConstraints();
+                if (!Application.isPlaying)
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+            }
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUI.indentLevel++;
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("spawning zone"))
+            {
+                MMIStandard.MConstraint w = new MMIStandard.MConstraint("SpawningZone");
+                w.GeometryConstraint = new MMIStandard.MGeometryConstraint("1"); //this should be standardized somehow
+                w.GeometryConstraint.ParentToConstraint = new MMIStandard.MTransform(UnitySceneAccess.CreateSceneObjectID(), new MMIStandard.MVector3(), new MMIStandard.MQuaternion());
+                w.GeometryConstraint.TranslationConstraint = new MMIStandard.MTranslationConstraint(0, new MMIStandard.MInterval3(new MMIStandard.MInterval(-0.1, 0.1), new MMIStandard.MInterval(-0.1, 0.1), new MMIStandard.MInterval(-0.1, 0.1)));
+                (target as MMISceneObject).Constraints.Add(w);
+                (target as MMISceneObject).SaveConstraints();
+                if (!Application.isPlaying)
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUI.indentLevel--;
+
+
+            GUIStyle styleOn = new GUIStyle();
+            styleOn.richText = true;
+
+            EditorGUILayout.Space();
+            bool ConstraintsChanged = false;
+            int deleteConstraint = -1;
+            //displaying all the constraints                        
+            for (int i = 0; i < (target as MMISceneObject).Constraints.Count; i++)
+            {
+                string header = "<size=12><color=white>" + (selectedConstraint == i ? "<b>" : "") + (target as MMISceneObject).Constraints[i].ID + (selectedConstraint == i ? "</b>" : "") + "</color></size>";
+                EditorGUILayout.BeginHorizontal();
+                if (!((selectedConstraint == i) && (selectedConstraintEdit)))
+                    if (GUILayout.Button(header, styleOn))
                     {
-                        if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].__isset.GeometryConstraint)
+                        if (selectedConstraint == i)
                         {
-                          if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].__isset.GeometryConstraint)
-                           if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.__isset.ParentToConstraint)
-                           {
-                                var constrID = (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.ID.Replace("Right","").Replace("Left","");
-                                (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Position =
-                                Vector3Editor((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Position,constrID+" position" , ref ConstraintsChanged);
-                                MMIStandard.MVector3 Rot=MMIStandard.MQuaternionExtensions.ToEuler((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Rotation);
-                                Rot = Vector3Editor(Rot, constrID+" rotation", ref ConstraintsChanged);
-                                (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Rotation=MMIStandard.MQuaternionExtensions.FromEuler(Rot);
-                          }
+                            selectedConstraint = -1;
+                            selectedConstraintEdit = false;
+                        }
+                        else
+                            selectedConstraint = i;
+                        if ((target as MMISceneObject).selectedConstraint != selectedConstraint)
+                        {
+                            (target as MMISceneObject).selectedConstraint = selectedConstraint;
+                            UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+                            UnityEditor.SceneView.RepaintAll();
                         }
                     }
-                  EditorGUI.indentLevel--;
+                if (selectedConstraint == i)
+                    if (selectedConstraintEdit)
+                    { //constraint is in edit mode - display name edit fields and fields editors
+                        EditorGUILayout.LabelField("Name", GUILayout.MaxWidth(100));
+                        GUILayout.FlexibleSpace();
+
+                        newID = EditorGUILayout.TextField(newID, GUILayout.MaxWidth(200));
+                        if (GUILayout.Button("OK"))
+                        {
+                            (target as MMISceneObject).Constraints[i].ID = newID;
+                            selectedConstraintEdit = false;
+                            (target as MMISceneObject).SaveConstraints();
+                            if (!Application.isPlaying)
+                                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                        }
+                        if (GUILayout.Button("Cancel"))
+                            selectedConstraintEdit = false;
+                    }
+                    else
+                    {
+                        if (GUILayout.Button("Edit"))
+                        {
+                            selectedConstraintEdit = true;
+                            newID = (target as MMISceneObject).Constraints[i].ID;
+                        }
+                        if (GUILayout.Button("Delete"))
+                            deleteConstraint = i;
+                    }
+
+                EditorGUILayout.EndHorizontal();
+
+                if (selectedConstraint == i)
+                {
+                    GeometricalConstraintEditor(ref (target as MMISceneObject).Constraints, i, ref ConstraintsChanged);
+                    AccelerationConstraintEditor(ref (target as MMISceneObject).Constraints, i, ref ConstraintsChanged);
+                    VelocityConstraintEditor(ref (target as MMISceneObject).Constraints, i, ref ConstraintsChanged);
+                }
+
+                if ((target as MMISceneObject).Constraints[i].__isset.PathConstraint)
+                    for (int cIndex=0; cIndex<(target as MMISceneObject).Constraints[i].PathConstraint.PolygonPoints.Count; cIndex++)
+                     if ((target as MMISceneObject).ShowConstraints.Contains(i,cIndex))
+
+
+                //EditorGUILayout.LabelField("<size=12><color=white><b>" + (target as MMISceneObject).Constraints[i].ID + "</b></color></size>", styleOn);
+                /*
+                if ((target as MMISceneObject).Constraints[i].__isset.AccelerationConstraint)
+                {
+                    if ((target as MMISceneObject).Constraints[i].AccelerationConstraint.__isset.TranslationalAcceleration)
+                    (target as MMISceneObject).Constraints[i].AccelerationConstraint.TranslationalAcceleration =
+                    Vector3Editor((target as MMISceneObject).Constraints[i].AccelerationConstraint.TranslationalAcceleration, "Translational A",ref ConstraintsChanged);
+                    if ((target as MMISceneObject).Constraints[i].AccelerationConstraint.__isset.RotationalAcceleration)
+                    (target as MMISceneObject).Constraints[i].AccelerationConstraint.RotationalAcceleration =
+                    Vector3Editor((target as MMISceneObject).Constraints[i].AccelerationConstraint.RotationalAcceleration, "Rotational A", ref ConstraintsChanged);
+
+                }*/
+                /*
+                if ((target as MMISceneObject).Constraints[i].__isset.VelocityConstraint)
+                {
+                    if ((target as MMISceneObject).Constraints[i].VelocityConstraint.__isset.TranslationalVelocity)
+                    (target as MMISceneObject).Constraints[i].VelocityConstraint.TranslationalVelocity =
+                    Vector3Editor((target as MMISceneObject).Constraints[i].VelocityConstraint.TranslationalVelocity, "Translational V", ref ConstraintsChanged);
+                    if ((target as MMISceneObject).Constraints[i].VelocityConstraint.__isset.RotationalVelocity)
+                    (target as MMISceneObject).Constraints[i].VelocityConstraint.RotationalVelocity =
+                    Vector3Editor((target as MMISceneObject).Constraints[i].VelocityConstraint.RotationalVelocity, "Rotational V", ref ConstraintsChanged);
+
+                }
+                
+                if ((target as MMISceneObject).Constraints[i].__isset.GeometryConstraint)
+                {
+                    if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.ParentToConstraint)
+                    {
+                        (target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Position =
+                         Vector3Editor((target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Position, "Position", ref ConstraintsChanged);
+                        (target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Rotation = MMIStandard.MQuaternionExtensions.FromEuler(
+                         Vector3Editor(MMIStandard.MQuaternionExtensions.ToEuler((target as MMISceneObject).Constraints[i].GeometryConstraint.ParentToConstraint.Rotation), "Rotation", ref ConstraintsChanged));
+                    }
+
+                    if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.TranslationConstraint)
+                        (target as MMISceneObject).Constraints[i].GeometryConstraint.TranslationConstraint.Limits =
+                        LimitEditor((target as MMISceneObject).Constraints[i].GeometryConstraint.TranslationConstraint.Limits, "Translation limits", ref ConstraintsChanged);
+                    if ((target as MMISceneObject).Constraints[i].GeometryConstraint.__isset.RotationConstraint)
+                        (target as MMISceneObject).Constraints[i].GeometryConstraint.RotationConstraint.Limits =
+                        LimitEditor((target as MMISceneObject).Constraints[i].GeometryConstraint.RotationConstraint.Limits, "Rotation limits", ref ConstraintsChanged);
+                }
+                */
+                if ((target as MMISceneObject).Constraints[i].__isset.PathConstraint)
+                {
+                    if ((target as MMISceneObject).Constraints[i].ID == "InitialLocation" || (target as MMISceneObject).Constraints[i].ID == "FinalLocation" || (target as MMISceneObject).Constraints[i].ID == "WalkTarget")
+                        MarkerEditor((target as MMISceneObject).Constraints[i].PathConstraint, i, ref ConstraintsChanged);
+                    else
+                        PathEditor((target as MMISceneObject).Constraints[i].PathConstraint, ref ConstraintsChanged);
+                }
+
+                if ((target as MMISceneObject).Constraints[i].__isset.PostureConstraint)
+                {
+                    if ((target as MMISceneObject).Constraints[i].PostureConstraint.__isset.JointConstraints)
+                    {
+                        EditorGUI.indentLevel++;
+                        for (int j = 0; j < (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints.Count; j++)
+                        {
+                            if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].__isset.GeometryConstraint)
+                            {
+                                if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].__isset.GeometryConstraint)
+                                    if ((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.__isset.ParentToConstraint)
+                                    {
+                                        var constrID = (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.ID.Replace("Right", "").Replace("Left", "");
+                                        (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Position =
+                                        Vector3Editor((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Position, constrID + " position", ref ConstraintsChanged);
+                                        MMIStandard.MVector3 Rot = MMIStandard.MQuaternionExtensions.ToEuler((target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Rotation);
+                                        Rot = Vector3Editor(Rot, constrID + " rotation", ref ConstraintsChanged);
+                                        (target as MMISceneObject).Constraints[i].PostureConstraint.JointConstraints[j].GeometryConstraint.ParentToConstraint.Rotation = MMIStandard.MQuaternionExtensions.FromEuler(Rot);
+                                    }
+                            }
+                        }
+                        EditorGUI.indentLevel--;
+                    }
                 }
             }
-        }
 
-        if (deleteConstraint>-1)
-        {
-          (target as MMISceneObject).Constraints.RemoveAt(deleteConstraint);
-          selectedConstraint = -1;
-          (target as MMISceneObject).selectedConstraint=selectedConstraint;
-          ConstraintsChanged=true;
-        }
-
-        if (ConstraintsChanged)
-        {
-            (target as MMISceneObject).SaveConstraints();
-            if (!Application.isPlaying)
+            if (deleteConstraint > -1)
             {
-                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-                UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-                UnityEditor.SceneView.RepaintAll();
+                (target as MMISceneObject).Constraints.RemoveAt(deleteConstraint);
+                selectedConstraint = -1;
+                (target as MMISceneObject).selectedConstraint = selectedConstraint;
+                ConstraintsChanged = true;
             }
-        }
-        
-        // Apply changes to the serializedProperty
-        serializedObject.ApplyModifiedProperties();
 
-        EditorGUILayout.Space();
+            if (ConstraintsChanged)
+            {
+                (target as MMISceneObject).SaveConstraints();
+                if (!Application.isPlaying)
+                {
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+                    UnityEditor.SceneView.RepaintAll();
+                }
+            }
+
+            // Apply changes to the serializedProperty
+            serializedObject.ApplyModifiedProperties();
+            /*
+            if (Application.isEditor && !Application.isPlaying)
+                (target as MMISceneObject).editorSceneZoom = (SceneView.sceneViews[0] as UnityEditor.SceneView).size / 10 - 1;
+            */
+            EditorGUILayout.Space();
             if (GUILayout.Button("Synchronize"))
                 sceneObject.Synchronize();
+            if (GUILayout.Button("Show ghosts"))
+            {
+                Debug.Log("Ghosts structures " + ((target as MMISceneObject).initialLocationGhosts != null ? "OK" : "ERR") + ", " + ((target as MMISceneObject).finalLocationGhosts != null ? "OK" : "ERR"));
+                if ((target as MMISceneObject).Type == MMISceneObject.Types.InitialLocation)
+                    if ((target as MMISceneObject).initialLocationGhosts != null)
+                        for (int i = 0; i < (target as MMISceneObject).initialLocationGhosts.Count; i++)
+                            Debug.Log(((target as MMISceneObject).initialLocationGhosts[i].sceneObject.ghostMesh != null ? "I-Ghost mesh exists " + (target as MMISceneObject).initialLocationGhosts[i].sceneObject.ghostMesh.vertices.Length.ToString() + " is visible " + ((target as MMISceneObject).initialLocationGhosts[i].visible ? "true" : "false") : "No I-ghost mesh"));
+                if ((target as MMISceneObject).Type == MMISceneObject.Types.FinalLocation)
+                    if ((target as MMISceneObject).finalLocationGhosts != null)
+                        for (int i = 0; i < (target as MMISceneObject).finalLocationGhosts.Count; i++)
+                            Debug.Log(((target as MMISceneObject).finalLocationGhosts[i].sceneObject.ghostMesh != null ? "F-Ghost mesh exists " + (target as MMISceneObject).finalLocationGhosts[i].sceneObject.ghostMesh.vertices.Length.ToString() + " is visible " + ((target as MMISceneObject).finalLocationGhosts[i].visible ? "true" : "false") : "No F-ghost mesh"));
+            }
         }
         /*
         void DrawConstraintBox(Vector3 Position, Quaternion Rotation, MMIStandard.MInterval3 Limits)
@@ -1083,22 +1141,70 @@ namespace MMIUnity.TargetEngine.Editor
             Handles.color=color;
             Handles.DrawLine(v3FrontBottomRight, v3BackBottomRight);
             Handles.DrawLine(v3FrontBottomLeft, v3BackBottomLeft);*/
-            /*
-            Debug.DrawLine(v3FrontTopLeft, v3FrontTopRight, colortop);
-            Debug.DrawLine(v3FrontTopRight, v3FrontBottomRight, color);
-            Debug.DrawLine(v3FrontBottomRight, v3FrontBottomLeft, color);
-            Debug.DrawLine(v3FrontBottomLeft, v3FrontTopLeft, color);
-    
-            Debug.DrawLine(v3BackTopLeft, v3BackTopRight, colortop);
-            Debug.DrawLine(v3BackTopRight, v3BackBottomRight, color);
-            Debug.DrawLine(v3BackBottomRight, v3BackBottomLeft, color);
-            Debug.DrawLine(v3BackBottomLeft, v3BackTopLeft, color);
-    
-            Debug.DrawLine(v3FrontTopLeft, v3BackTopLeft, colortop);
-            Debug.DrawLine(v3FrontTopRight, v3BackTopRight, colortop);
-            Debug.DrawLine(v3FrontBottomRight, v3BackBottomRight, color);
-            Debug.DrawLine(v3FrontBottomLeft, v3BackBottomLeft, color);*/
+        /*
+        Debug.DrawLine(v3FrontTopLeft, v3FrontTopRight, colortop);
+        Debug.DrawLine(v3FrontTopRight, v3FrontBottomRight, color);
+        Debug.DrawLine(v3FrontBottomRight, v3FrontBottomLeft, color);
+        Debug.DrawLine(v3FrontBottomLeft, v3FrontTopLeft, color);
+
+        Debug.DrawLine(v3BackTopLeft, v3BackTopRight, colortop);
+        Debug.DrawLine(v3BackTopRight, v3BackBottomRight, color);
+        Debug.DrawLine(v3BackBottomRight, v3BackBottomLeft, color);
+        Debug.DrawLine(v3BackBottomLeft, v3BackTopLeft, color);
+
+        Debug.DrawLine(v3FrontTopLeft, v3BackTopLeft, colortop);
+        Debug.DrawLine(v3FrontTopRight, v3BackTopRight, colortop);
+        Debug.DrawLine(v3FrontBottomRight, v3BackBottomRight, color);
+        Debug.DrawLine(v3FrontBottomLeft, v3BackBottomLeft, color);*/
         //}
+
+        void GeometricalConstraintEditor(ref List<MMIStandard.MConstraint> targetConstraint, int index, ref bool ConstraintsChanged)
+        {
+            if (targetConstraint[index].__isset.GeometryConstraint)
+            {
+                if (targetConstraint[index].GeometryConstraint.__isset.ParentToConstraint)
+                {
+                    targetConstraint[index].GeometryConstraint.ParentToConstraint.Position =
+                     Vector3Editor(targetConstraint[index].GeometryConstraint.ParentToConstraint.Position, "Position", ref ConstraintsChanged);
+                    targetConstraint[index].GeometryConstraint.ParentToConstraint.Rotation = MMIStandard.MQuaternionExtensions.FromEuler(
+                     Vector3Editor(MMIStandard.MQuaternionExtensions.ToEuler(targetConstraint[index].GeometryConstraint.ParentToConstraint.Rotation), "Rotation", ref ConstraintsChanged));
+                }
+
+                if (targetConstraint[index].GeometryConstraint.__isset.TranslationConstraint)
+                    targetConstraint[index].GeometryConstraint.TranslationConstraint.Limits =
+                    LimitEditor(targetConstraint[index].GeometryConstraint.TranslationConstraint.Limits, "Translation limits", ref ConstraintsChanged);
+                if (targetConstraint[index].GeometryConstraint.__isset.RotationConstraint)
+                    targetConstraint[index].GeometryConstraint.RotationConstraint.Limits =
+                    LimitEditor(targetConstraint[index].GeometryConstraint.RotationConstraint.Limits, "Rotation limits", ref ConstraintsChanged);
+            }
+        }
+
+        void AccelerationConstraintEditor(ref List<MMIStandard.MConstraint> targetConstraint, int index, ref bool ConstraintsChanged)
+        {
+            if (targetConstraint[index].__isset.AccelerationConstraint)
+            {
+                if (targetConstraint[index].AccelerationConstraint.__isset.TranslationalAcceleration)
+                    targetConstraint[index].AccelerationConstraint.TranslationalAcceleration =
+                    Vector3Editor(targetConstraint[index].AccelerationConstraint.TranslationalAcceleration, "Translational A", ref ConstraintsChanged);
+                if (targetConstraint[index].AccelerationConstraint.__isset.RotationalAcceleration)
+                    targetConstraint[index].AccelerationConstraint.RotationalAcceleration =
+                    Vector3Editor(targetConstraint[index].AccelerationConstraint.RotationalAcceleration, "Rotational A", ref ConstraintsChanged);
+            }
+        }
+        
+        void VelocityConstraintEditor(ref List<MMIStandard.MConstraint> targetConstraint, int index, ref bool ConstraintsChanged)
+        {
+            if (targetConstraint[index].__isset.VelocityConstraint)
+            {
+                if (targetConstraint[index].VelocityConstraint.__isset.TranslationalVelocity)
+                    targetConstraint[index].VelocityConstraint.TranslationalVelocity =
+                    Vector3Editor(targetConstraint[index].VelocityConstraint.TranslationalVelocity, "Translational V", ref ConstraintsChanged);
+                if (targetConstraint[index].VelocityConstraint.__isset.RotationalVelocity)
+                    targetConstraint[index].VelocityConstraint.RotationalVelocity =
+                    Vector3Editor(targetConstraint[index].VelocityConstraint.RotationalVelocity, "Rotational V", ref ConstraintsChanged);
+                
+            }
+        }
 
         void ConsolidatePathConstraints(MMISceneObject instance)
         {

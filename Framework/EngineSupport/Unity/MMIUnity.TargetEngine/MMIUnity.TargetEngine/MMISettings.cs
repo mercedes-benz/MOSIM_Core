@@ -112,6 +112,14 @@ namespace MMIUnity.TargetEngine
         /// </summary>
         //[Header("Folder for keeping part CAD models")]
         public string glTFFolder = "gltf_exports/";
+
+        /// <summary>
+        /// Folder for keeping pngs utilized by editor scripts
+        /// </summary>
+        [Header("Folder with editor textures/icons")]
+        public string texturesFolder = "Assets/MMI/png/";
+        // Name of the feet icon used to visualize walk targets
+        public const string feetIcon = "feet.png";
         
 }
 

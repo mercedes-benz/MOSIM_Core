@@ -21,6 +21,7 @@ namespace MMIUnity.TargetEngine.Scene
     /// <summary>
     /// Class represent a hand pose within the unity engine
     /// </summary>
+    [ExecuteInEditMode]
     public class UnityHandPose : MMISceneObject
     {
         /// <summary>
@@ -163,6 +164,16 @@ namespace MMIUnity.TargetEngine.Scene
             Gizmos.DrawLine(this.transform.position, this.transform.position + this.transform.up * 0.05f);
             Gizmos.color = Color.red;
             Gizmos.DrawLine(this.transform.position, this.transform.position + this.transform.right * 0.05f);
+        }
+
+        void OnEnable()
+        {
+            if (Constraints == null)
+                Constraints = new List<MConstraint>();
+            MConstraint mconst = new MConstraint("Posture constraint");
+            mconst.PostureConstraint = GetPostureConstraint();
+            Constraints.Add(mconst);
+            SaveConstraints();
         }
     }
 }
