@@ -103,6 +103,8 @@ namespace MMILauncher.Core
             set;
         } = false;
 
+        public bool useFolder { get; set; }
+
         #endregion
 
 
@@ -118,7 +120,7 @@ namespace MMILauncher.Core
         /// </summary>
         /// <param name="webserverAddress"></param>
         /// <param name="filepath"></param>
-        public ExecutableController(MExecutableDescription description, MIPAddress address, MIPAddress registerAddress, string mmuPath, string filepath, bool hideWindow)
+        public ExecutableController(MExecutableDescription description, MIPAddress address, MIPAddress registerAddress, string mmuPath, string filepath, bool hideWindow, bool useFolder = false)
         {
             this.Name = description.Name;
             this.Description = description;
@@ -129,6 +131,7 @@ namespace MMILauncher.Core
             this.Filepath = filepath;
             this.mmuPath = mmuPath;
             this.HideWindow = hideWindow;
+            this.useFolder = useFolder;
         }
 
 
@@ -145,6 +148,12 @@ namespace MMILauncher.Core
                 FileName = Filepath,
                 Arguments = "-a " + this.Address + ":" + this.Port + " -r " + (this.registerAddress.Address + ":" + this.registerAddress.Port) + " -m " + "\"" + this.mmuPath + "\"",
             };
+
+            if (this.useFolder)
+            {
+                pStartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Filepath);
+                pStartInfo.FileName = System.IO.Path.GetFileName(Filepath);
+            }
 
 
             if (this.HideWindow)
