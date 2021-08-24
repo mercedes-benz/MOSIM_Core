@@ -2,6 +2,15 @@ REM SPDX-License-Identifier: MIT
 REM The content of this file has been developed in the context of the MOSIM research project.
 REM Original author(s): Janis Sprenger, Bhuvaneshwaran Ilanthirayan
 
+
+ECHO.
+ECHO _______________________________________________________
+ECHO [33mdeploy_vs.bat[0m at %cd%\deploy_vs.bat Deploying the CS language support. 
+ECHO _______________________________________________________
+ECHO.
+
+
+
 REM Checking environment variables
 if not defined DEVENV (
   ECHO [31mDEVENV Environment variable pointing to the Visual Studio 2017 devenv.exe is missing.[0m
@@ -9,7 +18,11 @@ if not defined DEVENV (
   pause
   exit /b 1
 ) else (
-  ECHO DEVENV defined as: "%DEVENV%"
+  if not exist "%DEVENV%" (
+    ECHO    DEVENV: [31mMISSING[0m at "%DEVENV%"
+    ECHO [31mPlease update the deploy_variables.bat script with a valid path![0m
+	exit /b 2
+  )
 )
 
 if not defined MSBUILD (
@@ -18,7 +31,11 @@ if not defined MSBUILD (
   pause
   exit /b 1
 ) else (
-  ECHO MSBUILD defined as: "%MSBUILD%"
+  if not exist "%MSBUILD%" (
+    ECHO    MSBUILD: [31mMISSING[0m at "%MSBUILD%"
+    ECHO [31mPlease update the deploy_variables.bat script with a valid path![0m
+	exit /b 2
+  )
 )
 )
 
@@ -77,4 +94,4 @@ if %ERRORLEVEL% EQU 0 (
   exit /b 1
 )
 
-pause
+exit /b 0

@@ -5,7 +5,12 @@ REM Original author(s): Janis Sprenger, Bhuvaneshwaran Ilanthirayan
 
 REM the ESC sign can be created by pressing left alt + 027 on the num-pad. 
 
-REM Checking environment variables
+ECHO.
+ECHO _______________________________________________________
+ECHO [33mdeploy_unity.bat[0m at %cd%\deploy_unity.bat Deploying the Unity engine support. 
+ECHO _______________________________________________________
+ECHO.
+
 
 REM Checking environment variables
 if not defined DEVENV (
@@ -14,7 +19,11 @@ if not defined DEVENV (
   pause
   exit /b 1
 ) else (
-  ECHO DEVENV defined as: "%DEVENV%"
+  if not exist "%DEVENV%" (
+    ECHO    DEVENV: [31mMISSING[0m at "%DEVENV%"
+    ECHO [31mPlease update the deploy_variables.bat script with a valid path![0m
+	exit /b 2
+  )
 )
 
 REM Build the MMIUnity programm. 
@@ -66,11 +75,11 @@ if %ERRORLEVEL% EQU 0 (
     ECHO [92mSuccessfully deployed Unity Support [0m
     exit /b 0
   ) else (
-    ECHO [31mDeployment of Unity Support failed. Please consider the build.log for more information. [0m
+    ECHO [31mDeployment of Unity Support failed. Please investigate the %cs%MMIAdapterUnity/UnityProject for more information. [0m
     exit /b 1
   )
 ) else (
-  ECHO [31mDeployment of Unity Support failed. Please consider the build.log for more information. [0m
+  ECHO [31mDeployment of Unity Support failed. Please consider the %cs%/build.log for more information. [0m
   exit /b 1
 )
 

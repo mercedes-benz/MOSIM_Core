@@ -5,6 +5,13 @@ REM Original author(s): Janis Sprenger, Bhuvaneshwaran Ilanthirayan
 
 REM the ESC sign can be created by pressing left alt + 027 on the num-pad. 
 
+ECHO.
+ECHO _______________________________________________________
+ECHO [33mdeploy.bat[0m at %cd%\deploy.bat Deploying CS MMUs. 
+ECHO _______________________________________________________
+ECHO.
+
+
 REM Checking environment variables
 if not defined DEVENV (
   ECHO [31mDEVENV Environment variable pointing to the Visual Studio 2017 devenv.exe is missing.[0m
@@ -12,14 +19,18 @@ if not defined DEVENV (
   pause
   exit /b 1
 ) else (
-  ECHO DEVENV defined as: "%DEVENV%"
+  if not exist "%DEVENV%" (
+    ECHO    DEVENV: [31mMISSING[0m at "%DEVENV%"
+    ECHO [31mPlease update the deploy_variables.bat script with a valid path![0m
+	exit /b 2
+  )
 )
 
 SET mode=Debug
 
 if "%~1"=="" (
   REM no parameter provided, assuming debug mode. 
-  echo Using Debug as default.
+  echo Using Debug mode as default.
 ) else (
     if "%~1"=="Release" (
       SET "mode=Release"
@@ -51,11 +62,11 @@ REM If the build was sucessfull, copy all files to the respective build folders.
     )
   )
 
-  ECHO [92mSuccessfully deployed CS Language Support[0m
+  ECHO [92mSuccessfully deployed CS MMUs[0m
   exit /b 0
 ) else (
-  ECHO [31mDeployment of CS Language Support failed. Please consider the build.log for more information. [0m
+  ECHO [31mDeployment of CS MMUs failed. Please consider the %cs%/build.log for more information. [0m
   exit /b 1
 )
 
-pause
+exit /b 0

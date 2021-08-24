@@ -8,3 +8,4 @@ REM the ESC sign can be created by pressing left alt + 027 on the num-pad.
 REM Calling the visual studio deployment file
 
 call .\deploy_vs.bat
+exit /b %ERRORLEVEL%
