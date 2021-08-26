@@ -277,7 +277,7 @@ public class ObjectSpawner : MonoBehaviour
     {
         //Determine the size of the object based on the bounding box (use the first renderer in hiearchy -> can be optimized in future)
         //TODO: this should use all renderers to make sure all object extremes are considered
-        Bounds bounds = sceneObject.GetCompleteBounds(); //sceneObject.GetComponentInChildren<Renderer>().bounds;
+        Bounds bounds = sceneObject.GetCompleteBounds(); 
 
         //Aproximation of the size of the object
         float size = bounds.size.magnitude;
