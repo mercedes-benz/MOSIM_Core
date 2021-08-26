@@ -3,6 +3,14 @@ REM SPDX-License-Identifier: MIT
 REM The content of this file has been developed in the context of the MOSIM research project.
 REM Original author(s): Janis Sprenger
 
+ECHO.
+ECHO _______________________________________________________
+ECHO [33mdeploy.bat[0m at %cd%\deploy.bat Deploying the MOSIM support from python. 
+ECHO _______________________________________________________
+ECHO.
+
+
+
 SET MOSIMPIP=pip
 if "%~1"=="" (
   ECHO No parameters were provided, standard pip environment "%MOSIMPIP%" is utilized

@@ -6,4 +6,4 @@ REM Original author(s): Janis Sprenger, Bhuvaneshwaran Ilanthirayan
 REM Call the deploy script to deploy Unity Project
 
 call .\deploy_unity.bat
-
+exit /b %ERRORLEVEL%
