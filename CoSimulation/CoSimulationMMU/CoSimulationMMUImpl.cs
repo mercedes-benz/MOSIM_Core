@@ -229,7 +229,8 @@ namespace CoSimulationMMU
                 //Create and add the solvers (by default we usa an ik solver)
                 coSimulator.Solvers = new List<ICoSimulationSolver>
                 {
-                    new IKSolver(this.ServiceAccess, SkeletonAccess, this.AvatarDescription.AvatarID)
+                    new IKSolver(this.ServiceAccess, SkeletonAccess, this.AvatarDescription.AvatarID),
+                    new LocalPostureSolver(SkeletonAccess)
                 };
 
                 //Record if in debuggin mode

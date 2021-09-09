@@ -63,6 +63,7 @@
     <Compile Include="Solvers\ICoSimulationSolver.cs" />
     <Compile Include="Solvers\IKSolver.cs" />
     <Compile Include="Solvers\LocalJointConstraintSolver.cs" />
+    <Compile Include="Solvers\LocalPostureSolver.cs" />
     <Compile Include="SynchronizationCondition.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
