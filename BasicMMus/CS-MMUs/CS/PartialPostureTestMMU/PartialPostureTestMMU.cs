@@ -16,6 +16,7 @@ namespace PartialPosture
         private float blendDuration;
         private float elapsed = 0;
         private MInstruction instruction;
+        private int frames = 0;
 
         /// <summary>
         /// Initialization method -> just call the base class
@@ -38,6 +39,7 @@ namespace PartialPosture
         {
             base.AssignInstruction(instruction, simulationState);
             this.instruction = instruction;
+            this.frames = 0;
             return new MBoolResponse(true);
         }
 
@@ -53,11 +55,20 @@ namespace PartialPosture
                 SceneManipulations = new List<MSceneManipulation>(),
                 Posture = simulationState.Current
             };
+            if(this.frames == 0)
+            {
+                var data = new List<double>() { 0.707, 0.0, 0.0, 0.707 };
+                MAvatarPostureValues constraintPosture = new MAvatarPostureValues(result.Posture.AvatarID, data);
+                constraintPosture.PartialJointList = new List<MJointType>() { MJointType.LeftKnee };
+                MConstraint c = new MConstraint("C_Posture_");
+                c.PostureConstraint = new MPostureConstraint(constraintPosture);
 
-            var data = new List<double>() { 0.707, 0.0, 0.0, 0.707 };
-            MAvatarPostureValues constraintPosture = new MAvatarPostureValues(result.Posture.AvatarID, data);
-            constraintPosture.PartialJointList = new List<MJointType>() { MJointType.LeftKnee };
-            result.Events.Add(new MSimulationEvent("EndTest", mmiConstants.MSimulationEvent_End, this.instruction.ID));
+                result.Constraints.Add(c);
+            } else
+            {
+                result.Events.Add(new MSimulationEvent("EndTest", mmiConstants.MSimulationEvent_End, this.instruction.ID));
+            }
+            this.frames++;
             return result;
         }
     }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace MMICoSimulation.Solvers
 {
+    /// <summary>
+    /// Apply Posture Constraints without IK. In case there is a (partial) posture provided as a constraint, this posture will be utilized. 
+    /// </summary>
     public class LocalPostureSolver : ICoSimulationSolver
     {
 
@@ -19,10 +22,13 @@ namespace MMICoSimulation.Solvers
 
         public bool RequiresSolving(MSimulationResult result, float timeSpan)
         {
-            foreach(MConstraint c in result.Constraints)
-            {
-                if (c.PostureConstraint != null) return true;
+            if(result.Constraints != null && result.Constraints.Count > 0) {
+                foreach (MConstraint c in result.Constraints)
+                {
+                    if (c.PostureConstraint != null) return true;
+                }
             }
+            
             return false;
         }
 
