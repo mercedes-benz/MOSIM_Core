@@ -40,14 +40,21 @@ namespace CoSimulationMMU
         /// </summary>
         private MMUAccess mmuAccess;
 
+        private CoSimulationAccess cosimaccess;
+        private MIPAddress accessAddress = new MIPAddress("127.0.0.1", 9011);
+        private MIPAddress registryAddress;
+
 
         /// <summary>
         /// Basic constructor
         /// </summary>
-        public CoSimulationMMUImpl()
+        public CoSimulationMMUImpl(MIPAddress myAddress = null, MIPAddress registryAddress = null)
         {
             this.Name = "CoSimulation";
             this.sessionId = this.Name + MInstructionFactory.GenerateID();
+
+            this.registryAddress = registryAddress;
+
         }
 
         /// <summary>
@@ -203,6 +210,37 @@ namespace CoSimulationMMU
                 //Initialize all MMUs
                 bool initialized = this.mmuAccess.InitializeMMUs(TimeSpan.FromSeconds(10), avatarDescription.AvatarID);
 
+                //Instantiate the cosimulator
+                this.coSimulator = new MMICoSimulator(mmuAccess.MotionModelUnits)
+                {
+                    OverwriteSimulationState = true
+                };
+                //Set the priorities of the motions
+                this.coSimulator.SetPriority(priorities);
+
+                //Create and add the solvers (by default we usa an ik solver)
+                coSimulator.Solvers = new List<ICoSimulationSolver>
+                {
+                    new IKSolver(this.ServiceAccess, SkeletonAccess, this.AvatarDescription.AvatarID),
+                    new LocalPostureSolver(SkeletonAccess)
+                };
+
+                //Record if in debuggin mode
+                this.coSimulator.Recording = true;
+
+                if (registryAddress != null)
+                {
+                    if (this.cosimaccess != null)
+                    {
+                        this.cosimaccess.Dispose();
+                        System.Threading.Thread.Yield();
+                        System.Threading.Thread.Sleep(1000);
+                        System.Threading.Thread.Yield();
+                    }
+                    this.cosimaccess = new CoSimulationAccess(this.coSimulator, accessAddress, registryAddress);
+                    this.cosimaccess.Start();
+                }
+
                 if (!initialized)
                 {
                     Console.WriteLine("Problem at initializing MMUs");
@@ -215,28 +253,6 @@ namespace CoSimulationMMU
                          }
                     };
                 }
-
-                //Instantiate the cosimulator
-                this.coSimulator = new MMICoSimulator(mmuAccess.MotionModelUnits)
-                {
-                    OverwriteSimulationState = true
-                };
-
-                //Set the priorities of the motions
-                this.coSimulator.SetPriority(priorities);
-
-
-                //Create and add the solvers (by default we usa an ik solver)
-                coSimulator.Solvers = new List<ICoSimulationSolver>
-                {
-                    new IKSolver(this.ServiceAccess, SkeletonAccess, this.AvatarDescription.AvatarID),
-                    new LocalPostureSolver(SkeletonAccess)
-                };
-
-                //Record if in debuggin mode
-                this.coSimulator.Recording = true;
-
-
 
                 return new MBoolResponse(true);
             }
@@ -312,6 +328,14 @@ namespace CoSimulationMMU
         {
             //Dispose the MMU-Access
             this.mmuAccess.Dispose();
+
+            if (this.cosimaccess != null)
+            {
+                this.cosimaccess.Dispose();
+                System.Threading.Thread.Yield();
+                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Yield();
+            }
 
             return this.coSimulator.Dispose(parameters);
         }
