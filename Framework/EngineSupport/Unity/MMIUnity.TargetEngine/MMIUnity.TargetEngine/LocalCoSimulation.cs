@@ -108,7 +108,8 @@ namespace MMIUnity.TargetEngine
             //Create and add the solvers
             this.Solvers = new List<ICoSimulationSolver>
             {
-                new IKSolver(this.serviceAccess, avatar.GetSkeletonAccess(), avatar.MAvatar.ID)
+                new IKSolver(this.serviceAccess, avatar.GetSkeletonAccess(), avatar.MAvatar.ID),
+                new LocalPostureSolver(avatar.GetSkeletonAccess())
             };
 
             this.SortMMUPriority();
