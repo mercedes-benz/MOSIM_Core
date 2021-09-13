@@ -224,7 +224,8 @@ namespace MMICSharp.Common
                 hips.Z = (shoulder.Z + leftupleg.Z) / 2;
                 // raise hip to the hight of the target avatars hip height. 
                 hips.Y = leftupleg.Y;
-                //MVector3 root = new MVector3(hips.X, 0, hips.Z);
+                MVector3 root = new MVector3(hips.X, 0, hips.Z);
+                ((RJoint)this.parentJoint).SetOffsets(root);
                 hips.X = 0;
                 hips.Z = 0;
                 this.SetOffsets(hips);
