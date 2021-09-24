@@ -9,7 +9,7 @@ using MMIStandard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 
 namespace DebugAdapter
 {
@@ -45,7 +45,11 @@ namespace DebugAdapter
             };
 
             adapterController = new AdapterController(SessionData, adapterDescription, RegisterAddress, new MMUProvider(mmuType), new MMUInstantiator(mmuType));
-            adapterController.StartAsync();
+        }
+
+        public void Start()
+        {
+            adapterController.Start();
         }
 
         public void Dispose()
