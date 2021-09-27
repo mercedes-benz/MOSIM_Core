@@ -97,7 +97,9 @@ enum MJointType
   RightLittleProximal,
   RightLittleDistal,
   RightLittleTip,
-  Root
+  Root,
+  LeftEye,
+  RightEye
 }
 
 enum MEndeffectorType

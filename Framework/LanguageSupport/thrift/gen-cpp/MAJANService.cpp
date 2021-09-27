@@ -44,8 +44,8 @@ uint32_t MAJANService_CreateAgent_args::read(::apache::thrift::protocol::TProtoc
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->templateAgent);
-          this->__isset.templateAgent = true;
+          xfer += iprot->readString(this->template);
+          this->__isset.template = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -79,8 +79,8 @@ uint32_t MAJANService_CreateAgent_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeString(this->name);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("templateAgent", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->templateAgent);
+  xfer += oprot->writeFieldBegin("template", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->template);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("knowledge", ::apache::thrift::protocol::T_STRUCT, 3);
@@ -106,8 +106,8 @@ uint32_t MAJANService_CreateAgent_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeString((*(this->name)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("templateAgent", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->templateAgent)));
+  xfer += oprot->writeFieldBegin("template", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->template)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("knowledge", ::apache::thrift::protocol::T_STRUCT, 3);
@@ -805,20 +805,20 @@ uint32_t MAJANService_ReceiveAsync_presult::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
-void MAJANServiceClient::CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge)
+void MAJANServiceClient::CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge)
 {
-  send_CreateAgent(name, templateAgent, knowledge);
+  send_CreateAgent(name, template, knowledge);
   recv_CreateAgent(_return);
 }
 
-void MAJANServiceClient::send_CreateAgent(const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge)
+void MAJANServiceClient::send_CreateAgent(const std::string& name, const std::string& template, const MRDFGraph& knowledge)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("CreateAgent", ::apache::thrift::protocol::T_CALL, cseqid);
 
   MAJANService_CreateAgent_pargs args;
   args.name = &name;
-  args.templateAgent = &templateAgent;
+  args.template = &template;
   args.knowledge = &knowledge;
   args.write(oprot_);
 
@@ -1079,7 +1079,7 @@ void MAJANServiceProcessor::process_CreateAgent(int32_t seqid, ::apache::thrift:
 
   MAJANService_CreateAgent_result result;
   try {
-    iface_->CreateAgent(result.success, args.name, args.templateAgent, args.knowledge);
+    iface_->CreateAgent(result.success, args.name, args.template, args.knowledge);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -1278,13 +1278,13 @@ void MAJANServiceProcessor::process_ReceiveAsync(int32_t seqid, ::apache::thrift
   return processor;
 }
 
-void MAJANServiceConcurrentClient::CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge)
+void MAJANServiceConcurrentClient::CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge)
 {
-  int32_t seqid = send_CreateAgent(name, templateAgent, knowledge);
+  int32_t seqid = send_CreateAgent(name, template, knowledge);
   recv_CreateAgent(_return, seqid);
 }
 
-int32_t MAJANServiceConcurrentClient::send_CreateAgent(const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge)
+int32_t MAJANServiceConcurrentClient::send_CreateAgent(const std::string& name, const std::string& template, const MRDFGraph& knowledge)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -1292,7 +1292,7 @@ int32_t MAJANServiceConcurrentClient::send_CreateAgent(const std::string& name, 
 
   MAJANService_CreateAgent_pargs args;
   args.name = &name;
-  args.templateAgent = &templateAgent;
+  args.template = &template;
   args.knowledge = &knowledge;
   args.write(oprot_);
 

@@ -84,6 +84,8 @@ class MJointType(object):
     RightLittleDistal = 63
     RightLittleTip = 64
     Root = 65
+    LeftEye = 66
+    RightEye = 67
 
     _VALUES_TO_NAMES = {
         0: "Undefined",
@@ -152,6 +154,8 @@ class MJointType(object):
         63: "RightLittleDistal",
         64: "RightLittleTip",
         65: "Root",
+        66: "LeftEye",
+        67: "RightEye",
     }
 
     _NAMES_TO_VALUES = {
@@ -221,6 +225,8 @@ class MJointType(object):
         "RightLittleDistal": 63,
         "RightLittleTip": 64,
         "Root": 65,
+        "LeftEye": 66,
+        "RightEye": 67,
     }
 
 

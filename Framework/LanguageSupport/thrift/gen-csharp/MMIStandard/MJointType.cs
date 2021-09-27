@@ -75,5 +75,7 @@ namespace MMIStandard
     RightLittleDistal = 63,
     RightLittleTip = 64,
     Root = 65,
+    LeftEye = 66,
+    RightEye = 67,
   }
 }

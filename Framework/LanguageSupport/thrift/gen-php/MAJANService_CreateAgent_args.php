@@ -25,7 +25,7 @@ class MAJANService_CreateAgent_args
             'type' => TType::STRING,
         ),
         2 => array(
-            'var' => 'templateAgent',
+            'var' => 'template',
             'isRequired' => false,
             'type' => TType::STRING,
         ),
@@ -44,7 +44,7 @@ class MAJANService_CreateAgent_args
     /**
      * @var string
      */
-    public $templateAgent = null;
+    public $template = null;
     /**
      * @var \MRDFGraph
      */
@@ -56,8 +56,8 @@ class MAJANService_CreateAgent_args
             if (isset($vals['name'])) {
                 $this->name = $vals['name'];
             }
-            if (isset($vals['templateAgent'])) {
-                $this->templateAgent = $vals['templateAgent'];
+            if (isset($vals['template'])) {
+                $this->template = $vals['template'];
             }
             if (isset($vals['knowledge'])) {
                 $this->knowledge = $vals['knowledge'];
@@ -93,7 +93,7 @@ class MAJANService_CreateAgent_args
                     break;
                 case 2:
                     if ($ftype == TType::STRING) {
-                        $xfer += $input->readString($this->templateAgent);
+                        $xfer += $input->readString($this->template);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -125,9 +125,9 @@ class MAJANService_CreateAgent_args
             $xfer += $output->writeString($this->name);
             $xfer += $output->writeFieldEnd();
         }
-        if ($this->templateAgent !== null) {
-            $xfer += $output->writeFieldBegin('templateAgent', TType::STRING, 2);
-            $xfer += $output->writeString($this->templateAgent);
+        if ($this->template !== null) {
+            $xfer += $output->writeFieldBegin('template', TType::STRING, 2);
+            $xfer += $output->writeString($this->template);
             $xfer += $output->writeFieldEnd();
         }
         if ($this->knowledge !== null) {

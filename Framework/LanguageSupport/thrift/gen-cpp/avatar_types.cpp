@@ -79,7 +79,9 @@ int _kMJointTypeValues[] = {
   MJointType::RightLittleProximal,
   MJointType::RightLittleDistal,
   MJointType::RightLittleTip,
-  MJointType::Root
+  MJointType::Root,
+  MJointType::LeftEye,
+  MJointType::RightEye
 };
 const char* _kMJointTypeNames[] = {
   "Undefined",
@@ -147,9 +149,11 @@ const char* _kMJointTypeNames[] = {
   "RightLittleProximal",
   "RightLittleDistal",
   "RightLittleTip",
-  "Root"
+  "Root",
+  "LeftEye",
+  "RightEye"
 };
-const std::map<int, const char*> _MJointType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(66, _kMJointTypeValues, _kMJointTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
+const std::map<int, const char*> _MJointType_VALUES_TO_NAMES(::apache::thrift::TEnumIterator(68, _kMJointTypeValues, _kMJointTypeNames), ::apache::thrift::TEnumIterator(-1, NULL, NULL));
 
 std::ostream& operator<<(std::ostream& out, const MJointType::type& val) {
   std::map<int, const char*>::const_iterator it = _MJointType_VALUES_TO_NAMES.find(val);

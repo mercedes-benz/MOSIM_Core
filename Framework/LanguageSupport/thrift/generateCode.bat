@@ -1,3 +1,11 @@
+@echo off
+
+IF NOT EXIST thrift.exe (
+  ECHO "Please copy a the thrift executable (thrift.exe) to this folder."
+  pause
+  exit -1
+)
+
 echo Generating csharp source code...."
 for %%f in (mmi\*.thrift) do thrift.exe -gen csharp %%f
 

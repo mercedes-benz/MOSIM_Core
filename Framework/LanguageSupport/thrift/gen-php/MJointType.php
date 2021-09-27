@@ -148,6 +148,10 @@ final class MJointType
 
     const Root = 65;
 
+    const LeftEye = 66;
+
+    const RightEye = 67;
+
     static public $__names = array(
         0 => 'Undefined',
         1 => 'LeftBallTip',
@@ -215,6 +219,8 @@ final class MJointType
         63 => 'RightLittleDistal',
         64 => 'RightLittleTip',
         65 => 'Root',
+        66 => 'LeftEye',
+        67 => 'RightEye',
     );
 }
 

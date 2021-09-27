@@ -20,7 +20,7 @@ class MAJANServiceHandler : virtual public MAJANServiceIf {
     // Your initialization goes here
   }
 
-  void CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge) {
+  void CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge) {
     // Your implementation goes here
     printf("CreateAgent\n");
   }

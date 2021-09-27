@@ -28,17 +28,17 @@ class MAJANServiceClient implements \MAJANServiceIf
     }
 
 
-    public function CreateAgent($name, $templateAgent, \MRDFGraph $knowledge)
+    public function CreateAgent($name, $template, \MRDFGraph $knowledge)
     {
-        $this->send_CreateAgent($name, $templateAgent, $knowledge);
+        $this->send_CreateAgent($name, $template, $knowledge);
         return $this->recv_CreateAgent();
     }
 
-    public function send_CreateAgent($name, $templateAgent, \MRDFGraph $knowledge)
+    public function send_CreateAgent($name, $template, \MRDFGraph $knowledge)
     {
         $args = new \MAJANService_CreateAgent_args();
         $args->name = $name;
-        $args->templateAgent = $templateAgent;
+        $args->template = $template;
         $args->knowledge = $knowledge;
         $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {

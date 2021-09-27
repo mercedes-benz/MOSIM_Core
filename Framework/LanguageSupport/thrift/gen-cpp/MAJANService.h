@@ -22,7 +22,7 @@ namespace MMIStandard {
 class MAJANServiceIf {
  public:
   virtual ~MAJANServiceIf() {}
-  virtual void CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge) = 0;
+  virtual void CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge) = 0;
   virtual bool DeleteAgent(const std::string& agentName) = 0;
   virtual void ExecuteAgent(std::string& _return, const std::string& agentName, const std::string& endpoint, const MRDFGraph& content) = 0;
   virtual void ReceiveAsync(const std::string& actionID, const int32_t answer) = 0;
@@ -55,7 +55,7 @@ class MAJANServiceIfSingletonFactory : virtual public MAJANServiceIfFactory {
 class MAJANServiceNull : virtual public MAJANServiceIf {
  public:
   virtual ~MAJANServiceNull() {}
-  void CreateAgent(std::string& /* _return */, const std::string& /* name */, const std::string& /* templateAgent */, const MRDFGraph& /* knowledge */) {
+  void CreateAgent(std::string& /* _return */, const std::string& /* name */, const std::string& /* template */, const MRDFGraph& /* knowledge */) {
     return;
   }
   bool DeleteAgent(const std::string& /* agentName */) {
@@ -71,9 +71,9 @@ class MAJANServiceNull : virtual public MAJANServiceIf {
 };
 
 typedef struct _MAJANService_CreateAgent_args__isset {
-  _MAJANService_CreateAgent_args__isset() : name(false), templateAgent(false), knowledge(false) {}
+  _MAJANService_CreateAgent_args__isset() : name(false), template(false), knowledge(false) {}
   bool name :1;
-  bool templateAgent :1;
+  bool template :1;
   bool knowledge :1;
 } _MAJANService_CreateAgent_args__isset;
 
@@ -82,19 +82,19 @@ class MAJANService_CreateAgent_args {
 
   MAJANService_CreateAgent_args(const MAJANService_CreateAgent_args&);
   MAJANService_CreateAgent_args& operator=(const MAJANService_CreateAgent_args&);
-  MAJANService_CreateAgent_args() : name(), templateAgent() {
+  MAJANService_CreateAgent_args() : name(), template() {
   }
 
   virtual ~MAJANService_CreateAgent_args() noexcept;
   std::string name;
-  std::string templateAgent;
+  std::string template;
   MRDFGraph knowledge;
 
   _MAJANService_CreateAgent_args__isset __isset;
 
   void __set_name(const std::string& val);
 
-  void __set_templateAgent(const std::string& val);
+  void __set_template(const std::string& val);
 
   void __set_knowledge(const MRDFGraph& val);
 
@@ -102,7 +102,7 @@ class MAJANService_CreateAgent_args {
   {
     if (!(name == rhs.name))
       return false;
-    if (!(templateAgent == rhs.templateAgent))
+    if (!(template == rhs.template))
       return false;
     if (!(knowledge == rhs.knowledge))
       return false;
@@ -126,7 +126,7 @@ class MAJANService_CreateAgent_pargs {
 
   virtual ~MAJANService_CreateAgent_pargs() noexcept;
   const std::string* name;
-  const std::string* templateAgent;
+  const std::string* template;
   const MRDFGraph* knowledge;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -528,8 +528,8 @@ class MAJANServiceClient : virtual public MAJANServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge);
-  void send_CreateAgent(const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge);
+  void CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge);
+  void send_CreateAgent(const std::string& name, const std::string& template, const MRDFGraph& knowledge);
   void recv_CreateAgent(std::string& _return);
   bool DeleteAgent(const std::string& agentName);
   void send_DeleteAgent(const std::string& agentName);
@@ -594,13 +594,13 @@ class MAJANServiceMultiface : virtual public MAJANServiceIf {
     ifaces_.push_back(iface);
   }
  public:
-  void CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge) {
+  void CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->CreateAgent(_return, name, templateAgent, knowledge);
+      ifaces_[i]->CreateAgent(_return, name, template, knowledge);
     }
-    ifaces_[i]->CreateAgent(_return, name, templateAgent, knowledge);
+    ifaces_[i]->CreateAgent(_return, name, template, knowledge);
     return;
   }
 
@@ -664,8 +664,8 @@ class MAJANServiceConcurrentClient : virtual public MAJANServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void CreateAgent(std::string& _return, const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge);
-  int32_t send_CreateAgent(const std::string& name, const std::string& templateAgent, const MRDFGraph& knowledge);
+  void CreateAgent(std::string& _return, const std::string& name, const std::string& template, const MRDFGraph& knowledge);
+  int32_t send_CreateAgent(const std::string& name, const std::string& template, const MRDFGraph& knowledge);
   void recv_CreateAgent(std::string& _return, const int32_t seqid);
   bool DeleteAgent(const std::string& agentName);
   int32_t send_DeleteAgent(const std::string& agentName);

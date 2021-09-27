@@ -19,11 +19,11 @@ all_structs = []
 
 
 class Iface(object):
-    def CreateAgent(self, name, templateAgent, knowledge):
+    def CreateAgent(self, name, template, knowledge):
         """
         Parameters:
          - name
-         - templateAgent
+         - template
          - knowledge
 
         """
@@ -64,22 +64,22 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def CreateAgent(self, name, templateAgent, knowledge):
+    def CreateAgent(self, name, template, knowledge):
         """
         Parameters:
          - name
-         - templateAgent
+         - template
          - knowledge
 
         """
-        self.send_CreateAgent(name, templateAgent, knowledge)
+        self.send_CreateAgent(name, template, knowledge)
         return self.recv_CreateAgent()
 
-    def send_CreateAgent(self, name, templateAgent, knowledge):
+    def send_CreateAgent(self, name, template, knowledge):
         self._oprot.writeMessageBegin('CreateAgent', TMessageType.CALL, self._seqid)
         args = CreateAgent_args()
         args.name = name
-        args.templateAgent = templateAgent
+        args.template = template
         args.knowledge = knowledge
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
@@ -237,7 +237,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = CreateAgent_result()
         try:
-            result.success = self._handler.CreateAgent(args.name, args.templateAgent, args.knowledge)
+            result.success = self._handler.CreateAgent(args.name, args.template, args.knowledge)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -330,15 +330,15 @@ class CreateAgent_args(object):
     """
     Attributes:
      - name
-     - templateAgent
+     - template
      - knowledge
 
     """
 
 
-    def __init__(self, name=None, templateAgent=None, knowledge=None,):
+    def __init__(self, name=None, template=None, knowledge=None,):
         self.name = name
-        self.templateAgent = templateAgent
+        self.template = template
         self.knowledge = knowledge
 
     def read(self, iprot):
@@ -357,7 +357,7 @@ class CreateAgent_args(object):
                     iprot.skip(ftype)
             elif fid == 2:
                 if ftype == TType.STRING:
-                    self.templateAgent = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                    self.template = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
@@ -380,9 +380,9 @@ class CreateAgent_args(object):
             oprot.writeFieldBegin('name', TType.STRING, 1)
             oprot.writeString(self.name.encode('utf-8') if sys.version_info[0] == 2 else self.name)
             oprot.writeFieldEnd()
-        if self.templateAgent is not None:
-            oprot.writeFieldBegin('templateAgent', TType.STRING, 2)
-            oprot.writeString(self.templateAgent.encode('utf-8') if sys.version_info[0] == 2 else self.templateAgent)
+        if self.template is not None:
+            oprot.writeFieldBegin('template', TType.STRING, 2)
+            oprot.writeString(self.template.encode('utf-8') if sys.version_info[0] == 2 else self.template)
             oprot.writeFieldEnd()
         if self.knowledge is not None:
             oprot.writeFieldBegin('knowledge', TType.STRUCT, 3)
@@ -408,7 +408,7 @@ all_structs.append(CreateAgent_args)
 CreateAgent_args.thrift_spec = (
     None,  # 0
     (1, TType.STRING, 'name', 'UTF8', None, ),  # 1
-    (2, TType.STRING, 'templateAgent', 'UTF8', None, ),  # 2
+    (2, TType.STRING, 'template', 'UTF8', None, ),  # 2
     (3, TType.STRUCT, 'knowledge', [MRDFGraph, None], None, ),  # 3
 )
 
