@@ -13,6 +13,7 @@
     <ProjectReference Include="..\DebugAdapter\DebugAdapter.csproj" />
     <ProjectReference Include="..\ReachMMUConcurrent\ReachMMUConcurrent.csproj" />
     <ProjectReference Include="..\ReachMMU\ReachMMU.csproj" />
+    <ProjectReference Include="..\SimpleLookAtMMU\SimpleLookAtMMU.csproj" />
   </ItemGroup>
 
 </Project>

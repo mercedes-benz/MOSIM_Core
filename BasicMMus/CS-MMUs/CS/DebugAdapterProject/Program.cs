@@ -19,7 +19,7 @@ namespace DebugAdapterProject
     {
         static void Main(string[] args)
         {
-            ReachMMUConcurrentImpl rm = new ReachMMUConcurrentImpl();
+            SimpleLookAtMMU rm = new SimpleLookAtMMU();
             DebugAdapter.DebugAdapter a = new DebugAdapter.DebugAdapter(rm.GetType());
             a.Start();
             
