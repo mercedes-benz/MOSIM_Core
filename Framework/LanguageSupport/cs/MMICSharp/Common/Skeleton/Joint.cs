@@ -101,12 +101,36 @@ namespace MMICSharp.Common
 
         public void SetGlobalPosManually(MVector3 pos)
         {
-            this.globalPos = pos;
+            if (this.GetChannels().Contains(MChannel.XOffset))
+            {
+                this.globalPos = pos;
+
+                MQuaternion parentRotation = new MQuaternion(0, 0, 0, 1);
+                MVector3 parentPosition = new MVector3(0, 0, 0);
+                if (this.parentJoint != null)
+                {
+                    parentRotation = this.parentJoint.globalRot;
+                    parentPosition = this.parentJoint.globalPos;
+                }
+
+
+                MVector3 rotatedOffset = parentRotation.Multiply(this.joint.Position);
+                MVector3 rotatedTranslation = this.globalPos.Subtract(parentPosition).Subtract(rotatedOffset);
+                this.translation = MQuaternionExtensions.Inverse(this.joint.Rotation).Multiply(MQuaternionExtensions.Inverse(parentRotation).Multiply(rotatedTranslation));
+            }
         }
 
         public void SetGlobalRotManually(MQuaternion rot)
         {
             this.globalRot = rot;
+
+
+            MQuaternion parentRotation = new MQuaternion(0, 0, 0, 1);
+            if (this.parentJoint != null)
+            {
+                parentRotation = this.parentJoint.globalRot;
+            }
+            this.currentRotationValues = MQuaternionExtensions.Inverse(this.joint.Rotation).Multiply(MQuaternionExtensions.Inverse(parentRotation)).Multiply(this.globalRot);
         }
 
         /// <summary>
@@ -329,16 +353,16 @@ namespace MMICSharp.Common
             }
         }
 
-        public MVector3 GetGlobalPosition()
+        public MVector3 GetGlobalPosition(bool recompute = false)
         {
-            if(this.globalPos == null)
+            if(this.globalPos == null || recompute)
             {
                 MQuaternion parentRotation = new MQuaternion(0, 0, 0, 1);
                 MVector3 parentPosition = new MVector3(0, 0, 0);
                 if (this.parentJoint != null)
                 {
-                    parentRotation = this.parentJoint.globalRot;
-                    parentPosition = this.parentJoint.globalPos;
+                    parentRotation = this.parentJoint.GetGlobalRotation(recompute); //this.parentJoint.globalRot;
+                    parentPosition = this.parentJoint.GetGlobalPosition(recompute);// this.parentJoint.globalPos;
                 }
 
 
@@ -360,16 +384,16 @@ namespace MMICSharp.Common
         }
 
 
-        public MQuaternion GetGlobalRotation()
+        public MQuaternion GetGlobalRotation(bool recompute = false)
         {
-            if (this.globalRot == null)
+            if (this.globalRot == null || recompute)
             {
                 MQuaternion parentRotation = new MQuaternion(0, 0, 0, 1);
                 MVector3 parentPosition = new MVector3(0, 0, 0);
                 if (this.parentJoint != null)
                 {
-                    parentRotation = this.parentJoint.globalRot;
-                    parentPosition = this.parentJoint.globalPos;
+                    parentRotation = this.parentJoint.GetGlobalRotation(recompute); //this.parentJoint.globalRot;
+                    //parentPosition = this.parentJoint.GetGlobalPosition(recompute);// this.parentJoint.globalPos;
                 }
 
                 this.globalRot = parentRotation.Multiply(this.joint.Rotation).Multiply(this.currentRotationValues);

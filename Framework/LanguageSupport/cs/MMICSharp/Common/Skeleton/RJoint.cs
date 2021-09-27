@@ -206,10 +206,10 @@ namespace MMICSharp.Common
                 this.GetOffsetPositions().Y = 1.0;
                 this.GetOffsetPositions().Z = 0;
             }
-            if(this.joint.Type == MJointType.Root)
+            if (this.joint.Type == MJointType.Root)
             {
-                //MVector3 rootPos = getJointPosition(globalTarget, joint_map[MJointType.Root]);
-                //this.SetOffsets(rootPos);
+                MVector3 rootPos = getJointPosition(globalTarget, joint_map[MJointType.Root]);
+                this.SetOffsets(rootPos);
             }
             else if (this.joint.Type == MJointType.PelvisCentre)
             {
@@ -218,7 +218,7 @@ namespace MMICSharp.Common
                 MVector3 leftupleg = getJointPosition(globalTarget, joint_map[MJointType.LeftHip]);
 
                 // initialize Root at 0, 0, 0
-                ((RJoint)this.parentJoint).SetOffsets(new MVector3(0,0,0));
+                ((RJoint)this.parentJoint).SetOffsets(new MVector3(0, 0, 0));
 
                 // find the average z axis position of shoulders and hips to find initial position of hip
                 hips.Z = (shoulder.Z + leftupleg.Z) / 2;
@@ -230,6 +230,9 @@ namespace MMICSharp.Common
                 hips.Z = 0;
                 this.SetOffsets(hips);
 
+            } else if (this.GetMJoint().Type == MJointType.LeftEye || this.GetMJoint().Type == MJointType.RightEye)
+            {
+                // do nothing. see below. 
             }
             else
             {
@@ -270,7 +273,7 @@ namespace MMICSharp.Common
             else
             {
                 // if this is not the last joint in a sequence, scale depending on distance to child human bone
-                if (joint_map.ContainsKey(this.children[0].GetMJoint().Type) && joint_map.ContainsKey(this.GetMJoint().Type))
+                if (this.children.Count > 0 && joint_map.ContainsKey(this.children[0].GetMJoint().Type) && joint_map.ContainsKey(this.GetMJoint().Type))
                 {
                     this.boneLength = GetJointDistance(globalTarget, joint_map[this.GetMJoint().Type], joint_map[this.children[0].GetMJoint().Type]);
                 }
@@ -290,7 +293,24 @@ namespace MMICSharp.Common
                 }
             }
 
-            if(this.GetMJoint().ID.Contains("Wrist"))
+
+            if (this.GetMJoint().Type == MJointType.LeftEye || this.GetMJoint().Type == MJointType.RightEye)
+            {
+                if (joint_map.ContainsKey(this.GetMJoint().Type))
+                {
+                    MVector3 thisPos = getJointPosition(globalTarget, joint_map[this.GetMJoint().Type]);
+                    MVector3 parentPos = this.parentJoint.GetGlobalPosition(true);
+                    MQuaternion parentRot = this.parentJoint.GetGlobalRotation(true);
+                    MVector3 newPos = new MTransform("tmp", parentPos, parentRot).InverseTransformPoint(thisPos);
+                    this.SetOffsets(newPos);
+                }
+                else
+                {
+                    this.SetOffsets(new MVector3(0, 0, 0));
+                }
+            }
+
+            if (this.GetMJoint().ID.Contains("Wrist"))
             {
                 MVector3 wristPos = this.GetGlobalPosition();//getJointPosition(globalTarget, joint_map[this.GetMJoint().Type]);
                 MTransform Twrist = new MTransform("tmp", this.GetGlobalPosition(), this.GetGlobalRotation());

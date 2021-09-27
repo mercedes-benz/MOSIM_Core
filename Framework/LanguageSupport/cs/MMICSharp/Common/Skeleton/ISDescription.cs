@@ -130,7 +130,10 @@ namespace MMICSharp.Common
             NewMJoint("RightKnee", MJointType.RightKnee, new MVector3(0, 1, 0), identityQ, "RightHip",defaultJointChannels),
             NewMJoint("RightAnkle", MJointType.RightAnkle, new MVector3(0, 1, 0), new MQuaternion(0, 0, -0.53730, 0.84339), "RightKnee",defaultJointChannels),
             NewMJoint("RightBall", MJointType.RightBall, new MVector3(0, 1, 0), new MQuaternion(0, 0, -0.2164396196603775,  0.9762960076332092), "RightAnkle",defaultJointChannels),
-            NewMJoint("RightBallTip", MJointType.RightBallTip, new MVector3(0, 0.08, 0), identityQ, "RightBall", zeroChannels)
+            NewMJoint("RightBallTip", MJointType.RightBallTip, new MVector3(0, 0.08, 0), identityQ, "RightBall", zeroChannels),
+
+            NewMJoint("LeftEye", MJointType.LeftEye, new MVector3(1, 1, 1), identityQ, "HeadJoint", defaultJointChannels),
+            NewMJoint("RightEye", MJointType.RightEye, new MVector3(1, 1, -1), identityQ, "HeadJoint", defaultJointChannels),
             };
             return defaultJoints;
         }
@@ -266,6 +269,8 @@ namespace MMICSharp.Common
 {"HeadJoint", MJointType.HeadJoint},
 {"HeadTip", MJointType.HeadTip},
 {"MidEye", MJointType.MidEye},
+{"LeftEye", MJointType.LeftEye},
+{"RightEye", MJointType.RightEye},
 {"LeftShoulder", MJointType.LeftShoulder},
 {"LeftElbow", MJointType.LeftElbow},
 {"LeftWrist", MJointType.LeftWrist},
