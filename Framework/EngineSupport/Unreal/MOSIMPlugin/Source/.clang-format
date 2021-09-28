@@ -1,0 +1,16 @@
+BasedOnStyle: Google
+
+# see http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+ColumnLimit: 100
+DerivePointerAlignment: false
+PointerAlignment: Left
+IndentWidth: 4
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine : false
+AllowShortLoopsOnASingleLine : false
+BreakBeforeBraces: Allman
+SpacesInParentheses: true
+SpaceBeforeParens : Never
+SortIncludes: false

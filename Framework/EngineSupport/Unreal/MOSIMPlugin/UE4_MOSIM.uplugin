@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "UE4 MOSIM Plugin",
+	"Description": "This plugin enables usage of the MMI framework to control human models.",
+	"Category": "Runtime",
+	"CreatedBy": "TWT GmbH",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+        "EnabledByDefault": true,
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name" : "MMIScene",
+			"Type" : "Runtime",
+			"LoadingPhase" : "Default"
+		}
+        ]
+}

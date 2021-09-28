@@ -1,0 +1,10 @@
+{
+  "__isset": { "Dependencies": true },
+  "Author": "Felix Gaisbauer, Daimler AG",
+  "Dependencies": [],
+  "ExecutableName": "CoSimulationStandalone.exe",
+  "ID": "dffe45fa-4411-455a-7c14-564c8c0fd0ae",
+  "Language": "C#",
+  "Name": "CoSimulationStandalone",
+  "Version": "1.0"
+}
