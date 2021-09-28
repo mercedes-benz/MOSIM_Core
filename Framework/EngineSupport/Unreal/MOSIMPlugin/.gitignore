@@ -25,6 +25,8 @@
 *.a
 *.lib
 
+!libs/*.lib 
+
 # Executables
 *.exe
 *.out
