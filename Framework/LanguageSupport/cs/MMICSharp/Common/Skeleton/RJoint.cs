@@ -181,8 +181,8 @@ namespace MMICSharp.Common
 
         private MVector3 GetFingerPosition(MAvatarPosture globalTarget, Dictionary<MJointType, string> joint_map, double z_shift)
         {
-            MVector3 wristPos = getJointPosition(globalTarget, joint_map[this.parentJoint.GetMJoint().Type]);//this.parentJoint.GetGlobalPosition();
-            MVector3 thisPos = getJointPosition(globalTarget, joint_map[this.GetMJoint().Type]);
+            MVector3 wristPos = getJointPosition(globalTarget, joint_map.getItem(this.parentJoint.GetMJoint().Type));//this.parentJoint.GetGlobalPosition();
+            MVector3 thisPos = getJointPosition(globalTarget, joint_map.getItem(this.GetMJoint().Type));
             thisPos.Y = wristPos.Y; // adjust height
             MVector3 newPos = new MTransform("tmp", wristPos, this.parentJoint.GetGlobalRotation()).InverseTransformPoint(thisPos);
             newPos.Z -= z_shift;
@@ -196,8 +196,8 @@ namespace MMICSharp.Common
             {
 
                 //float shoulder_height = getJointPosition(HumanBodyBones.LeftUpperArm, anim).y;
-                double shoulder_height = getJointPosition(globalTarget, joint_map[MJointType.HeadJoint]).Y;
-                double hip_height = getJointPosition(globalTarget, joint_map[MJointType.PelvisCentre]).Y;
+                double shoulder_height = getJointPosition(globalTarget, joint_map.getItem(MJointType.HeadJoint)).Y;
+                double hip_height = getJointPosition(globalTarget, joint_map.getItem(MJointType.PelvisCentre)).Y;
                 double spine_length = shoulder_height - hip_height;
 
                 
@@ -208,14 +208,14 @@ namespace MMICSharp.Common
             }
             if(this.joint.Type == MJointType.Root)
             {
-                //MVector3 rootPos = getJointPosition(globalTarget, joint_map[MJointType.Root]);
+                //MVector3 rootPos = getJointPosition(globalTarget, joint_map.getItem(MJointType.Root]);
                 //this.SetOffsets(rootPos);
             }
             else if (this.joint.Type == MJointType.PelvisCentre)
             {
-                MVector3 hips = getJointPosition(globalTarget, joint_map[MJointType.PelvisCentre]).Clone();
-                MVector3 shoulder = getJointPosition(globalTarget, joint_map[MJointType.LeftShoulder]);
-                MVector3 leftupleg = getJointPosition(globalTarget, joint_map[MJointType.LeftHip]);
+                MVector3 hips = getJointPosition(globalTarget, joint_map.getItem(MJointType.PelvisCentre)).Clone();
+                MVector3 shoulder = getJointPosition(globalTarget, joint_map.getItem(MJointType.LeftShoulder));
+                MVector3 leftupleg = getJointPosition(globalTarget, joint_map.getItem(MJointType.LeftHip));
 
                 // initialize Root at 0, 0, 0
                 ((RJoint)this.parentJoint).SetOffsets(new MVector3(0,0,0));
@@ -237,7 +237,7 @@ namespace MMICSharp.Common
                 if (this.parentJoint.children.Count == 3 && this.parentJoint.children[0] != this)
                 {
                     // If there are two children (e.g. pelvis / upper spine), take the half distance between both children
-                    factor = GetJointDistance(globalTarget, joint_map[this.parentJoint.children[1].GetMJoint().Type], joint_map[this.parentJoint.children[2].GetMJoint().Type]) / 2.0d;
+                    factor = GetJointDistance(globalTarget, joint_map.getItem(this.parentJoint.children[1].GetMJoint().Type), joint_map.getItem(this.parentJoint.children[2].GetMJoint().Type)) / 2.0d;
                 }
                 else
                 {
@@ -254,7 +254,7 @@ namespace MMICSharp.Common
                 if (jointID.Contains("Shoulder"))
                 {
                     // in case of shoulders, they have to be raised in up direction. 
-                    double shoulder_height = getJointPosition(globalTarget, joint_map[this.GetMJoint().Type]).Y;
+                    double shoulder_height = getJointPosition(globalTarget, joint_map.getItem(this.GetMJoint().Type)).Y;
                     double current_Pos = this.GetShoulderHeight();
                     shoulder_height = shoulder_height - current_Pos;
                     this.GetOffsetPositions().Y = shoulder_height;
@@ -272,7 +272,7 @@ namespace MMICSharp.Common
                 // if this is not the last joint in a sequence, scale depending on distance to child human bone
                 if (joint_map.ContainsKey(this.children[0].GetMJoint().Type) && joint_map.ContainsKey(this.GetMJoint().Type))
                 {
-                    this.boneLength = GetJointDistance(globalTarget, joint_map[this.GetMJoint().Type], joint_map[this.children[0].GetMJoint().Type]);
+                    this.boneLength = GetJointDistance(globalTarget, joint_map.getItem(this.GetMJoint().Type), joint_map.getItem(this.children[0].GetMJoint().Type));
                 }
                 else
                 {
@@ -292,7 +292,7 @@ namespace MMICSharp.Common
 
             if(this.GetMJoint().ID.Contains("Wrist"))
             {
-                MVector3 wristPos = this.GetGlobalPosition();//getJointPosition(globalTarget, joint_map[this.GetMJoint().Type]);
+                MVector3 wristPos = this.GetGlobalPosition();//getJointPosition(globalTarget, joint_map.getItem(this.GetMJoint().Type]);
                 MTransform Twrist = new MTransform("tmp", this.GetGlobalPosition(), this.GetGlobalRotation());
                 Joint middle = this.children[0];
 
@@ -398,4 +398,22 @@ namespace MMICSharp.Common
         }
 
     }
+}
+
+
+public static class JointMapAccessExtension
+{
+    public static string getItem(this Dictionary<MJointType, string> d, MJointType t)
+    {
+        if(!d.ContainsKey(t))
+        {
+            var cc = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Error: Joint " + t + " not in joint map!");
+            Console.WriteLine("   map: " + string.Join(", ", d));
+            Console.ForegroundColor = cc;
+        }
+        return d[t];
+    }
+
 }

@@ -237,6 +237,17 @@ namespace MMICSharp.Common
                     }
                 }
             }
+
+            if(joint_map.Count < 5)
+            {
+                var ff = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Warning. joint map size smaller than 5. Please check your retargeting configuration.");
+                Console.WriteLine("   provided Target Posture: " + MMICSharp.Common.Communication.Serialization.ToJsonString<MAvatarPosture>(globalTarget));
+                Console.WriteLine("   joint map (lenght: " + joint_map.Count + "): " + string.Join(", ", joint_map));
+                Console.ForegroundColor = ff;
+            }
+
             if (this.children.ContainsKey(id))
             {
                 this.children[id] = _children;
@@ -264,7 +275,20 @@ namespace MMICSharp.Common
             MAvatarDescription desc = IntermediateSkeleton.GenerateFromDescriptionFile(id);
             this.skeleton.InitializeAnthropometry(desc);
 
-            ((RJoint)this.skeleton.GetRoot(id)).ScaleSkeleton(globalTarget, joint_map);
+            try
+            {
+                ((RJoint)this.skeleton.GetRoot(id)).ScaleSkeleton(globalTarget, joint_map);
+            } catch(System.Collections.Generic.KeyNotFoundException e)
+            {
+                var ff = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Access error during skeleton scaling.");
+                Console.WriteLine("   provided Target Posture: " + MMICSharp.Common.Communication.Serialization.ToJsonString<MAvatarPosture>(globalTarget));
+                Console.WriteLine("   joint map (lenght: " + joint_map.Count + "): " + string.Join(", ", joint_map));
+                Console.ForegroundColor = ff;
+
+                throw e;
+            }
 
             this.skeleton.GetRoot(id).SetAvatarPostureValues(null);
 
