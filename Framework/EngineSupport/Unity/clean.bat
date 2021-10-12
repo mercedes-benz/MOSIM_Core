@@ -28,7 +28,7 @@ if not defined MSBUILD (
 )
 
 REM Build the Visual Studio Project
-REM "%DEVENV%" /Log clean.log .\MMIUnity.sln /Clean
+REM "%MSBUILD%" .\MMIUnity.sln -t:clean -flp:logfile=clean.log
 "%MSBUILD%" -t:clean -flp:logfile=clean.log
 
 

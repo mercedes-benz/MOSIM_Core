@@ -16,7 +16,8 @@ if not defined DEVENV (
 SET mode=Debug
 
 REM Clean the Visual Studio Project
-"%DEVENV%" /Log clean.log .\MMICSharp.sln /Clean
+"%MSBUILD%" .\MMICSharp.sln -t:clean -flp:logfile=clean.log
+
 
 if %ERRORLEVEL% EQU 0 (
 

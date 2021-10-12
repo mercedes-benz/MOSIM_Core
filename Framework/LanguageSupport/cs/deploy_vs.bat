@@ -35,8 +35,8 @@ if not defined MSBUILD (
     ECHO    MSBUILD: [31mMISSING[0m at "%MSBUILD%"
     ECHO [31mPlease update the deploy_variables.bat script with a valid path![0m
 	exit /b 2
+    )
   )
-)
 )
 
 SET mode=Debug
@@ -58,7 +58,7 @@ REM restoring nuget
 "%MSBUILD%" -t:restore -flp:logfile=restore.log
 
 REM Build the Visual Studio Project
-"%DEVENV%" /Log build.log .\MMICSharp.sln /Build %mode%
+"%MSBUILD%" .\MMICSharp.sln -t:Build -p:Configuration=%mode% -flp:logfile=build.log
 
 REM If the build was sucessfull, copy all files to the respective build folders. 
 if %ERRORLEVEL% EQU 0 (

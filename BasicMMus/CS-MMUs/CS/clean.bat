@@ -33,7 +33,7 @@ if EXIST build (
 )
 
 @REM Clean the Visual Studio Project
-"%DEVENV%" /Log build.log .\CS.sln /Clean
+"%MSBUILD%" .\CS.sln -t:clean -flp:logfile=clean.log
 
 if %ERRORLEVEL% EQU 0 (
     @REM If the cleaning is 92mSuccessful, delete all files from the respective build folders
