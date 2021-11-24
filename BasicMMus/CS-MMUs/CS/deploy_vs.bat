@@ -59,25 +59,31 @@ if EXIST build (
 )
 md build
 
-REM Build the Visual Studio Project
-"%MSBUILD%" .\CS.sln -t:Build -p:Configuration=%mode% -flp:logfile=build.log
+if EXIST deploy.log DEL deploy.log 
 
+>deploy.log (
+	REM Build the Visual Studio Project
+	"%MSBUILD%" .\CS.sln -t:Build -p:Configuration=%mode% -flp:logfile=build.log
+)
 if %ERRORLEVEL% EQU 0 (
-REM If the build was sucessfull, copy all files to the respective build folders. 
-  FOR /D %%G in (*) DO (
-    if NOT "%%G"==".vs" (
-      if EXIST "%%G"\bin (
-        if EXIST "%%G"\bin\%mode% (
-          md .\build\%%G
-          cmd /c xcopy /S/Y/Q .\%%G\bin\%mode%\* .\build\%%G
-        )
-      )
-    )
-  )
 
+	>>deploy.log (
+	REM If the build was sucessfull, copy all files to the respective build folders. 
+	  FOR /D %%G in (*) DO (
+		if NOT "%%G"==".vs" (
+		  if EXIST "%%G"\bin (
+			if EXIST "%%G"\bin\%mode% (
+			  md .\build\%%G
+			  cmd /c xcopy /S/Y/Q .\%%G\bin\%mode%\* .\build\%%G
+			)
+		  )
+		)
+	  )
+	)
   ECHO [92mSuccessfully deployed CS MMUs[0m
   exit /b 0
 ) else (
+  type deploy.log
   ECHO [31mDeployment of CS MMUs failed. Please consider the %cs%/build.log for more information. [0m
   exit /b 1
 )

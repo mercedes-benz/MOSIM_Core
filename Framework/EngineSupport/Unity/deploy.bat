@@ -8,3 +8,4 @@ REM the ESC sign can be created by pressing left alt + 027 on the num-pad.
 REM There is only use for a unity deployment in case of the Unity Engine Support
 
 call .\deploy_unity.bat
+exit /b %ERRORLEVEL%

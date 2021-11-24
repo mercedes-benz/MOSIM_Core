@@ -5,3 +5,4 @@ REM Original author(s): Janis Sprenger, Bhuvaneshwaran Ilanthirayan
 REM Calling the visual studio deployement file
 
 call .\deploy_vs.bat
+exit /b %ERRORLEVEL%
