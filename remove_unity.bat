@@ -9,8 +9,8 @@ REM DEL "Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngi
 REM DEL "Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine.Editor\UnityEngine.dll"
 REM DEL "Framework\EngineSupport\Unity\MMIUnity.TargetEngine\MMIUnity.TargetEngine\UnityEngine.dll"
 REM DEL "Framework\EngineSupport\Unity\MMIUnity\UnityEngine.dll"
-DEL "Framework\Libraries\UnityEngine.dll"
-DEL "Framework\Libraries\UnityEditor.dll"
+DEL ".\Libraries\UnityEngine.dll"
+DEL ".\Libraries\UnityEditor.dll"
 
 
 
