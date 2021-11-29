@@ -1,4 +1,6 @@
 <!-- SPDX-License-Identifier: MIT -->
+# :warning: This project is no longer maintained and is archived.
+
 # MOSIM_Core
 
 ![mosim](https://mosim.eu/____impro/1/onewebmedia/MOSIM%20Logo%20white%20background%20150.png?etag=%221b8a-5c57fd19%22&sourceContentType=image%2Fpng&ignoreAspectRatio&resize=150%2B84&extract=0%2B7%2B149%2B59)
